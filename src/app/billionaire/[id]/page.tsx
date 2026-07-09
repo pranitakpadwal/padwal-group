@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
+import { siteUrl } from "@/lib/site";
 import {
   formatPercentChange,
   formatUsdChange,
@@ -10,6 +11,8 @@ import {
 } from "@/lib/format";
 import PersonAvatar from "@/components/PersonAvatar";
 import Sparkline from "@/components/Sparkline";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +25,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const person = findBillionaireById(id);
+  if (!person) {
+    return { title: "Billionaire not found" };
+  }
+
+  const title = `${person.name} — Real-Time Billionaires`;
+  const description = person.bio;
   return {
-    title: person
-      ? `${person.name} — Real-Time Billionaires`
-      : "Billionaire not found",
+    title,
+    description,
+    alternates: { canonical: `${siteUrl()}/billionaire/${person.id}` },
+    openGraph: { title, description, type: "profile" },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -43,7 +54,7 @@ export default async function BillionaireProfile({
 
   const [leaderboard, priceHistory] = await Promise.all([
     getLeaderboard(),
-    getPriceHistory(person.ticker),
+    person.ticker ? getPriceHistory(person.ticker) : Promise.resolve(null),
   ]);
 
   const ranked = leaderboard.people.find((candidate) => candidate.id === id);
@@ -60,9 +71,21 @@ export default async function BillionaireProfile({
       ? "text-rose-500"
       : "text-neutral-400";
 
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: person.name,
+    description: person.bio,
+    birthDate: person.birthDate,
+    nationality: person.country,
+    image: ranked.photoUrl ?? undefined,
+    url: `${siteUrl()}/billionaire/${person.id}`,
+  };
+
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-4 py-12 font-sans dark:bg-black sm:px-8">
-      <main className="flex w-full max-w-3xl flex-col gap-6">
+    <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-black">
+      <SiteHeader activeCategory="world" />
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
         <Link
           href="/"
           className="text-sm text-neutral-500 hover:underline dark:text-neutral-400"
@@ -117,33 +140,47 @@ export default async function BillionaireProfile({
           </div>
         </div>
 
-        <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
-          <div className="mb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold">
-              {ranked.ticker} &mdash; last ~3 months
-            </h2>
-            {ranked.sharePrice !== null && (
-              <span className="text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
-                {ranked.sharePrice.toFixed(2)} {ranked.currency ?? ""}
-              </span>
+        {ranked.ticker ? (
+          <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div className="mb-3 flex items-baseline justify-between">
+              <h2 className="text-sm font-semibold">
+                {ranked.ticker} &mdash; last ~3 months
+              </h2>
+              {ranked.sharePrice !== null && (
+                <span className="text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
+                  {ranked.sharePrice.toFixed(2)} {ranked.currency ?? ""}
+                </span>
+              )}
+            </div>
+            {priceHistory ? (
+              <Sparkline values={priceHistory} />
+            ) : (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Price history unavailable right now.
+              </p>
             )}
-          </div>
-          {priceHistory ? (
-            <Sparkline values={priceHistory} />
-          ) : (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Price history unavailable right now.
+            <p className="mt-3 text-xs text-neutral-400">
+              This chart tracks {ranked.ticker}&apos;s share price, the public
+              portion of {ranked.name.split(" ")[0]}&apos;s wealth. It
+              excludes the {formatUsdCompact(person.otherAssetsUsd)} static
+              estimate for private assets, which this tracker doesn&apos;t
+              have historical data for.
             </p>
-          )}
-          <p className="mt-3 text-xs text-neutral-400">
-            This chart tracks {person.ticker}&apos;s share price, the public
-            portion of {ranked.name.split(" ")[0]}&apos;s wealth. It excludes
-            the {formatUsdCompact(person.otherAssetsUsd)} static estimate for
-            private assets, which this tracker doesn&apos;t have historical
-            data for.
-          </p>
-        </div>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-neutral-200 p-5 text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
+            {ranked.name}&apos;s wealth is primarily tied to{" "}
+            {person.primarySource}, a privately held company with no public
+            ticker to chart. The {formatUsdCompact(person.otherAssetsUsd)} net
+            worth estimate shown above is a static figure, not a live feed.
+          </div>
+        )}
       </main>
+      <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
     </div>
   );
 }

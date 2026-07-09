@@ -9,13 +9,14 @@ export interface RankedBillionaire {
   rank: number;
   id: string;
   name: string;
+  gender: "female" | "male";
   age: number;
   country: string;
   primarySource: string;
   industry: string;
   bio: string;
   photoUrl: string | null;
-  ticker: string;
+  ticker: string | null;
   netWorthUsd: number;
   dayChangeUsd: number;
   dayChangePercent: number;
@@ -34,12 +35,22 @@ export interface Leaderboard {
 }
 
 const CACHE_TTL_MS = 20_000;
-const MOVERS_COUNT = 5;
+const MOVERS_COUNT = 6;
 
 let cache: { leaderboard: Leaderboard; expiresAt: number } | null = null;
 let inFlight: Promise<Leaderboard> | null = null;
 
-type QuoteInfo = { price: number; change: number; currency?: string; marketState?: string };
+type QuoteInfo = { priceUsd: number; changeUsd: number; currency?: string; marketState?: string };
+
+export function selectMovers(
+  people: RankedBillionaire[],
+  count: number = MOVERS_COUNT,
+): { topGainers: RankedBillionaire[]; topLosers: RankedBillionaire[] } {
+  const movers = people.filter((person) => person.dayChangeUsd !== 0);
+  const topGainers = [...movers].sort((a, b) => b.dayChangeUsd - a.dayChangeUsd).slice(0, count);
+  const topLosers = [...movers].sort((a, b) => a.dayChangeUsd - b.dayChangeUsd).slice(0, count);
+  return { topGainers, topLosers };
+}
 
 function computeLeaderboard(
   people: Billionaire[],
@@ -47,25 +58,27 @@ function computeLeaderboard(
   photosByTitle: Map<string, string | null>,
 ): Leaderboard {
   const ranked = people.map((person) => {
-    const quote = quotesBySymbol.get(person.ticker);
-    const price = quote?.price ?? null;
-    const changePerShare = quote?.change ?? 0;
+    const quote = person.ticker ? quotesBySymbol.get(person.ticker) : undefined;
+    const price = quote?.priceUsd ?? null;
+    const changePerShare = quote?.changeUsd ?? 0;
+    const sharesHeld = person.sharesHeld ?? 0;
 
-    const netWorthUsd = price !== null ? person.sharesHeld * price + person.otherAssetsUsd : person.otherAssetsUsd;
-    const dayChangeUsd = person.sharesHeld * changePerShare;
+    const netWorthUsd = price !== null ? sharesHeld * price + person.otherAssetsUsd : person.otherAssetsUsd;
+    const dayChangeUsd = sharesHeld * changePerShare;
     const previousNetWorth = netWorthUsd - dayChangeUsd;
     const dayChangePercent = previousNetWorth > 0 ? (dayChangeUsd / previousNetWorth) * 100 : 0;
 
     return {
       id: person.id,
       name: person.name,
+      gender: person.gender,
       age: calculateAge(person.birthDate),
       country: person.country,
       primarySource: person.primarySource,
       industry: person.industry,
       bio: person.bio,
       photoUrl: photosByTitle.get(person.wikipediaTitle) ?? null,
-      ticker: person.ticker,
+      ticker: person.ticker ?? null,
       netWorthUsd,
       dayChangeUsd,
       dayChangePercent,
@@ -77,14 +90,7 @@ function computeLeaderboard(
 
   ranked.sort((a, b) => b.netWorthUsd - a.netWorthUsd);
   const rankedWithPositions = ranked.map((person, index) => ({ ...person, rank: index + 1 }));
-
-  const movers = rankedWithPositions.filter((person) => person.dayChangeUsd !== 0);
-  const topGainers = [...movers]
-    .sort((a, b) => b.dayChangeUsd - a.dayChangeUsd)
-    .slice(0, MOVERS_COUNT);
-  const topLosers = [...movers]
-    .sort((a, b) => a.dayChangeUsd - b.dayChangeUsd)
-    .slice(0, MOVERS_COUNT);
+  const { topGainers, topLosers } = selectMovers(rankedWithPositions);
 
   return {
     people: rankedWithPositions,
@@ -96,8 +102,44 @@ function computeLeaderboard(
   };
 }
 
+/**
+ * Yahoo Finance returns prices in the security's native currency (e.g. EUR
+ * for a Euronext Paris listing, INR for an NSE listing). We convert
+ * everything to USD using live FX quotes so net worth stays comparable
+ * across people. If a currency's FX rate can't be fetched, that person's
+ * live price is treated as unavailable (falls back to otherAssetsUsd)
+ * rather than silently mixing currencies.
+ */
+async function getUsdFxRates(currencies: string[]): Promise<Map<string, number>> {
+  const uniqueNonUsd = Array.from(new Set(currencies)).filter(
+    (currency) => currency && currency !== "USD",
+  );
+
+  const rates = new Map<string, number>();
+  if (uniqueNonUsd.length === 0) {
+    return rates;
+  }
+
+  try {
+    const fxSymbols = uniqueNonUsd.map((currency) => `${currency}USD=X`);
+    const fxQuotes = await yahooFinance.quote(fxSymbols, { return: "map" });
+    for (const currency of uniqueNonUsd) {
+      const rate = fxQuotes.get(`${currency}USD=X`)?.regularMarketPrice;
+      if (typeof rate === "number") {
+        rates.set(currency, rate);
+      }
+    }
+  } catch {
+    // Leave rates empty; affected currencies simply won't resolve below.
+  }
+
+  return rates;
+}
+
 async function fetchLeaderboard(): Promise<Leaderboard> {
-  const symbols = Array.from(new Set(billionaires.map((b) => b.ticker)));
+  const symbols = Array.from(
+    new Set(billionaires.map((b) => b.ticker).filter((ticker): ticker is string => Boolean(ticker))),
+  );
   const wikipediaTitles = billionaires.map((b) => b.wikipediaTitle);
 
   const [quotes, photosByTitle] = await Promise.all([
@@ -105,17 +147,31 @@ async function fetchLeaderboard(): Promise<Leaderboard> {
     getPhotoUrls(wikipediaTitles),
   ]);
 
+  const currencies = Array.from(quotes.values())
+    .map((quote) => quote.currency)
+    .filter((currency): currency is string => Boolean(currency));
+  const fxRates = await getUsdFxRates(currencies);
+
   const quotesBySymbol = new Map<string, QuoteInfo>();
   for (const [symbol, quote] of quotes.entries()) {
     const price = quote.regularMarketPrice;
-    if (typeof price === "number") {
-      quotesBySymbol.set(symbol, {
-        price,
-        change: quote.regularMarketChange ?? 0,
-        currency: quote.currency,
-        marketState: quote.marketState,
-      });
+    if (typeof price !== "number") {
+      continue;
     }
+
+    const currency = quote.currency;
+    const fxRate = !currency || currency === "USD" ? 1 : fxRates.get(currency);
+    if (fxRate === undefined) {
+      // Non-USD currency with no live FX rate — skip rather than mixing units.
+      continue;
+    }
+
+    quotesBySymbol.set(symbol, {
+      priceUsd: price * fxRate,
+      changeUsd: (quote.regularMarketChange ?? 0) * fxRate,
+      currency: quote.currency,
+      marketState: quote.marketState,
+    });
   }
 
   return computeLeaderboard(billionaires, quotesBySymbol, photosByTitle);

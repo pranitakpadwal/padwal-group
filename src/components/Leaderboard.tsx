@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Leaderboard as LeaderboardData } from "@/lib/net-worth";
+import type { Category } from "@/lib/categories";
 import {
   formatClock,
   formatPercentChange,
@@ -36,8 +37,10 @@ function ChangeCell({ usd, percent }: { usd: number; percent: number }) {
 
 export default function Leaderboard({
   initialData,
+  category,
 }: {
   initialData: LeaderboardData;
+  category: Category;
 }) {
   const [data, setData] = useState<LeaderboardData>(initialData);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -60,7 +63,9 @@ export default function Leaderboard({
     async function refresh() {
       setIsRefreshing(true);
       try {
-        const response = await fetch("/api/billionaires", { cache: "no-store" });
+        const response = await fetch(`/api/billionaires?category=${category}`, {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
@@ -91,10 +96,10 @@ export default function Leaderboard({
       clearInterval(pollTimer);
       clearInterval(countdownTimer);
     };
-  }, []);
+  }, [category]);
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-6">
+    <div className="flex w-full min-w-0 flex-1 flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
         <div className="flex items-center gap-2">
           <span
@@ -116,6 +121,11 @@ export default function Leaderboard({
 
       <MoversStrip topGainers={data.topGainers} topLosers={data.topLosers} />
 
+      {data.people.length === 0 ? (
+        <div className="rounded-xl border border-neutral-200 p-8 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
+          No one in this tracker matches this list right now.
+        </div>
+      ) : (
       <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
         <table className="w-full min-w-[720px] border-collapse text-left">
           <thead className="bg-neutral-50 text-xs uppercase tracking-wide text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
@@ -159,7 +169,7 @@ export default function Leaderboard({
                 <td className="hidden px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300 sm:table-cell">
                   {person.primarySource}
                   <div className="text-xs text-neutral-400">{person.industry}</div>
-                  {person.sharePrice !== null && (
+                  {person.ticker && person.sharePrice !== null && (
                     <div className="text-xs text-neutral-400">
                       {person.ticker} @ {person.sharePrice.toFixed(2)}{" "}
                       {person.currency ?? ""}
@@ -177,6 +187,7 @@ export default function Leaderboard({
           </tbody>
         </table>
       </div>
+      )}
     </div>
   );
 }

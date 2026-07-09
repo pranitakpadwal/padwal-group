@@ -1,12 +1,20 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getLeaderboard } from "@/lib/net-worth";
+import { getCategoryView, isCategory } from "@/lib/categories";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const leaderboard = await getLeaderboard();
-    return NextResponse.json(leaderboard);
+    const categoryParam = request.nextUrl.searchParams.get("category") ?? "world";
+    const category = isCategory(categoryParam) ? categoryParam : "world";
+    const view = getCategoryView(leaderboard, category);
+
+    return NextResponse.json({
+      ...leaderboard,
+      ...view,
+    });
   } catch (error) {
     return NextResponse.json(
       {

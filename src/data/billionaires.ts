@@ -12,7 +12,11 @@
  * filings (SEC 13D/13G/Form 4, proxy statements) and secondary sources.
  * `otherAssetsUsd` is a static placeholder for everything else (private
  * equity, cash, real estate, art, etc.) and does NOT update in real time.
- * `birthDate`, `industry`, `bio`, and `wikipediaTitle` are static
+ * When `ticker` is omitted entirely (wealth is overwhelmingly tied to a
+ * private company — e.g. Koch Industries, Mars, Fidelity), `otherAssetsUsd`
+ * represents the FULL net worth estimate, static until you update it.
+ *
+ * `birthDate`, `gender`, `industry`, `bio`, and `wikipediaTitle` are static
  * biographical fields. Treat all of it as directional estimates, not
  * authoritative figures — verify and refresh periodically against current
  * filings and sources.
@@ -21,6 +25,7 @@
 export interface Billionaire {
   id: string;
   name: string;
+  gender: "female" | "male";
   country: string;
   primarySource: string;
   industry: string;
@@ -29,18 +34,20 @@ export interface Billionaire {
   bio: string;
   /** Wikipedia article title (underscored), used to look up a portrait. */
   wikipediaTitle: string;
-  /** Yahoo Finance ticker symbol for their main publicly traded holding. */
-  ticker: string;
-  /** Approximate shares held in that ticker. */
-  sharesHeld: number;
-  /** Static estimate (USD) of wealth NOT captured by the ticker above. */
+  /** Yahoo Finance ticker for their main publicly traded holding, if any. */
+  ticker?: string;
+  /** Approximate shares held in that ticker. Only meaningful if `ticker` is set. */
+  sharesHeld?: number;
+  /** Static estimate (USD) of wealth NOT captured by the ticker above (or ALL of it, if there's no ticker). */
   otherAssetsUsd: number;
 }
 
 export const billionaires: Billionaire[] = [
+  // --- United States (public-company wealth) ---
   {
     id: "elon-musk",
     name: "Elon Musk",
+    gender: "male",
     country: "United States",
     primarySource: "Tesla, SpaceX",
     industry: "Automotive & Aerospace",
@@ -54,6 +61,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "jeff-bezos",
     name: "Jeff Bezos",
+    gender: "male",
     country: "United States",
     primarySource: "Amazon",
     industry: "Technology & E-commerce",
@@ -67,6 +75,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "mark-zuckerberg",
     name: "Mark Zuckerberg",
+    gender: "male",
     country: "United States",
     primarySource: "Meta Platforms",
     industry: "Technology & Social Media",
@@ -80,6 +89,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "larry-ellison",
     name: "Larry Ellison",
+    gender: "male",
     country: "United States",
     primarySource: "Oracle",
     industry: "Technology & Software",
@@ -93,6 +103,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "larry-page",
     name: "Larry Page",
+    gender: "male",
     country: "United States",
     primarySource: "Alphabet (Google)",
     industry: "Technology & Internet",
@@ -106,6 +117,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "sergey-brin",
     name: "Sergey Brin",
+    gender: "male",
     country: "United States",
     primarySource: "Alphabet (Google)",
     industry: "Technology & Internet",
@@ -119,6 +131,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "steve-ballmer",
     name: "Steve Ballmer",
+    gender: "male",
     country: "United States",
     primarySource: "Microsoft",
     industry: "Technology",
@@ -132,6 +145,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "warren-buffett",
     name: "Warren Buffett",
+    gender: "male",
     country: "United States",
     primarySource: "Berkshire Hathaway",
     industry: "Finance & Investments",
@@ -145,6 +159,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "bernard-arnault",
     name: "Bernard Arnault",
+    gender: "male",
     country: "France",
     primarySource: "LVMH",
     industry: "Fashion & Luxury Goods",
@@ -156,21 +171,9 @@ export const billionaires: Billionaire[] = [
     otherAssetsUsd: 20_000_000_000,
   },
   {
-    id: "mukesh-ambani",
-    name: "Mukesh Ambani",
-    country: "India",
-    primarySource: "Reliance Industries",
-    industry: "Diversified (Energy, Telecom, Retail)",
-    birthDate: "1957-04-19",
-    bio: "Chairman and managing director of Reliance Industries, India's most valuable company.",
-    wikipediaTitle: "Mukesh_Ambani",
-    ticker: "RELIANCE.NS",
-    sharesHeld: 670_000_000,
-    otherAssetsUsd: 15_000_000_000,
-  },
-  {
     id: "jensen-huang",
     name: "Jensen Huang",
+    gender: "male",
     country: "United States",
     primarySource: "Nvidia",
     industry: "Technology & Semiconductors",
@@ -184,6 +187,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "michael-dell",
     name: "Michael Dell",
+    gender: "male",
     country: "United States",
     primarySource: "Dell Technologies",
     industry: "Technology & Computer Hardware",
@@ -197,6 +201,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "phil-knight",
     name: "Phil Knight",
+    gender: "male",
     country: "United States",
     primarySource: "Nike",
     industry: "Fashion & Retail",
@@ -210,6 +215,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "jim-walton",
     name: "Jim Walton",
+    gender: "male",
     country: "United States",
     primarySource: "Walmart",
     industry: "Retail",
@@ -223,6 +229,7 @@ export const billionaires: Billionaire[] = [
   {
     id: "rob-walton",
     name: "Rob Walton",
+    gender: "male",
     country: "United States",
     primarySource: "Walmart",
     industry: "Retail",
@@ -232,5 +239,295 @@ export const billionaires: Billionaire[] = [
     ticker: "WMT",
     sharesHeld: 480_000_000,
     otherAssetsUsd: 5_000_000_000,
+  },
+
+  // --- Women ---
+  {
+    id: "alice-walton",
+    name: "Alice Walton",
+    gender: "female",
+    country: "United States",
+    primarySource: "Walmart",
+    industry: "Retail",
+    birthDate: "1949-10-07",
+    bio: "Daughter of Walmart founder Sam Walton; founded Crystal Bridges Museum of American Art.",
+    wikipediaTitle: "Alice_Walton",
+    ticker: "WMT",
+    sharesHeld: 500_000_000,
+    otherAssetsUsd: 50_000_000_000,
+  },
+  {
+    id: "mackenzie-scott",
+    name: "MacKenzie Scott",
+    gender: "female",
+    country: "United States",
+    primarySource: "Amazon",
+    industry: "Technology & E-commerce",
+    birthDate: "1970-04-07",
+    bio: "Novelist and philanthropist; received an Amazon stake in her 2019 divorce from Jeff Bezos and has since given away billions.",
+    wikipediaTitle: "MacKenzie_Scott",
+    ticker: "AMZN",
+    sharesHeld: 90_000_000,
+    otherAssetsUsd: 20_000_000_000,
+  },
+  {
+    id: "julia-koch",
+    name: "Julia Koch",
+    gender: "female",
+    country: "United States",
+    primarySource: "Koch Industries",
+    industry: "Diversified Conglomerate",
+    birthDate: "1962-05-13",
+    bio: "Widow of Koch Industries co-owner David Koch; she and her children hold a large stake in the private conglomerate.",
+    wikipediaTitle: "Julia_Koch",
+    otherAssetsUsd: 40_000_000_000,
+  },
+  {
+    id: "francoise-bettencourt-meyers",
+    name: "Françoise Bettencourt Meyers",
+    gender: "female",
+    country: "France",
+    primarySource: "L'Oréal",
+    industry: "Beauty & Cosmetics",
+    birthDate: "1953-07-10",
+    bio: "Granddaughter of L'Oréal founder Eugène Schueller; chairwoman of the Bettencourt Meyers family holding company.",
+    wikipediaTitle: "Françoise_Bettencourt_Meyers",
+    ticker: "OR.PA",
+    sharesHeld: 100_000_000,
+    otherAssetsUsd: 25_000_000_000,
+  },
+  {
+    id: "miriam-adelson",
+    name: "Miriam Adelson",
+    gender: "female",
+    country: "United States",
+    primarySource: "Las Vegas Sands",
+    industry: "Gaming & Hospitality",
+    birthDate: "1945-06-10",
+    bio: "Physician and widow of casino magnate Sheldon Adelson; controls the family's majority stake in Las Vegas Sands.",
+    wikipediaTitle: "Miriam_Adelson",
+    ticker: "LVS",
+    sharesHeld: 400_000_000,
+    otherAssetsUsd: 5_000_000_000,
+  },
+  {
+    id: "jacqueline-mars",
+    name: "Jacqueline Mars",
+    gender: "female",
+    country: "United States",
+    primarySource: "Mars, Incorporated",
+    industry: "Food & Confectionery",
+    birthDate: "1939-02-10",
+    bio: "Granddaughter of Mars, Incorporated founder Frank Mars; one-third owner of the private candy and pet-care giant.",
+    wikipediaTitle: "Jacqueline_Mars",
+    otherAssetsUsd: 38_000_000_000,
+  },
+  {
+    id: "abigail-johnson",
+    name: "Abigail Johnson",
+    gender: "female",
+    country: "United States",
+    primarySource: "Fidelity Investments",
+    industry: "Finance & Investments",
+    birthDate: "1961-12-19",
+    bio: "Chairwoman and CEO of Fidelity Investments, the asset-management firm founded by her grandfather.",
+    wikipediaTitle: "Abigail_Johnson",
+    otherAssetsUsd: 28_000_000_000,
+  },
+  {
+    id: "gina-rinehart",
+    name: "Gina Rinehart",
+    gender: "female",
+    country: "Australia",
+    primarySource: "Hancock Prospecting",
+    industry: "Mining",
+    birthDate: "1954-02-09",
+    bio: "Executive chairwoman of Hancock Prospecting, Australia's largest privately-owned iron ore mining company.",
+    wikipediaTitle: "Gina_Rinehart",
+    otherAssetsUsd: 24_000_000_000,
+  },
+  {
+    id: "susanne-klatten",
+    name: "Susanne Klatten",
+    gender: "female",
+    country: "Germany",
+    primarySource: "BMW",
+    industry: "Automotive",
+    birthDate: "1962-04-28",
+    bio: "Heiress to the Quandt family fortune; one of BMW's largest individual shareholders.",
+    wikipediaTitle: "Susanne_Klatten",
+    ticker: "BMW.DE",
+    sharesHeld: 90_000_000,
+    otherAssetsUsd: 5_000_000_000,
+  },
+  {
+    id: "whitney-wolfe-herd",
+    name: "Whitney Wolfe Herd",
+    gender: "female",
+    country: "United States",
+    primarySource: "Bumble",
+    industry: "Technology & Dating Apps",
+    birthDate: "1989-07-01",
+    bio: "Founder of the dating app Bumble; became the youngest woman to take a company public when Bumble listed in 2021.",
+    wikipediaTitle: "Whitney_Wolfe_Herd",
+    ticker: "BMBL",
+    sharesHeld: 15_000_000,
+    otherAssetsUsd: 900_000_000,
+  },
+
+  // --- India ---
+  {
+    id: "mukesh-ambani",
+    name: "Mukesh Ambani",
+    gender: "male",
+    country: "India",
+    primarySource: "Reliance Industries",
+    industry: "Diversified (Energy, Telecom, Retail)",
+    birthDate: "1957-04-19",
+    bio: "Chairman and managing director of Reliance Industries, India's most valuable company.",
+    wikipediaTitle: "Mukesh_Ambani",
+    ticker: "RELIANCE.NS",
+    sharesHeld: 670_000_000,
+    otherAssetsUsd: 15_000_000_000,
+  },
+  {
+    id: "gautam-adani",
+    name: "Gautam Adani",
+    gender: "male",
+    country: "India",
+    primarySource: "Adani Group",
+    industry: "Diversified (Ports, Energy, Infrastructure)",
+    birthDate: "1962-06-24",
+    bio: "Founder and chairman of the Adani Group, spanning ports, energy, and infrastructure across India.",
+    wikipediaTitle: "Gautam_Adani",
+    ticker: "ADANIENT.NS",
+    sharesHeld: 320_000_000,
+    otherAssetsUsd: 10_000_000_000,
+  },
+  {
+    id: "shiv-nadar",
+    name: "Shiv Nadar",
+    gender: "male",
+    country: "India",
+    primarySource: "HCL Technologies",
+    industry: "Technology & IT Services",
+    birthDate: "1945-07-14",
+    bio: "Founder of HCL Technologies, one of India's largest IT services companies.",
+    wikipediaTitle: "Shiv_Nadar",
+    ticker: "HCLTECH.NS",
+    sharesHeld: 900_000_000,
+    otherAssetsUsd: 6_000_000_000,
+  },
+  {
+    id: "radhakishan-damani",
+    name: "Radhakishan Damani",
+    gender: "male",
+    country: "India",
+    primarySource: "Avenue Supermarts (DMart)",
+    industry: "Retail",
+    birthDate: "1954-01-01",
+    bio: "Reclusive investor and founder of the DMart supermarket chain (Avenue Supermarts).",
+    wikipediaTitle: "Radhakishan_Damani",
+    ticker: "DMART.NS",
+    sharesHeld: 350_000_000,
+    otherAssetsUsd: 3_000_000_000,
+  },
+  {
+    id: "kumar-birla",
+    name: "Kumar Mangalam Birla",
+    gender: "male",
+    country: "India",
+    primarySource: "Aditya Birla Group",
+    industry: "Diversified (Cement, Metals, Telecom)",
+    birthDate: "1967-06-14",
+    bio: "Chairman of the Aditya Birla Group, a multinational conglomerate spanning cement, metals, and telecom.",
+    wikipediaTitle: "Kumar_Mangalam_Birla",
+    ticker: "GRASIM.NS",
+    sharesHeld: 150_000_000,
+    otherAssetsUsd: 4_000_000_000,
+  },
+  {
+    id: "savitri-jindal",
+    name: "Savitri Jindal",
+    gender: "female",
+    country: "India",
+    primarySource: "Jindal Group",
+    industry: "Steel & Power",
+    birthDate: "1950-03-20",
+    bio: "Chairperson emeritus of the Jindal Group; widow of industrialist O. P. Jindal, matriarch of the family's steel and power businesses.",
+    wikipediaTitle: "Savitri_Jindal",
+    ticker: "JINDALSTEL.NS",
+    sharesHeld: 400_000_000,
+    otherAssetsUsd: 3_000_000_000,
+  },
+  {
+    id: "cyrus-poonawalla",
+    name: "Cyrus Poonawalla",
+    gender: "male",
+    country: "India",
+    primarySource: "Serum Institute of India",
+    industry: "Pharmaceuticals & Vaccines",
+    birthDate: "1941-12-20",
+    bio: "Founder of the Serum Institute of India, the world's largest vaccine manufacturer by doses produced.",
+    wikipediaTitle: "Cyrus_Poonawalla",
+    otherAssetsUsd: 9_000_000_000,
+  },
+
+  // --- Young (mostly overlapping with categories above, plus a few more) ---
+  {
+    id: "evan-spiegel",
+    name: "Evan Spiegel",
+    gender: "male",
+    country: "United States",
+    primarySource: "Snap Inc.",
+    industry: "Technology & Social Media",
+    birthDate: "1990-06-04",
+    bio: "Co-founder and CEO of Snap Inc., maker of Snapchat.",
+    wikipediaTitle: "Evan_Spiegel",
+    ticker: "SNAP",
+    sharesHeld: 40_000_000,
+    otherAssetsUsd: 500_000_000,
+  },
+  {
+    id: "bobby-murphy",
+    name: "Bobby Murphy",
+    gender: "male",
+    country: "United States",
+    primarySource: "Snap Inc.",
+    industry: "Technology & Social Media",
+    birthDate: "1988-05-19",
+    bio: "Co-founder and CTO of Snap Inc., maker of Snapchat.",
+    wikipediaTitle: "Bobby_Murphy",
+    ticker: "SNAP",
+    sharesHeld: 42_000_000,
+    otherAssetsUsd: 500_000_000,
+  },
+  {
+    id: "daniel-ek",
+    name: "Daniel Ek",
+    gender: "male",
+    country: "Sweden",
+    primarySource: "Spotify",
+    industry: "Technology & Music Streaming",
+    birthDate: "1983-02-21",
+    bio: "Co-founder and CEO of Spotify, the world's largest music-streaming service.",
+    wikipediaTitle: "Daniel_Ek",
+    ticker: "SPOT",
+    sharesHeld: 13_000_000,
+    otherAssetsUsd: 1_000_000_000,
+  },
+  {
+    id: "brian-chesky",
+    name: "Brian Chesky",
+    gender: "male",
+    country: "United States",
+    primarySource: "Airbnb",
+    industry: "Technology & Travel",
+    birthDate: "1981-08-29",
+    bio: "Co-founder and CEO of Airbnb.",
+    wikipediaTitle: "Brian_Chesky",
+    ticker: "ABNB",
+    sharesHeld: 90_000_000,
+    otherAssetsUsd: 1_000_000_000,
   },
 ];

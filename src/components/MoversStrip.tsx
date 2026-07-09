@@ -39,31 +39,36 @@ export default function MoversStrip({
   }
 
   return (
-    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-      {topGainers.length > 0 && (
-        <div>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-            Biggest Gainers Today
-          </h2>
-          <div className="flex gap-3 overflow-x-auto pb-1">
-            {topGainers.map((person) => (
-              <MoverCard key={person.id} person={person} isGainer />
-            ))}
+    <section className="w-full rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900/40">
+      <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-black dark:text-white">
+        Today&apos;s Biggest Movers
+      </h2>
+      <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+        {topGainers.length > 0 && (
+          <div>
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-500">
+              Gainers
+            </h3>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {topGainers.map((person) => (
+                <MoverCard key={person.id} person={person} isGainer />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {topLosers.length > 0 && (
-        <div>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-            Biggest Losers Today
-          </h2>
-          <div className="flex gap-3 overflow-x-auto pb-1">
-            {topLosers.map((person) => (
-              <MoverCard key={person.id} person={person} isGainer={false} />
-            ))}
+        )}
+        {topLosers.length > 0 && (
+          <div>
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-600 dark:text-rose-500">
+              Losers
+            </h3>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {topLosers.map((person) => (
+                <MoverCard key={person.id} person={person} isGainer={false} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </section>
   );
 }
