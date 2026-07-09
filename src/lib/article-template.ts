@@ -18,6 +18,12 @@ function magnitude(deltaUsd: number, deltaPercent: number): string {
   return `${formatUsdCompact(Math.abs(deltaUsd))} (${formatPercentMagnitude(deltaPercent)})`;
 }
 
+/** "the {list name} list", without a doubled article for names already starting with "The". */
+function theListPhrase(category: Category): string {
+  const title = categoryArticleTitle(category);
+  return title.startsWith("The ") ? `${title} list` : `the ${title} list`;
+}
+
 /**
  * Deterministic, template-based article text generated purely from
  * computed facts — no AI writing involved. Every sentence below maps to a
@@ -52,7 +58,7 @@ export function buildArticleText(date: string, category: Category, facts: Articl
   }
   if (summaryParts.length === 0) {
     summaryParts.push(
-      `Tracking ${facts.personCount} billionaires in the ${categoryArticleTitle(category)} list, with a combined estimated net worth of ${formatUsdCompact(facts.totalNetWorthUsd)}.`,
+      `Tracking ${facts.personCount} billionaires in ${theListPhrase(category)}, with a combined estimated net worth of ${formatUsdCompact(facts.totalNetWorthUsd)}.`,
     );
   }
   const summary = summaryParts.join(" ");
@@ -77,7 +83,7 @@ export function buildArticleText(date: string, category: Category, facts: Articl
     });
   }
   faqs.push({
-    question: `How many billionaires are on the ${categoryArticleTitle(category)} list?`,
+    question: `How many billionaires are on ${theListPhrase(category)}?`,
     answer: `${facts.personCount}, with a combined estimated net worth of ${formatUsdCompact(facts.totalNetWorthUsd)} as of ${dateLabel}.`,
   });
 
