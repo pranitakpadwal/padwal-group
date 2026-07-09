@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
+import { getPersonProfile } from "@/data/profiles";
 import { siteUrl } from "@/lib/site";
 import {
   formatPercentChange,
@@ -62,6 +63,17 @@ export default async function BillionaireProfile({
   if (!ranked) {
     notFound();
   }
+
+  const profile = getPersonProfile(id);
+  const subpageLinks = [
+    profile?.ventures && profile.ventures.length > 0
+      ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
+      : null,
+    profile?.notableAssets && profile.notableAssets.length > 0
+      ? { href: `/billionaire/${id}/lifestyle`, label: "Homes, Jets & Notable Assets" }
+      : null,
+    profile?.family ? { href: `/billionaire/${id}/family`, label: "Family" } : null,
+  ].filter((link) => link !== null);
 
   const isUp = ranked.dayChangeUsd > 0;
   const isDown = ranked.dayChangeUsd < 0;
@@ -173,6 +185,20 @@ export default async function BillionaireProfile({
             {person.primarySource}, a privately held company with no public
             ticker to chart. The {formatUsdCompact(person.otherAssetsUsd)} net
             worth estimate shown above is a static figure, not a live feed.
+          </div>
+        )}
+
+        {subpageLinks.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {subpageLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+              >
+                {link.label} &rarr;
+              </Link>
+            ))}
           </div>
         )}
       </main>

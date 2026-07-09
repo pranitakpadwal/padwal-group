@@ -12,7 +12,10 @@ for market data.
 - `/women` — The Richest Women
 - `/young` — Billionaires under 45
 - `/billionaire/[id]` — per-person profile page (bio, stats, ~3-month stock
-  price sparkline)
+  price sparkline), linking out to (where curated):
+  - `/billionaire/[id]/ventures` — other companies founded/invested in
+  - `/billionaire/[id]/lifestyle` — publicly reported homes, jets, yachts
+  - `/billionaire/[id]/family` — marital status + number of children only
 - `/articles` — index of daily recap articles, filterable by category
 - `/articles/[date]/[category]` — one recap per list per day: today's
   leader, biggest gainers/losers, rank moves, and an FAQ section
@@ -60,6 +63,26 @@ sidebar (quick stats, today's top mover, links to the other lists).
 - SEO: `src/app/sitemap.ts`, `src/app/robots.ts`, per-page `metadata`
   (title/description/OpenGraph/Twitter), and JSON-LD (`ItemList` on list
   pages, `Person` on profile pages).
+
+### Deeper profile content (ventures, lifestyle, family)
+
+- `src/data/profiles.ts` — hand-curated, sourced facts for a handful of
+  very well-documented people (currently Musk, Bezos, Ambani, Arnault,
+  Zuckerberg, Ellison). Most of the roster intentionally has **no** entry
+  here — the sub-pages simply don't exist for them, rather than showing
+  thin or fabricated content.
+- Three deliberate boundaries baked into this data, on purpose, not just
+  as a style choice:
+  1. **Every fact needs a credible public source** (major outlet or
+     Wikipedia), linked inline. No single-tabloid claims.
+  2. **Family info is capped at marital status + number of children.**
+     Never children's names, ages, or schools — these are some of the
+     most targetable people alive, and that's a real safety line.
+  3. **Home locations stay at city/region level**, not street addresses,
+     even where more specific info is publicly reported elsewhere.
+- If you extend `personProfiles`, keep to this same bar. It's manually
+  curated and will go stale (marriages, sold yachts, new ventures) —
+  recheck sources periodically rather than trusting it indefinitely.
 
 ### Daily recap articles (SEO/AEO content)
 

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { billionaires } from "@/data/billionaires";
+import { getPersonProfile } from "@/data/profiles";
 import { listArticles } from "@/lib/articles";
 import { siteUrl } from "@/lib/site";
 
@@ -20,6 +21,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
+  const profileSubpageRoutes: MetadataRoute.Sitemap = billionaires.flatMap((person) => {
+    const profile = getPersonProfile(person.id);
+    if (!profile) {
+      return [];
+    }
+    const slugs: string[] = [];
+    if (profile.ventures && profile.ventures.length > 0) slugs.push("ventures");
+    if (profile.notableAssets && profile.notableAssets.length > 0) slugs.push("lifestyle");
+    if (profile.family) slugs.push("family");
+
+    return slugs.map((slug) => ({
+      url: `${base}/billionaire/${person.id}/${slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.4,
+    }));
+  });
+
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
     lastModified: article.generatedAt,
@@ -27,5 +45,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...categoryRoutes, ...profileRoutes, ...articleRoutes];
+  return [...categoryRoutes, ...profileRoutes, ...profileSubpageRoutes, ...articleRoutes];
 }
