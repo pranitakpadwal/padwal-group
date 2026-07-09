@@ -3,7 +3,7 @@ import Link from "next/link";
 import { listArticles } from "@/lib/articles";
 import { buildArticleText } from "@/lib/article-template";
 import { CATEGORIES, categoryLabel, isCategory, type Category } from "@/lib/categories";
-import { formatDateLong } from "@/lib/dates";
+import { formatDateLong, todayDateString } from "@/lib/dates";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -67,13 +67,25 @@ export default async function ArticlesIndexPage({
         </nav>
 
         {articles.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            No recaps have been generated yet. Visit a{" "}
-            <Link href="/" className="hover:underline">
-              billionaire list
-            </Link>{" "}
-            first, or check back after the next daily update.
-          </p>
+          <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <p className="text-sm text-neutral-600 dark:text-neutral-300">
+              No recaps exist yet for this site. Nothing writes itself until
+              someone opens today&apos;s recap for the first time — click any
+              one below and it&apos;ll generate right now, then stay saved
+              for everyone after that.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map((c) => (
+                <Link
+                  key={c}
+                  href={`/articles/${todayDateString()}/${c}`}
+                  className="rounded-full border border-black bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90 dark:border-white dark:bg-white dark:text-black"
+                >
+                  Write today&apos;s {categoryLabel(c)} recap
+                </Link>
+              ))}
+            </div>
+          </div>
         ) : (
           <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
             {articles.map((article) => {
