@@ -1,5 +1,7 @@
 import YahooFinance from "yahoo-finance2";
 import { billionaires, type Billionaire } from "@/data/billionaires";
+import { calculateAge } from "@/lib/age";
+import { getPhotoUrls } from "@/lib/photos";
 
 const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
@@ -7,8 +9,12 @@ export interface RankedBillionaire {
   rank: number;
   id: string;
   name: string;
+  age: number;
   country: string;
   primarySource: string;
+  industry: string;
+  bio: string;
+  photoUrl: string | null;
   ticker: string;
   netWorthUsd: number;
   dayChangeUsd: number;
@@ -20,19 +26,25 @@ export interface RankedBillionaire {
 
 export interface Leaderboard {
   people: RankedBillionaire[];
+  topGainers: RankedBillionaire[];
+  topLosers: RankedBillionaire[];
   asOf: string;
   stale: boolean;
   warning: string | null;
 }
 
 const CACHE_TTL_MS = 20_000;
+const MOVERS_COUNT = 5;
 
 let cache: { leaderboard: Leaderboard; expiresAt: number } | null = null;
 let inFlight: Promise<Leaderboard> | null = null;
 
+type QuoteInfo = { price: number; change: number; currency?: string; marketState?: string };
+
 function computeLeaderboard(
   people: Billionaire[],
-  quotesBySymbol: Map<string, { price: number; change: number; currency?: string; marketState?: string }>,
+  quotesBySymbol: Map<string, QuoteInfo>,
+  photosByTitle: Map<string, string | null>,
 ): Leaderboard {
   const ranked = people.map((person) => {
     const quote = quotesBySymbol.get(person.ticker);
@@ -47,8 +59,12 @@ function computeLeaderboard(
     return {
       id: person.id,
       name: person.name,
+      age: calculateAge(person.birthDate),
       country: person.country,
       primarySource: person.primarySource,
+      industry: person.industry,
+      bio: person.bio,
+      photoUrl: photosByTitle.get(person.wikipediaTitle) ?? null,
       ticker: person.ticker,
       netWorthUsd,
       dayChangeUsd,
@@ -60,9 +76,20 @@ function computeLeaderboard(
   });
 
   ranked.sort((a, b) => b.netWorthUsd - a.netWorthUsd);
+  const rankedWithPositions = ranked.map((person, index) => ({ ...person, rank: index + 1 }));
+
+  const movers = rankedWithPositions.filter((person) => person.dayChangeUsd !== 0);
+  const topGainers = [...movers]
+    .sort((a, b) => b.dayChangeUsd - a.dayChangeUsd)
+    .slice(0, MOVERS_COUNT);
+  const topLosers = [...movers]
+    .sort((a, b) => a.dayChangeUsd - b.dayChangeUsd)
+    .slice(0, MOVERS_COUNT);
 
   return {
-    people: ranked.map((person, index) => ({ ...person, rank: index + 1 })),
+    people: rankedWithPositions,
+    topGainers,
+    topLosers,
     asOf: new Date().toISOString(),
     stale: false,
     warning: null,
@@ -71,13 +98,14 @@ function computeLeaderboard(
 
 async function fetchLeaderboard(): Promise<Leaderboard> {
   const symbols = Array.from(new Set(billionaires.map((b) => b.ticker)));
+  const wikipediaTitles = billionaires.map((b) => b.wikipediaTitle);
 
-  const quotes = await yahooFinance.quote(symbols, { return: "map" });
+  const [quotes, photosByTitle] = await Promise.all([
+    yahooFinance.quote(symbols, { return: "map" }),
+    getPhotoUrls(wikipediaTitles),
+  ]);
 
-  const quotesBySymbol = new Map<
-    string,
-    { price: number; change: number; currency?: string; marketState?: string }
-  >();
+  const quotesBySymbol = new Map<string, QuoteInfo>();
   for (const [symbol, quote] of quotes.entries()) {
     const price = quote.regularMarketPrice;
     if (typeof price === "number") {
@@ -90,7 +118,7 @@ async function fetchLeaderboard(): Promise<Leaderboard> {
     }
   }
 
-  return computeLeaderboard(billionaires, quotesBySymbol);
+  return computeLeaderboard(billionaires, quotesBySymbol, photosByTitle);
 }
 
 /**
@@ -131,7 +159,7 @@ export async function getLeaderboard(): Promise<Leaderboard> {
       // than failing the whole page. Cache the degraded result briefly too,
       // so a sustained outage doesn't retry the upstream on every request.
       const degraded: Leaderboard = {
-        ...computeLeaderboard(billionaires, new Map()),
+        ...computeLeaderboard(billionaires, new Map(), new Map()),
         stale: true,
         warning: `Live prices unavailable: ${message}`,
       };
@@ -143,4 +171,8 @@ export async function getLeaderboard(): Promise<Leaderboard> {
     });
 
   return inFlight;
+}
+
+export function findBillionaireById(id: string): Billionaire | undefined {
+  return billionaires.find((person) => person.id === id);
 }

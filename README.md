@@ -21,6 +21,18 @@ for market data.
 - `src/app/page.tsx` + `src/components/Leaderboard.tsx` — renders the
   table server-side for a fast first paint, then polls the API client-side
   every 20s to keep numbers moving.
+- `src/components/MoversStrip.tsx` — highlights today's top 5 gainers and
+  losers by dollar change, above the main table.
+- `src/lib/photos.ts` — best-effort portrait lookup via Wikipedia's public
+  REST summary API (cached ~24h), falling back to initials avatars
+  (`src/components/PersonAvatar.tsx`) when unavailable.
+- `src/lib/age.ts` — computes a live age from each person's birth date
+  instead of a hardcoded number that goes stale.
+- `src/app/billionaire/[id]/page.tsx` — a per-person profile page with
+  bio, industry, current stats, and a ~3-month stock price sparkline
+  (`src/lib/price-history.ts` + `src/components/Sparkline.tsx`). The
+  sparkline reflects the ticker's price only — the static
+  `otherAssetsUsd` portion has no historical data to chart.
 
 ### Important data caveats
 
@@ -42,11 +54,16 @@ things to know before you rely on it:
    rest of the app only depends on the `RankedBillionaire`/`Leaderboard`
    shapes, not on where the quotes come from.
 4. **Outbound network access must be allowed** to Yahoo's quote endpoints
-   (`query1.finance.yahoo.com`, `fc.yahoo.com`) from wherever this is
-   hosted. If quotes never populate, that's almost always a network/egress
-   policy issue on the host, not a bug in the app — the leaderboard falls
-   back to the static estimate and shows a "Live prices unavailable"
-   banner when it can't reach the provider.
+   (`query1.finance.yahoo.com`, `fc.yahoo.com`) and Wikipedia's REST API
+   (`en.wikipedia.org`) from wherever this is hosted. If quotes or photos
+   never populate, that's almost always a network/egress policy issue on
+   the host, not a bug in the app — the leaderboard falls back to the
+   static estimate / initials avatars and shows a "Live prices
+   unavailable" banner when it can't reach a provider.
+5. **Portraits are pulled from Wikipedia's REST API**, not a licensed
+   photo feed — see the note in `src/lib/photos.ts`. Fine for a personal
+   project; swap in a licensed image source before using this
+   commercially.
 
 ## Getting started locally
 

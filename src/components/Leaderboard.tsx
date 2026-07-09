@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import type { Leaderboard as LeaderboardData } from "@/lib/net-worth";
 import {
   formatClock,
@@ -8,18 +9,10 @@ import {
   formatUsdChange,
   formatUsdCompact,
 } from "@/lib/format";
+import PersonAvatar from "@/components/PersonAvatar";
+import MoversStrip from "@/components/MoversStrip";
 
 const POLL_INTERVAL_MS = 20_000;
-
-function initials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
 
 function ChangeCell({ usd, percent }: { usd: number; percent: number }) {
   const isUp = usd > 0;
@@ -101,8 +94,8 @@ export default function Leaderboard({
   }, []);
 
   return (
-    <div className="w-full max-w-4xl">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+    <div className="flex w-full max-w-4xl flex-col gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
         <div className="flex items-center gap-2">
           <span
             className={`inline-block h-2 w-2 rounded-full ${
@@ -121,14 +114,17 @@ export default function Leaderboard({
         )}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800">
-        <table className="w-full border-collapse text-left">
+      <MoversStrip topGainers={data.topGainers} topLosers={data.topLosers} />
+
+      <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+        <table className="w-full min-w-[720px] border-collapse text-left">
           <thead className="bg-neutral-50 text-xs uppercase tracking-wide text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
             <tr>
               <th className="px-4 py-3 font-medium">Rank</th>
               <th className="px-4 py-3 font-medium">Name</th>
+              <th className="px-4 py-3 font-medium">Age</th>
               <th className="px-4 py-3 font-medium hidden sm:table-cell">
-                Source
+                Source / Industry
               </th>
               <th className="px-4 py-3 font-medium text-right">Net Worth</th>
               <th className="px-4 py-3 font-medium text-right">Today</th>
@@ -144,20 +140,25 @@ export default function Leaderboard({
                   {person.rank}
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-xs font-semibold text-white dark:bg-neutral-100 dark:text-neutral-900">
-                      {initials(person.name)}
-                    </span>
+                  <Link
+                    href={`/billionaire/${person.id}`}
+                    className="flex items-center gap-3"
+                  >
+                    <PersonAvatar name={person.name} photoUrl={person.photoUrl} size={36} />
                     <div>
-                      <div className="font-medium">{person.name}</div>
+                      <div className="font-medium hover:underline">{person.name}</div>
                       <div className="text-xs text-neutral-500 dark:text-neutral-400">
                         {person.country}
                       </div>
                     </div>
-                  </div>
+                  </Link>
+                </td>
+                <td className="px-4 py-3 text-sm tabular-nums text-neutral-600 dark:text-neutral-300">
+                  {person.age}
                 </td>
                 <td className="hidden px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300 sm:table-cell">
                   {person.primarySource}
+                  <div className="text-xs text-neutral-400">{person.industry}</div>
                   {person.sharePrice !== null && (
                     <div className="text-xs text-neutral-400">
                       {person.ticker} @ {person.sharePrice.toFixed(2)}{" "}
