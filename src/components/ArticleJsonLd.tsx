@@ -1,0 +1,79 @@
+import type { Faq } from "@/lib/article-template";
+import { categoryArticleTitle, categoryLabel, type Category } from "@/lib/categories";
+import { siteUrl } from "@/lib/site";
+
+export default function ArticleJsonLd({
+  date,
+  category,
+  title,
+  summary,
+  faqs,
+}: {
+  date: string;
+  category: Category;
+  title: string;
+  summary: string;
+  faqs: Faq[];
+}) {
+  const url = `${siteUrl()}/articles/${date}/${category}`;
+  const publishedAt = `${date}T23:59:00Z`;
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description: summary,
+    datePublished: publishedAt,
+    dateModified: publishedAt,
+    url,
+    mainEntityOfPage: url,
+    about: categoryArticleTitle(category),
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Real-Time Billionaires Tracker",
+      url: siteUrl(),
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl() },
+      { "@type": "ListItem", position: 2, name: "Daily Recaps", item: `${siteUrl()}/articles` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: categoryLabel(category),
+        item: `${siteUrl()}/articles?category=${category}`,
+      },
+      { "@type": "ListItem", position: 4, name: title, item: url },
+    ],
+  };
+
+  const faqJsonLd =
+    faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+          })),
+        }
+      : null;
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+    </>
+  );
+}

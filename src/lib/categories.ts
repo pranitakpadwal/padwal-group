@@ -23,6 +23,34 @@ export function categoryLabel(category: Category): string {
   }
 }
 
+/** Natural-language noun phrase for headlines, e.g. "India's Billionaires". */
+export function categoryArticleTitle(category: Category): string {
+  switch (category) {
+    case "world":
+      return "World's Billionaires";
+    case "india":
+      return "India's Billionaires";
+    case "women":
+      return "The World's Richest Women";
+    case "young":
+      return `The Youngest Billionaires (Under ${YOUNG_AGE_THRESHOLD})`;
+  }
+}
+
+/** Fits "Who is the richest {phrase} on {date}?" */
+export function categoryRichestPhrase(category: Category): string {
+  switch (category) {
+    case "world":
+      return "billionaire in the world";
+    case "india":
+      return "billionaire in India";
+    case "women":
+      return "woman billionaire";
+    case "young":
+      return `billionaire under ${YOUNG_AGE_THRESHOLD}`;
+  }
+}
+
 export function categoryDescription(category: Category): string {
   switch (category) {
     case "world":
@@ -57,12 +85,13 @@ function filterByCategory(people: RankedBillionaire[], category: Category): Rank
 }
 
 /**
- * Derives a category-scoped view from the full (world) leaderboard: filters
- * the roster, re-ranks 1..N within that subset, and recomputes gainers/
- * losers scoped to the same subset.
+ * Filters a ranked roster down to a category, re-ranking 1..N within that
+ * subset and recomputing gainers/losers scoped to the same subset. Works
+ * on any RankedBillionaire[] — a live leaderboard or a historical snapshot
+ * hydrated back into the same shape.
  */
-export function getCategoryView(leaderboard: Leaderboard, category: Category): CategoryView {
-  const filtered = filterByCategory(leaderboard.people, category);
+export function deriveCategoryView(people: RankedBillionaire[], category: Category): CategoryView {
+  const filtered = filterByCategory(people, category);
   const rankedWithinCategory = filtered
     .slice()
     .sort((a, b) => b.netWorthUsd - a.netWorthUsd)
@@ -71,4 +100,9 @@ export function getCategoryView(leaderboard: Leaderboard, category: Category): C
   const { topGainers, topLosers } = selectMovers(rankedWithinCategory);
 
   return { category, people: rankedWithinCategory, topGainers, topLosers };
+}
+
+/** Derives a category-scoped view from the full (world) live leaderboard. */
+export function getCategoryView(leaderboard: Leaderboard, category: Category): CategoryView {
+  return deriveCategoryView(leaderboard.people, category);
 }

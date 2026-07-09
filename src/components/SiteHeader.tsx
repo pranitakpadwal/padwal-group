@@ -12,9 +12,17 @@ export default function SiteHeader({ activeCategory }: { activeCategory: Categor
               Real-Time Billionaires
             </span>
           </Link>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Live estimates from public stock holdings &mdash; not affiliated with Forbes
-          </p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/articles"
+              className="text-sm font-medium text-neutral-600 hover:underline dark:text-neutral-300"
+            >
+              Daily Recaps
+            </Link>
+            <p className="hidden text-xs text-neutral-500 dark:text-neutral-400 sm:block">
+              Live estimates from public stock holdings &mdash; not affiliated with Forbes
+            </p>
+          </div>
         </div>
         <CategoryTabs active={activeCategory} />
       </div>

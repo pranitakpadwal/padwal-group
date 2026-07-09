@@ -13,6 +13,10 @@ for market data.
 - `/young` — Billionaires under 45
 - `/billionaire/[id]` — per-person profile page (bio, stats, ~3-month stock
   price sparkline)
+- `/articles` — index of daily recap articles, filterable by category
+- `/articles/[date]/[category]` — one recap per list per day: today's
+  leader, biggest gainers/losers, rank moves, and an FAQ section
+- `/llms.txt` — a plain-text site summary for AI crawlers/answer engines
 
 All four list pages share one layout: category tabs, a "Today's Biggest
 Movers" gainers/losers section, the main ranked table, and a right-hand
@@ -56,6 +60,37 @@ sidebar (quick stats, today's top mover, links to the other lists).
 - SEO: `src/app/sitemap.ts`, `src/app/robots.ts`, per-page `metadata`
   (title/description/OpenGraph/Twitter), and JSON-LD (`ItemList` on list
   pages, `Person` on profile pages).
+
+### Daily recap articles (SEO/AEO content)
+
+- `src/lib/db.ts` — a single-file SQLite database (via `better-sqlite3`)
+  storing daily net-worth snapshots and generated articles. This is
+  single-instance persistence — fine for one Railway service, not for
+  multiple horizontally-scaled instances.
+- `src/lib/snapshots.ts` — saves each day's net worth per person, and can
+  rebuild a fully-ranked historical view for any past date from stored
+  snapshots (joined against the static roster for bio fields).
+- `src/lib/article-facts.ts` — pure functions computing the facts that
+  make a day's recap non-generic: top 10, biggest $ gainers/losers vs.
+  yesterday's snapshot, and biggest rank climbers/fallers.
+- `src/lib/article-template.ts` — deterministic, **template-based** text
+  generation (title, summary, FAQ) from those facts. No AI/LLM call — every
+  sentence maps to a real computed number, which is what keeps this
+  legitimate content rather than the kind of thin auto-generated filler
+  search engines penalize.
+- `src/app/api/cron/daily-snapshot/route.ts` — a `POST` endpoint, guarded
+  by a `CRON_SECRET` header, that snapshots today's data and (re)generates
+  all four category articles. Meant to be called once a day by an external
+  scheduler (see Railway setup below). Safe to call more than once a day —
+  each call overwrites that day's articles with the latest figures.
+- `src/lib/generate-article.ts` — also exposes `ensureArticle()`, used by
+  the article page itself: if you visit today's article before the cron
+  has run, it generates and saves it on the fly. Past dates with no stored
+  snapshot 404 instead of fabricating history.
+- JSON-LD on article pages: `Article`, `BreadcrumbList`, and `FAQPage`
+  (`src/components/ArticleJsonLd.tsx`) — the FAQ block in particular is
+  aimed at being cited directly by AI answer engines (Google AI Overviews,
+  Perplexity, etc.), not just classic search.
 
 ### Important data caveats
 
@@ -121,6 +156,36 @@ Open [http://localhost:3000](http://localhost:3000).
    Finance data source. If you switch to a paid market-data provider, add
    its API key under **Variables** and read it via `process.env` in
    `src/lib/net-worth.ts`.
+
+### Setting up daily recap articles on Railway
+
+The article system needs persistent storage and a daily trigger — neither
+exists by default on a fresh Railway service.
+
+1. **Add a Volume**: on your service, go to **Settings → Volumes → New
+   Volume**, mount it at e.g. `/data`.
+2. **Set `DATABASE_PATH`** under **Variables** to a file path inside that
+   volume, e.g. `/data/tracker.db`. Without this, the SQLite file lives on
+   the container's ephemeral disk and resets on every deploy/restart —
+   you'd lose snapshot history and every past article would 404.
+3. **Set `CRON_SECRET`** under **Variables** to a random string (e.g.
+   `openssl rand -hex 32`). The snapshot endpoint refuses all requests
+   without it.
+4. **Add a Cron Job**: in the same Railway project, **New → Cron Job** (or
+   **Empty Service** configured as a scheduled job, depending on your
+   Railway plan/UI), running something like:
+   ```bash
+   curl -X POST https://yourdomain.com/api/cron/daily-snapshot \
+     -H "x-cron-secret: $CRON_SECRET"
+   ```
+   Schedule it for once a day, after US markets close (e.g. `30 21 * * *`
+   UTC ≈ 4:30pm ET) so the day's article reflects a consistent end-of-day
+   snapshot rather than a random intraday figure. Give the cron service
+   its own `CRON_SECRET` variable matching the web service's.
+5. If you skip steps 1-4 entirely, the site still works: `/articles/[today]/[category]`
+   pages generate themselves on first visit via `ensureArticle()`. You just
+   won't get day-over-day gainers/losers/rank-move content (no prior
+   snapshot to compare against), and nothing persists across restarts.
 
 ## Extending the roster
 
