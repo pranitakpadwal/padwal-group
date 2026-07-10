@@ -42,7 +42,22 @@ export interface FamilyInfo {
   note?: string;
 }
 
+/**
+ * "Self-made" descriptor loosely mirroring how Forbes frames wealth origin,
+ * without copying their proprietary 1-10 score (which we can't verify).
+ */
+export type WealthOrigin = "Self-made" | "Inherited" | "Inherited and growing it";
+
 export interface PersonProfile {
+  /** City/region only, never a street address. */
+  residenceCity?: string;
+  citizenship?: string;
+  education?: string;
+  wealthOrigin?: WealthOrigin;
+  /** Short editorial bio, one string per paragraph. Written from public facts. */
+  longBio?: string[];
+  /** Punchy, widely-reported facts. */
+  keyFacts?: string[];
   ventures?: Venture[];
   notableAssets?: NotableAsset[];
   family?: FamilyInfo;
@@ -50,6 +65,19 @@ export interface PersonProfile {
 
 export const personProfiles: Record<string, PersonProfile> = {
   "elon-musk": {
+    residenceCity: "Austin, Texas",
+    citizenship: "United States",
+    education: "University of Pennsylvania",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Elon Musk is the CEO of Tesla and SpaceX and one of the most closely watched entrepreneurs in the world. Born in Pretoria, South Africa, he moved to Canada and then the United States, where he co-founded the online payments company that became PayPal.",
+      "He has since built a sprawling portfolio of companies spanning electric vehicles, spaceflight, satellite internet, tunnelling, brain-computer interfaces, and artificial intelligence, and acquired the social platform now known as X.",
+    ],
+    keyFacts: [
+      "Taught himself to code as a child and sold his first game, Blastar, for around $500.",
+      "Co-founder of multiple companies including Tesla, SpaceX, Neuralink, and xAI.",
+      "Acquired Twitter (now X) in 2022 for roughly $44 billion.",
+    ],
     ventures: [
       {
         name: "SpaceX",
@@ -110,6 +138,19 @@ export const personProfiles: Record<string, PersonProfile> = {
   },
 
   "jeff-bezos": {
+    residenceCity: "Miami, Florida",
+    citizenship: "United States",
+    education: "Princeton University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Jeff Bezos founded Amazon in 1994, initially as an online bookseller run out of his garage, and built it into one of the world's largest companies spanning e-commerce, cloud computing, and devices.",
+      "He stepped down as Amazon CEO in 2021 to focus on other ventures, including his aerospace company Blue Origin. Most of his fortune remains tied to his Amazon stake.",
+    ],
+    keyFacts: [
+      "Founded Amazon in 1994 out of his garage, initially selling books online.",
+      "Founded aerospace company Blue Origin in 2000.",
+      "Bought The Washington Post for $250 million in 2013.",
+    ],
     ventures: [
       {
         name: "Blue Origin",
@@ -151,6 +192,19 @@ export const personProfiles: Record<string, PersonProfile> = {
   },
 
   "mukesh-ambani": {
+    residenceCity: "Mumbai, India",
+    citizenship: "India",
+    education: "Institute of Chemical Technology, Mumbai",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Mukesh Ambani is the chairman and managing director of Reliance Industries, India's most valuable company, which spans energy, petrochemicals, retail, and telecom.",
+      "He inherited the business his father Dhirubhai Ambani founded and has substantially expanded it, most notably by launching the telecom operator Jio, which rapidly became one of India's largest mobile networks.",
+    ],
+    keyFacts: [
+      "Chairs Reliance Industries, India's most valuable company.",
+      "Launched telecom operator Jio in 2016, rapidly gaining hundreds of millions of subscribers.",
+      "Lives in Antilia, a 27-story private residence in Mumbai.",
+    ],
     ventures: [
       {
         name: "Jio",
@@ -191,6 +245,19 @@ export const personProfiles: Record<string, PersonProfile> = {
   },
 
   "bernard-arnault": {
+    residenceCity: "Paris, France",
+    citizenship: "France",
+    education: "École Polytechnique",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Bernard Arnault is the chairman and CEO of LVMH, the world's largest luxury goods company, which controls around 75 brands including Louis Vuitton, Dior, and Tiffany & Co.",
+      "He began by taking over his family's construction business and used the proceeds to build a luxury empire through a series of acquisitions over several decades. Several of his five children hold senior roles across LVMH's brands.",
+    ],
+    keyFacts: [
+      "Transformed a family construction business into luxury conglomerate LVMH.",
+      "LVMH controls around 75 brands including Louis Vuitton, Dior, and Tiffany & Co.",
+      "A prominent contemporary art collector via the Fondation Louis Vuitton.",
+    ],
     ventures: [
       {
         name: "Fondation Louis Vuitton",
@@ -217,6 +284,19 @@ export const personProfiles: Record<string, PersonProfile> = {
   },
 
   "mark-zuckerberg": {
+    residenceCity: "Palo Alto, California",
+    citizenship: "United States",
+    education: "Harvard University (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Mark Zuckerberg is the co-founder, chairman, and CEO of Meta Platforms, which owns Facebook, Instagram, and WhatsApp. He launched Facebook from his Harvard dorm room in 2004 and dropped out to build the company full-time.",
+      "He controls the company through a dual-class share structure and, with his wife Priscilla Chan, has pledged to give away the vast majority of his wealth through the Chan Zuckerberg Initiative.",
+    ],
+    keyFacts: [
+      "Launched Facebook from his Harvard dorm room in 2004.",
+      "Dropped out of Harvard to build the company full-time.",
+      "Owns roughly 13% of Meta Platforms.",
+    ],
     ventures: [
       {
         name: "Chan Zuckerberg Initiative",
@@ -243,6 +323,19 @@ export const personProfiles: Record<string, PersonProfile> = {
   },
 
   "larry-ellison": {
+    residenceCity: "Lanai, Hawaii",
+    citizenship: "United States",
+    education: "University of Illinois (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Larry Ellison co-founded the software company Oracle in 1977 and led it as CEO for decades, building it into one of the world's largest database and enterprise software firms. He remains its chairman and chief technology officer.",
+      "Raised in modest circumstances in Chicago, he is known for an extravagant personal life, including ownership of most of the Hawaiian island of Lanai and a fleet of large yachts.",
+    ],
+    keyFacts: [
+      "Co-founded Oracle in 1977 and led it as CEO for decades.",
+      "Owns about 98% of the Hawaiian island of Lanai.",
+      "Known as one of the largest individual yacht owners in the world.",
+    ],
     ventures: [],
     notableAssets: [
       {

@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
 import { getPersonProfile } from "@/data/profiles";
+import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { siteUrl } from "@/lib/site";
+import { todayDateString } from "@/lib/dates";
 import {
   formatPercentChange,
   formatUsdChange,
@@ -12,6 +14,7 @@ import {
 } from "@/lib/format";
 import PersonAvatar from "@/components/PersonAvatar";
 import Sparkline from "@/components/Sparkline";
+import PersonalStats from "@/components/PersonalStats";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -30,7 +33,7 @@ export async function generateMetadata({
     return { title: "Billionaire not found" };
   }
 
-  const title = `${person.name} — Real-Time Billionaires`;
+  const title = `${person.name} — Net Worth, Bio & Real-Time Rank`;
   const description = person.bio;
   return {
     title,
@@ -65,6 +68,20 @@ export default async function BillionaireProfile({
   }
 
   const profile = getPersonProfile(id);
+  const appearances = getListAppearances(leaderboard, id);
+  const related = getRelatedPeople(leaderboard, ranked);
+  const today = todayDateString();
+  const firstName = ranked.name.split(" ")[0];
+
+  const isUp = ranked.dayChangeUsd > 0;
+  const isDown = ranked.dayChangeUsd < 0;
+  const changeColor = isUp
+    ? "text-emerald-500"
+    : isDown
+      ? "text-rose-500"
+      : "text-neutral-400";
+  const arrow = isUp ? "▲" : isDown ? "▼" : "•";
+
   const subpageLinks = [
     profile?.ventures && profile.ventures.length > 0
       ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
@@ -75,14 +92,6 @@ export default async function BillionaireProfile({
     profile?.family ? { href: `/billionaire/${id}/family`, label: "Family" } : null,
   ].filter((link) => link !== null);
 
-  const isUp = ranked.dayChangeUsd > 0;
-  const isDown = ranked.dayChangeUsd < 0;
-  const changeColor = isUp
-    ? "text-emerald-500"
-    : isDown
-      ? "text-rose-500"
-      : "text-neutral-400";
-
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -92,12 +101,14 @@ export default async function BillionaireProfile({
     nationality: person.country,
     image: ranked.photoUrl ?? undefined,
     url: `${siteUrl()}/billionaire/${person.id}`,
+    ...(profile?.education ? { alumniOf: profile.education } : {}),
+    ...(profile?.residenceCity ? { homeLocation: profile.residenceCity } : {}),
   };
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-black">
       <SiteHeader activeCategory="world" />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
         <Link
           href="/"
           className="text-sm text-neutral-500 hover:underline dark:text-neutral-400"
@@ -105,102 +116,201 @@ export default async function BillionaireProfile({
           &larr; Back to leaderboard
         </Link>
 
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <PersonAvatar name={ranked.name} photoUrl={ranked.photoUrl} size={72} />
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-3xl">
+        {/* Hero */}
+        <div className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-950 sm:flex-row sm:items-center">
+          <PersonAvatar name={ranked.name} photoUrl={ranked.photoUrl} size={96} />
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
               {ranked.name}
             </h1>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Rank #{ranked.rank} &middot; Age {ranked.age} &middot; {ranked.country}
+            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+              #{ranked.rank} in the World &middot; Age {ranked.age} &middot;{" "}
+              {profile?.residenceCity ?? ranked.country}
             </p>
           </div>
-        </div>
-
-        <p className="max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">
-          {person.bio}
-        </p>
-
-        <div className="grid grid-cols-1 gap-4 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800 sm:grid-cols-3">
-          <div>
+          <div className="sm:text-right">
             <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-              Net Worth
+              Real-Time Net Worth
             </div>
-            <div className="text-2xl font-bold tabular-nums">
+            <div className="text-3xl font-bold tabular-nums sm:text-4xl">
               {formatUsdCompact(ranked.netWorthUsd)}
             </div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-              Today
-            </div>
-            <div className={`text-2xl font-bold tabular-nums ${changeColor}`}>
-              {formatUsdChange(ranked.dayChangeUsd)}
-            </div>
-            <div className={`text-sm tabular-nums ${changeColor}`}>
-              {formatPercentChange(ranked.dayChangePercent)}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-              Industry
-            </div>
-            <div className="text-sm font-medium">{ranked.industry}</div>
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              {ranked.primarySource}
+            <div className={`text-sm font-medium tabular-nums ${changeColor}`}>
+              {arrow} {formatUsdChange(ranked.dayChangeUsd)} (
+              {formatPercentChange(ranked.dayChangePercent)}) today
             </div>
           </div>
         </div>
 
-        {ranked.ticker ? (
-          <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
-            <div className="mb-3 flex items-baseline justify-between">
-              <h2 className="text-sm font-semibold">
-                {ranked.ticker} &mdash; last ~3 months
+        <div className="flex flex-col gap-8 lg:flex-row">
+          {/* Main column */}
+          <div className="flex min-w-0 flex-1 flex-col gap-8">
+            <section aria-labelledby="about-heading">
+              <h2 id="about-heading" className="mb-2 text-lg font-bold">
+                About {firstName}
               </h2>
-              {ranked.sharePrice !== null && (
-                <span className="text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
-                  {ranked.sharePrice.toFixed(2)} {ranked.currency ?? ""}
-                </span>
+              {profile?.longBio ? (
+                <div className="flex flex-col gap-3 text-sm leading-relaxed text-neutral-700 dark:text-neutral-200">
+                  {profile.longBio.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-200">
+                  {person.bio}
+                </p>
               )}
-            </div>
-            {priceHistory ? (
-              <Sparkline values={priceHistory} />
-            ) : (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Price history unavailable right now.
-              </p>
-            )}
-            <p className="mt-3 text-xs text-neutral-400">
-              This chart tracks {ranked.ticker}&apos;s share price, the public
-              portion of {ranked.name.split(" ")[0]}&apos;s wealth. It
-              excludes the {formatUsdCompact(person.otherAssetsUsd)} static
-              estimate for private assets, which this tracker doesn&apos;t
-              have historical data for.
-            </p>
-          </div>
-        ) : (
-          <div className="rounded-xl border border-neutral-200 p-5 text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
-            {ranked.name}&apos;s wealth is primarily tied to{" "}
-            {person.primarySource}, a privately held company with no public
-            ticker to chart. The {formatUsdCompact(person.otherAssetsUsd)} net
-            worth estimate shown above is a static figure, not a live feed.
-          </div>
-        )}
+            </section>
 
-        {subpageLinks.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {subpageLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
-              >
-                {link.label} &rarr;
-              </Link>
-            ))}
+            {profile?.keyFacts && profile.keyFacts.length > 0 && (
+              <section aria-labelledby="facts-heading">
+                <h2 id="facts-heading" className="mb-2 text-lg font-bold">
+                  Key Facts
+                </h2>
+                <ul className="flex flex-col gap-2 text-sm text-neutral-700 dark:text-neutral-200">
+                  {profile.keyFacts.map((fact, index) => (
+                    <li key={index} className="flex gap-2">
+                      <span aria-hidden className="text-neutral-400">
+                        &bull;
+                      </span>
+                      <span>{fact}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {ranked.ticker ? (
+              <section aria-labelledby="chart-heading">
+                <div className="mb-3 flex items-baseline justify-between">
+                  <h2 id="chart-heading" className="text-lg font-bold">
+                    {ranked.ticker} &mdash; last ~3 months
+                  </h2>
+                  {ranked.sharePrice !== null && (
+                    <span className="text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
+                      {ranked.sharePrice.toFixed(2)} {ranked.currency ?? ""}
+                    </span>
+                  )}
+                </div>
+                {priceHistory ? (
+                  <Sparkline values={priceHistory} />
+                ) : (
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    Price history unavailable right now.
+                  </p>
+                )}
+                <p className="mt-3 text-xs text-neutral-400">
+                  This chart tracks {ranked.ticker}&apos;s share price, the
+                  public portion of {firstName}&apos;s wealth. It excludes the{" "}
+                  {formatUsdCompact(person.otherAssetsUsd)} static estimate for
+                  private assets.
+                </p>
+              </section>
+            ) : (
+              <section className="rounded-xl border border-neutral-200 p-5 text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
+                {firstName}&apos;s wealth is primarily tied to{" "}
+                {person.primarySource}, a privately held company with no public
+                ticker to chart. The {formatUsdCompact(person.otherAssetsUsd)}{" "}
+                net worth estimate is a static figure, not a live feed.
+              </section>
+            )}
+
+            {subpageLinks.length > 0 && (
+              <section aria-labelledby="more-heading">
+                <h2 id="more-heading" className="mb-2 text-lg font-bold">
+                  More on {firstName}
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {subpageLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+                    >
+                      {link.label} &rarr;
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {related.length > 0 && (
+              <section aria-labelledby="related-heading">
+                <h2 id="related-heading" className="mb-3 text-lg font-bold">
+                  Related Billionaires
+                </h2>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {related.map((other) => (
+                    <Link
+                      key={other.id}
+                      href={`/billionaire/${other.id}`}
+                      className="flex items-center gap-3 rounded-xl border border-neutral-200 p-3 transition-colors hover:border-neutral-300 dark:border-neutral-800 dark:hover:border-neutral-700"
+                    >
+                      <PersonAvatar name={other.name} photoUrl={other.photoUrl} size={40} />
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-medium">{other.name}</div>
+                        <div className="text-xs tabular-nums text-neutral-500 dark:text-neutral-400">
+                          {formatUsdCompact(other.netWorthUsd)} &middot; {other.primarySource}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
-        )}
+
+          {/* Sidebar */}
+          <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-6 lg:w-[300px] lg:shrink-0 lg:self-start">
+            <PersonalStats person={ranked} profile={profile} />
+
+            {appearances.length > 0 && (
+              <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  Appears On These Lists
+                </h2>
+                <ul className="flex flex-col gap-2 text-sm">
+                  {appearances.map((appearance) => (
+                    <li key={appearance.category} className="flex items-baseline justify-between gap-2">
+                      <span>{appearance.label}</span>
+                      <span className="tabular-nums font-semibold">
+                        #{appearance.rank}
+                        <span className="text-xs font-normal text-neutral-400"> / {appearance.total}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {appearances.length > 0 && (
+              <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  Today&apos;s Recaps
+                </h2>
+                <ul className="flex flex-col gap-2 text-sm">
+                  {appearances.map((appearance) => (
+                    <li key={appearance.category}>
+                      <Link
+                        href={`/articles/${today}/${appearance.category}`}
+                        className="hover:underline"
+                      >
+                        {appearance.label} &rarr;
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </aside>
+        </div>
+
+        <p className="text-xs text-neutral-400">
+          Net worth is an estimate derived from public stock holdings plus a
+          static estimate for private assets — directional, not audited, and
+          not affiliated with Forbes. Biographical details are curated from
+          public reporting and may go out of date.
+        </p>
       </main>
       <SiteFooter />
       <script

@@ -11,8 +11,12 @@ for market data.
 - `/india` — India's Billionaires
 - `/women` — The Richest Women
 - `/young` — Billionaires under 45
-- `/billionaire/[id]` — per-person profile page (bio, stats, ~3-month stock
-  price sparkline), linking out to (where curated):
+- `/billionaire/[id]` — Forbes-style per-person profile: a hero with
+  real-time net worth and world rank, a "Personal Stats" sidebar (source of
+  wealth, self-made status, age, residence, citizenship, education, family),
+  an editorial bio, key facts, which of our lists they rank on (with their
+  position), related billionaires, and links to today's recaps. Links out to
+  (where curated):
   - `/billionaire/[id]/ventures` — other companies founded/invested in
   - `/billionaire/[id]/lifestyle` — publicly reported homes, jets, yachts
   - `/billionaire/[id]/family` — marital status + number of children only
