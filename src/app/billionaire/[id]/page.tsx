@@ -3,8 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
+import { getPersonHistory } from "@/lib/snapshots";
 import { getPersonProfile } from "@/data/profiles";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
+import { getHolding, getTickerHolders } from "@/lib/holdings";
+import { explainMove } from "@/lib/explain-move";
 import { siteUrl } from "@/lib/site";
 import { todayDateString } from "@/lib/dates";
 import {
@@ -15,6 +18,7 @@ import {
 import PersonAvatar from "@/components/PersonAvatar";
 import Sparkline from "@/components/Sparkline";
 import PersonalStats from "@/components/PersonalStats";
+import NetWorthHistorySection from "@/components/NetWorthHistorySection";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -34,10 +38,18 @@ export async function generateMetadata({
   }
 
   const title = `${person.name} — Net Worth, Bio & Real-Time Rank`;
-  const description = person.bio;
+  const description = `${person.name}'s real-time net worth, world ranking, biography, and holdings. ${person.bio}`;
   return {
     title,
     description,
+    keywords: [
+      `${person.name} net worth`,
+      `${person.name} real time net worth`,
+      `how rich is ${person.name}`,
+      `${person.name} rank`,
+      person.primarySource,
+      person.industry,
+    ],
     alternates: { canonical: `${siteUrl()}/billionaire/${person.id}` },
     openGraph: { title, description, type: "profile" },
     twitter: { card: "summary", title, description },
@@ -70,6 +82,12 @@ export default async function BillionaireProfile({
   const profile = getPersonProfile(id);
   const appearances = getListAppearances(leaderboard, id);
   const related = getRelatedPeople(leaderboard, ranked);
+  const holding = getHolding(ranked);
+  const coOwners = ranked.ticker
+    ? getTickerHolders(leaderboard, ranked.ticker).filter((h) => h.person.id !== id)
+    : [];
+  const history = getPersonHistory(id);
+  const moveExplanation = explainMove(ranked);
   const today = todayDateString();
   const firstName = ranked.name.split(" ")[0];
 
@@ -103,6 +121,20 @@ export default async function BillionaireProfile({
     url: `${siteUrl()}/billionaire/${person.id}`,
     ...(profile?.education ? { alumniOf: profile.education } : {}),
     ...(profile?.residenceCity ? { homeLocation: profile.residenceCity } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl() },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: person.name,
+        item: `${siteUrl()}/billionaire/${person.id}`,
+      },
+    ],
   };
 
   return (
@@ -139,6 +171,11 @@ export default async function BillionaireProfile({
               {arrow} {formatUsdChange(ranked.dayChangeUsd)} (
               {formatPercentChange(ranked.dayChangePercent)}) today
             </div>
+            {moveExplanation && (
+              <p className="mt-2 max-w-xs text-xs text-neutral-500 dark:text-neutral-400 sm:ml-auto">
+                {moveExplanation}
+              </p>
+            )}
           </div>
         </div>
 
@@ -188,7 +225,7 @@ export default async function BillionaireProfile({
                   </h2>
                   {ranked.sharePrice !== null && (
                     <span className="text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
-                      {ranked.sharePrice.toFixed(2)} {ranked.currency ?? ""}
+                      {ranked.sharePrice.toFixed(2)} USD
                     </span>
                   )}
                 </div>
@@ -214,6 +251,71 @@ export default async function BillionaireProfile({
                 net worth estimate is a static figure, not a live feed.
               </section>
             )}
+
+            {holding && (
+              <section aria-labelledby="holdings-heading">
+                <h2 id="holdings-heading" className="mb-3 text-lg font-bold">
+                  Public Holding
+                </h2>
+                <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <span className="font-semibold">
+                      {ranked.primarySource} ({holding.ticker})
+                    </span>
+                    <Link
+                      href={`/stock/${holding.ticker}`}
+                      className="text-sm text-neutral-500 hover:underline dark:text-neutral-400"
+                    >
+                      Who else owns {holding.ticker}? &rarr;
+                    </Link>
+                  </div>
+                  <dl className="mt-3 grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+                    <div>
+                      <dt className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                        Shares Held (est.)
+                      </dt>
+                      <dd className="font-medium tabular-nums">
+                        {holding.shares.toLocaleString("en-US")}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                        Stake Value
+                      </dt>
+                      <dd className="font-medium tabular-nums">
+                        {holding.valueUsd !== null ? formatUsdCompact(holding.valueUsd) : "—"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                        Share of Net Worth
+                      </dt>
+                      <dd className="font-medium tabular-nums">
+                        {holding.pctOfNetWorth !== null
+                          ? `${holding.pctOfNetWorth.toFixed(0)}%`
+                          : "—"}
+                      </dd>
+                    </div>
+                  </dl>
+                  {coOwners.length > 0 && (
+                    <p className="mt-3 border-t border-neutral-200 pt-3 text-xs text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
+                      Also held by{" "}
+                      {coOwners.map((holder, index) => (
+                        <span key={holder.person.id}>
+                          {index > 0 && ", "}
+                          <Link href={`/billionaire/${holder.person.id}`} className="hover:underline">
+                            {holder.person.name}
+                          </Link>
+                        </span>
+                      ))}
+                      .
+                    </p>
+                  )}
+                </div>
+              </section>
+            )}
+
+            <NetWorthHistorySection points={history} firstName={firstName} />
 
             {subpageLinks.length > 0 && (
               <section aria-labelledby="more-heading">
@@ -316,6 +418,10 @@ export default async function BillionaireProfile({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
     </div>
   );

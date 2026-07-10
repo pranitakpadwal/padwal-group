@@ -21,6 +21,8 @@ export interface RankedBillionaire {
   dayChangeUsd: number;
   dayChangePercent: number;
   sharePrice: number | null;
+  /** The underlying stock's own % move today (drives the net worth change). */
+  stockChangePercent: number | null;
   currency: string | null;
   marketState: string | null;
 }
@@ -68,6 +70,10 @@ function computeLeaderboard(
     const previousNetWorth = netWorthUsd - dayChangeUsd;
     const dayChangePercent = previousNetWorth > 0 ? (dayChangeUsd / previousNetWorth) * 100 : 0;
 
+    const previousPrice = price !== null ? price - changePerShare : null;
+    const stockChangePercent =
+      previousPrice !== null && previousPrice > 0 ? (changePerShare / previousPrice) * 100 : null;
+
     return {
       id: person.id,
       name: person.name,
@@ -83,6 +89,7 @@ function computeLeaderboard(
       dayChangeUsd,
       dayChangePercent,
       sharePrice: price,
+      stockChangePercent,
       currency: quote?.currency ?? null,
       marketState: quote?.marketState ?? null,
     };

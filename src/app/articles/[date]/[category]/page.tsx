@@ -37,10 +37,18 @@ export async function generateMetadata({
   }
 
   const { title, summary } = buildArticleText(article.date, article.category, article.facts);
+  const leader = article.facts.topByNetWorth[0]?.name;
   const url = `${siteUrl()}/articles/${article.date}/${article.category}`;
   return {
     title,
     description: summary,
+    keywords: [
+      "billionaires today",
+      "richest people today",
+      "biggest gainers billionaires",
+      "biggest losers billionaires",
+      ...(leader ? [`richest person ${article.date}`, `${leader} net worth today`] : []),
+    ],
     alternates: { canonical: url },
     openGraph: { title, description: summary, type: "article", url },
     twitter: { card: "summary", title, description: summary },

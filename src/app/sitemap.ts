@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { billionaires } from "@/data/billionaires";
 import { getPersonProfile } from "@/data/profiles";
+import { getAllTickers } from "@/lib/holdings";
 import { listArticles } from "@/lib/articles";
 import { siteUrl } from "@/lib/site";
 
@@ -38,6 +39,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
   });
 
+  const stockRoutes: MetadataRoute.Sitemap = getAllTickers().map((ticker) => ({
+    url: `${base}/stock/${ticker}`,
+    changeFrequency: "daily",
+    priority: 0.4,
+  }));
+
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
     lastModified: article.generatedAt,
@@ -45,5 +52,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...categoryRoutes, ...profileRoutes, ...profileSubpageRoutes, ...articleRoutes];
+  return [
+    ...categoryRoutes,
+    ...profileRoutes,
+    ...profileSubpageRoutes,
+    ...stockRoutes,
+    ...articleRoutes,
+  ];
 }

@@ -12,11 +12,17 @@ for market data.
 - `/women` — The Richest Women
 - `/young` — Billionaires under 45
 - `/billionaire/[id]` — Forbes-style per-person profile: a hero with
-  real-time net worth and world rank, a "Personal Stats" sidebar (source of
-  wealth, self-made status, age, residence, citizenship, education, family),
-  an editorial bio, key facts, which of our lists they rank on (with their
-  position), related billionaires, and links to today's recaps. Links out to
-  (where curated):
+  real-time net worth and world rank (plus a plain-language explanation of
+  *why* it moved — e.g. "Tesla shares moved +2%"), a "Personal Stats"
+  sidebar (source of wealth, self-made status, age, residence, citizenship,
+  education, family), an editorial bio, key facts, their public holding
+  (shares, live stake value, % of net worth, and co-owners), a net-worth &
+  rank history table, which of our lists they rank on, related billionaires,
+  and links to today's recaps. Every roster member now has a curated bio.
+  Links out to (where available):
+- `/stock/[ticker]` — "Which billionaires own TSLA?" — live price, market
+  cap, and every tracked holder of that stock, cross-linking people who
+  share a holding.
   - `/billionaire/[id]/ventures` — other companies founded/invested in
   - `/billionaire/[id]/lifestyle` — publicly reported homes, jets, yachts
   - `/billionaire/[id]/family` — marital status + number of children only

@@ -86,6 +86,7 @@ export function hydrateSnapshotPeople(date: string): RankedBillionaire[] | null 
       dayChangeUsd: 0,
       dayChangePercent: 0,
       sharePrice: null,
+      stockChangePercent: null,
       currency: null,
       marketState: null,
       rank: 0,
@@ -93,6 +94,38 @@ export function hydrateSnapshotPeople(date: string): RankedBillionaire[] | null 
 
   people.sort((a, b) => b.netWorthUsd - a.netWorthUsd);
   return people.map((person, index) => ({ ...person, rank: index + 1 }));
+}
+
+export interface HistoryPoint {
+  date: string;
+  netWorthUsd: number;
+  rank: number;
+}
+
+/**
+ * A person's net worth and world rank on each day we have a snapshot for,
+ * oldest first. Rank is computed within that day's full snapshot. Returns
+ * an empty array until at least one daily snapshot has been captured.
+ */
+export function getPersonHistory(id: string): HistoryPoint[] {
+  const db = getDb();
+  const dates = db
+    .prepare(`SELECT DISTINCT snapshot_date FROM snapshots ORDER BY snapshot_date ASC`)
+    .all() as { snapshot_date: string }[];
+
+  const rankStmt = db.prepare(
+    `SELECT person_id, net_worth_usd FROM snapshots WHERE snapshot_date = ? ORDER BY net_worth_usd DESC`,
+  );
+
+  const points: HistoryPoint[] = [];
+  for (const { snapshot_date } of dates) {
+    const rows = rankStmt.all(snapshot_date) as SnapshotRow[];
+    const index = rows.findIndex((row) => row.person_id === id);
+    if (index >= 0) {
+      points.push({ date: snapshot_date, netWorthUsd: rows[index].net_worth_usd, rank: index + 1 });
+    }
+  }
+  return points;
 }
 
 export function hydrateHistoricalCategoryView(

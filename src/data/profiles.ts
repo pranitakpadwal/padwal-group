@@ -366,6 +366,437 @@ export const personProfiles: Record<string, PersonProfile> = {
       note: "Reported to be his sixth marriage, following five divorces.",
     },
   },
+
+  "larry-page": {
+    residenceCity: "Palo Alto, California",
+    citizenship: "United States",
+    education: "Stanford University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Larry Page co-founded Google with Sergey Brin at Stanford in 1998 and served as CEO of both Google and, later, its parent company Alphabet. He stepped back from day-to-day leadership in 2019 but remains a controlling shareholder.",
+    ],
+    keyFacts: [
+      "Co-created the PageRank algorithm that powered Google search.",
+      "Stepped down as Alphabet CEO in 2019 but retains voting control.",
+      "Has funded aviation and flying-car startups.",
+    ],
+  },
+
+  "sergey-brin": {
+    residenceCity: "Los Altos, California",
+    citizenship: "United States",
+    education: "Stanford University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Sergey Brin co-founded Google with Larry Page and served as president of Alphabet until 2019. Born in Moscow, he emigrated to the United States as a child. He remains a controlling shareholder and has returned to hands-on work on Google's AI efforts.",
+    ],
+    keyFacts: [
+      "Born in Moscow, in the former Soviet Union.",
+      "Co-created the PageRank algorithm with Larry Page.",
+      "Has been closely involved in Alphabet's AI and moonshot projects.",
+    ],
+  },
+
+  "steve-ballmer": {
+    residenceCity: "Hunts Point, Washington",
+    citizenship: "United States",
+    education: "Harvard University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Steve Ballmer was Microsoft's CEO from 2000 to 2014, having joined as its first business manager in 1980. Since leaving, he has owned the Los Angeles Clippers and launched the data non-profit USAFacts.",
+    ],
+    keyFacts: [
+      "Was Microsoft's 30th employee and first business manager.",
+      "Bought the Los Angeles Clippers for $2 billion in 2014.",
+      "Founded USAFacts, a government-data transparency project.",
+    ],
+  },
+
+  "warren-buffett": {
+    residenceCity: "Omaha, Nebraska",
+    citizenship: "United States",
+    education: "Columbia Business School",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Warren Buffett, the \"Oracle of Omaha,\" is chairman and CEO of Berkshire Hathaway and one of the most successful investors in history. He built a conglomerate spanning insurance, railroads, energy, and consumer brands, and is known for his value-investing philosophy.",
+    ],
+    keyFacts: [
+      "Bought his first stock at age 11.",
+      "Still lives in the Omaha home he purchased in 1958.",
+      "Has pledged to give away more than 99% of his wealth.",
+    ],
+  },
+
+  "jensen-huang": {
+    residenceCity: "California",
+    citizenship: "United States",
+    education: "Stanford University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Jensen Huang co-founded the chipmaker Nvidia in 1993 and has led it ever since. Once known mainly for graphics cards, Nvidia became one of the world's most valuable companies as its chips became the backbone of the artificial-intelligence boom.",
+    ],
+    keyFacts: [
+      "Born in Taiwan; moved to the United States as a child.",
+      "Has led Nvidia as CEO for more than 30 years.",
+      "A central figure in the AI hardware boom.",
+    ],
+  },
+
+  "michael-dell": {
+    residenceCity: "Austin, Texas",
+    citizenship: "United States",
+    education: "University of Texas (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Michael Dell founded the computer company that bears his name from his university dorm room in 1984. He took the company private in 2013 and public again in 2018, and controls it alongside investment firm MSD Capital.",
+    ],
+    keyFacts: [
+      "Started the company from his dorm room at age 19.",
+      "Took Dell private in a $25 billion deal in 2013.",
+      "Returned Dell to the public markets in 2018.",
+    ],
+  },
+
+  "phil-knight": {
+    residenceCity: "Oregon",
+    citizenship: "United States",
+    education: "Stanford Graduate School of Business",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Phil Knight co-founded Nike with his former track coach Bill Bowerman, starting by importing and selling running shoes out of his car. He built it into the world's largest athletic-footwear and apparel company and is now chairman emeritus.",
+    ],
+    keyFacts: [
+      "Co-founded Nike with his track coach, Bill Bowerman.",
+      "Started out selling shoes from the trunk of his car.",
+      "A major donor to the University of Oregon and Stanford.",
+    ],
+  },
+
+  "jim-walton": {
+    residenceCity: "Bentonville, Arkansas",
+    citizenship: "United States",
+    education: "University of Arkansas",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Jim Walton is the youngest son of Walmart founder Sam Walton. He chairs Arvest Bank, the family's banking business, and holds a large stake in the retailer through the family holding company.",
+    ],
+    keyFacts: [
+      "Youngest son of Walmart founder Sam Walton.",
+      "Chairman of the family's Arvest Bank.",
+      "A part-owner of Walton Enterprises, the family holding company.",
+    ],
+  },
+
+  "rob-walton": {
+    residenceCity: "Bentonville, Arkansas",
+    citizenship: "United States",
+    education: "Columbia Law School",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Rob Walton is the eldest son of Sam Walton and chaired Walmart's board from 1992 to 2015. In 2022 he led an ownership group that bought the NFL's Denver Broncos.",
+    ],
+    keyFacts: [
+      "Chaired Walmart's board of directors from 1992 to 2015.",
+      "Led the group that bought the Denver Broncos in 2022.",
+      "Eldest of Sam Walton's four children.",
+    ],
+  },
+
+  "alice-walton": {
+    residenceCity: "Fort Worth, Texas",
+    citizenship: "United States",
+    education: "Trinity University",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Alice Walton is the only daughter of Walmart founder Sam Walton and, at times, the richest woman in the world. Unlike her brothers she never worked in the family business, focusing instead on art; she founded the Crystal Bridges Museum of American Art in Arkansas.",
+    ],
+    keyFacts: [
+      "Founded the Crystal Bridges Museum of American Art.",
+      "Has at times been the richest woman in the world.",
+      "A prominent collector of American art.",
+    ],
+  },
+
+  "mackenzie-scott": {
+    residenceCity: "California",
+    citizenship: "United States",
+    education: "Princeton University",
+    longBio: [
+      "MacKenzie Scott is a novelist and philanthropist who received a large Amazon stake in her 2019 divorce from Jeff Bezos. She has since given away tens of billions of dollars, largely as unrestricted gifts to nonprofits.",
+    ],
+    keyFacts: [
+      "Was one of Amazon's earliest employees.",
+      "Has given away tens of billions in unrestricted gifts.",
+      "A published novelist.",
+    ],
+  },
+
+  "julia-koch": {
+    residenceCity: "New York City",
+    citizenship: "United States",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Julia Koch and her children inherited a roughly 42% stake in Koch Industries, one of the largest private companies in the United States, after the death of her husband David Koch in 2019.",
+    ],
+    keyFacts: [
+      "Inherited her Koch Industries stake in 2019.",
+      "She and her children own about 42% of the conglomerate.",
+      "Active in philanthropy and the arts in New York.",
+    ],
+  },
+
+  "francoise-bettencourt-meyers": {
+    residenceCity: "Paris, France",
+    citizenship: "France",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Françoise Bettencourt Meyers is the granddaughter of L'Oréal founder Eugène Schueller and chairs the family holding company. She has often ranked as the richest woman in the world and is also a published author.",
+    ],
+    keyFacts: [
+      "Granddaughter of L'Oréal's founder.",
+      "Frequently ranked as the world's richest woman.",
+      "An author of books on religion and mythology.",
+    ],
+  },
+
+  "miriam-adelson": {
+    residenceCity: "Las Vegas, Nevada",
+    citizenship: "United States",
+    education: "Tel Aviv University (MD)",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Miriam Adelson is a physician and the widow of casino magnate Sheldon Adelson. She controls the family's majority stake in Las Vegas Sands and is one of the largest political donors in the United States.",
+    ],
+    keyFacts: [
+      "A physician who has specialized in addiction treatment.",
+      "Controls the family's majority stake in Las Vegas Sands.",
+      "Part of the ownership group of the NBA's Dallas Mavericks.",
+    ],
+  },
+
+  "jacqueline-mars": {
+    residenceCity: "Virginia",
+    citizenship: "United States",
+    education: "Bryn Mawr College",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Jacqueline Mars is a granddaughter of Mars, Incorporated founder Frank Mars and owns roughly a third of the private candy and pet-care giant behind brands like M&M's, Snickers, and Pedigree.",
+    ],
+    keyFacts: [
+      "Owns about one-third of Mars, Incorporated.",
+      "Granddaughter of the company's founder, Frank Mars.",
+      "A longtime equestrian and supporter of the sport.",
+    ],
+  },
+
+  "abigail-johnson": {
+    residenceCity: "Massachusetts",
+    citizenship: "United States",
+    education: "Harvard Business School",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Abigail Johnson is the chair and CEO of Fidelity Investments, the asset-management giant founded by her grandfather. A third-generation leader, she has pushed the firm into new areas including cryptocurrency.",
+    ],
+    keyFacts: [
+      "Third-generation leader of Fidelity Investments.",
+      "An early mover in offering crypto to retirement savers.",
+      "Joined the family firm in 1988.",
+    ],
+  },
+
+  "gina-rinehart": {
+    residenceCity: "Perth, Australia",
+    citizenship: "Australia",
+    education: "University of Sydney",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Gina Rinehart is Australia's richest person and executive chair of Hancock Prospecting. She inherited a debt-laden mining business from her father and rebuilt it into the country's most valuable private company, riding the iron-ore boom.",
+    ],
+    keyFacts: [
+      "Australia's richest person.",
+      "Rebuilt an inherited, debt-laden mining business into a giant.",
+      "A major investor in agriculture and cattle stations.",
+    ],
+  },
+
+  "susanne-klatten": {
+    residenceCity: "Munich, Germany",
+    citizenship: "Germany",
+    education: "University of Buckingham (MBA)",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Susanne Klatten is among the largest shareholders of automaker BMW and controls the specialty-chemicals company Altana. She is one of Germany's wealthiest people and a member of the Quandt family.",
+    ],
+    keyFacts: [
+      "One of BMW's largest individual shareholders.",
+      "Controls the chemicals company Altana.",
+      "A member of the industrial Quandt family.",
+    ],
+  },
+
+  "whitney-wolfe-herd": {
+    residenceCity: "Austin, Texas",
+    citizenship: "United States",
+    education: "Southern Methodist University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Whitney Wolfe Herd founded the dating app Bumble, built around the idea of women making the first move. When Bumble went public in 2021 she became, at 31, the youngest woman to take a US company public.",
+    ],
+    keyFacts: [
+      "Co-founded Tinder before launching Bumble.",
+      "Became the youngest woman to take a US company public, in 2021.",
+      "Built Bumble around women making the first move.",
+    ],
+  },
+
+  "gautam-adani": {
+    residenceCity: "Ahmedabad, India",
+    citizenship: "India",
+    education: "Gujarat University (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Gautam Adani is a first-generation entrepreneur who built the Adani Group into one of India's largest infrastructure conglomerates, spanning ports, energy, airports, and logistics. He has at times ranked as Asia's richest person.",
+    ],
+    keyFacts: [
+      "A first-generation, self-made entrepreneur.",
+      "Built a ports-to-energy infrastructure empire.",
+      "Has at times been Asia's richest person.",
+    ],
+  },
+
+  "shiv-nadar": {
+    residenceCity: "Delhi, India",
+    citizenship: "India",
+    education: "PSG College of Technology",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Shiv Nadar founded HCL in 1976, making him one of the pioneers of India's IT industry. He is also one of the country's most generous philanthropists through the Shiv Nadar Foundation and its schools and university.",
+    ],
+    keyFacts: [
+      "Founded HCL in 1976, an early Indian IT pioneer.",
+      "A leading Indian philanthropist in education.",
+      "Founded Shiv Nadar University.",
+    ],
+  },
+
+  "radhakishan-damani": {
+    residenceCity: "Mumbai, India",
+    citizenship: "India",
+    education: "University of Mumbai (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Radhakishan Damani is a reclusive value investor who founded the DMart supermarket chain, run by listed company Avenue Supermarts. He is widely regarded as a mentor figure among Indian investors.",
+    ],
+    keyFacts: [
+      "Founder of the DMart supermarket chain.",
+      "Made his name first as a stock-market investor.",
+      "Known for a notably private, low-profile lifestyle.",
+    ],
+  },
+
+  "kumar-birla": {
+    residenceCity: "Mumbai, India",
+    citizenship: "India",
+    education: "London Business School (MBA)",
+    wealthOrigin: "Inherited and growing it",
+    longBio: [
+      "Kumar Mangalam Birla took over the Aditya Birla Group at 28 after his father's death and expanded it into a global conglomerate spanning cement, metals, chemicals, and telecom, including a stake in Vodafone Idea.",
+    ],
+    keyFacts: [
+      "Took charge of the Aditya Birla Group at age 28.",
+      "Expanded it into a multinational conglomerate.",
+      "The group is one of India's largest cement producers.",
+    ],
+  },
+
+  "savitri-jindal": {
+    residenceCity: "Hisar, India",
+    citizenship: "India",
+    wealthOrigin: "Inherited",
+    longBio: [
+      "Savitri Jindal is the matriarch of the O.P. Jindal Group, a steel and power conglomerate, having become chairperson emeritus after her husband's death in 2005. She has also served as a politician in the state of Haryana.",
+    ],
+    keyFacts: [
+      "Matriarch of the Jindal steel-and-power empire.",
+      "Became chairperson emeritus after 2005.",
+      "A former state politician in Haryana.",
+    ],
+  },
+
+  "cyrus-poonawalla": {
+    residenceCity: "Pune, India",
+    citizenship: "India",
+    education: "University of Pune",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Cyrus Poonawalla founded the Serum Institute of India, the world's largest vaccine manufacturer by number of doses produced. The company played a major role in global Covid-19 vaccine supply.",
+    ],
+    keyFacts: [
+      "Founded the world's largest vaccine maker by volume.",
+      "Started out breeding racehorses.",
+      "The Serum Institute produced billions of Covid-19 doses.",
+    ],
+  },
+
+  "evan-spiegel": {
+    residenceCity: "Los Angeles, California",
+    citizenship: "United States",
+    education: "Stanford University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Evan Spiegel co-founded Snap, the parent company of Snapchat, while a student at Stanford. He became one of the youngest self-made billionaires when the company went public in 2017.",
+    ],
+    keyFacts: [
+      "Co-founded Snapchat while at Stanford.",
+      "Was among the youngest self-made billionaires at Snap's 2017 IPO.",
+      "Serves as Snap's CEO.",
+    ],
+  },
+
+  "bobby-murphy": {
+    residenceCity: "Los Angeles, California",
+    citizenship: "United States",
+    education: "Stanford University",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Bobby Murphy co-founded Snap with Evan Spiegel and built the early engineering behind Snapchat. He serves as the company's chief technology officer and keeps a notably low public profile.",
+    ],
+    keyFacts: [
+      "Co-founded Snapchat and built its early technology.",
+      "Serves as Snap's chief technology officer.",
+      "Keeps a famously low public profile.",
+    ],
+  },
+
+  "daniel-ek": {
+    residenceCity: "Stockholm, Sweden",
+    citizenship: "Sweden",
+    education: "KTH Royal Institute of Technology (dropped out)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Daniel Ek co-founded Spotify in 2006 as a legal alternative to music piracy and grew it into the world's largest music-streaming service. He has also become a prominent backer of European technology startups.",
+    ],
+    keyFacts: [
+      "Co-founded Spotify in 2006.",
+      "Built the world's largest music-streaming service.",
+      "An active investor in European tech.",
+    ],
+  },
+
+  "brian-chesky": {
+    residenceCity: "San Francisco, California",
+    citizenship: "United States",
+    education: "Rhode Island School of Design",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Brian Chesky co-founded Airbnb, which began when he and his roommates rented out air mattresses in their apartment. A trained industrial designer, he led the company through its 2020 IPO and serves as CEO.",
+    ],
+    keyFacts: [
+      "Started Airbnb by renting air mattresses in his apartment.",
+      "A trained industrial designer.",
+      "Led Airbnb's 2020 IPO.",
+    ],
+  },
 };
 
 export function getPersonProfile(id: string): PersonProfile | undefined {

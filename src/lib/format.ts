@@ -24,6 +24,16 @@ const plainPercent = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+const compactNumber = new Intl.NumberFormat("en-US", {
+  notation: "compact",
+  maximumFractionDigits: 2,
+});
+
+/** Compact number without a currency symbol, e.g. "1.2B" — pair with a currency label. */
+export function formatCompactNumber(value: number): string {
+  return compactNumber.format(value);
+}
+
 export function formatUsdCompact(value: number): string {
   return compactUsd.format(value);
 }
