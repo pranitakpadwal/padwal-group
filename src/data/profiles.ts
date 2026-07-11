@@ -297,6 +297,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "LVMH controls around 75 brands including Louis Vuitton, Dior, and Tiffany & Co.",
       "A prominent contemporary art collector via the Fondation Louis Vuitton.",
     ],
+    careerTimeline: [
+      { year: "1971", title: "Joined the family firm", description: "Began working at his family's construction business, Ferret-Savinel." },
+      { year: "1984", title: "Acquired Boussac Saint-Frères", description: "Took control of the struggling textile group, whose holdings included Christian Dior — his entry point into luxury goods." },
+      { year: "1989", title: "Took control of LVMH", description: "Became chairman and CEO of the recently formed LVMH group." },
+      { year: "2021", title: "Acquired Tiffany & Co.", description: "Completed LVMH's roughly $16 billion acquisition of the jeweler Tiffany & Co." },
+    ],
     ventures: [
       {
         name: "Fondation Louis Vuitton",
@@ -381,6 +387,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Owns about 98% of the Hawaiian island of Lanai.",
       "Known as one of the largest individual yacht owners in the world.",
     ],
+    careerTimeline: [
+      { year: "1977", title: "Co-founded Oracle", description: "Started the company, originally Software Development Laboratories, with Bob Miner and Ed Oates." },
+      { year: "1986", title: "Oracle IPO", description: "Took Oracle public on the Nasdaq." },
+      { year: "2012", title: "Bought Lanai", description: "Purchased roughly 98% of the Hawaiian island of Lanai for about $300 million." },
+      { year: "2014", title: "Stepped down as CEO", description: "Handed the chief executive role to Safra Catz and Mark Hurd, remaining chairman and chief technology officer." },
+    ],
     ventures: [],
     notableAssets: [
       {
@@ -425,6 +437,13 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Stepped down as Alphabet CEO in 2019 but retains voting control.",
       "Has funded aviation and flying-car startups.",
     ],
+    careerTimeline: [
+      { year: "1995", title: "Met Sergey Brin at Stanford", description: "Began the research collaboration behind Google's search algorithm." },
+      { year: "1998", title: "Co-founded Google", description: "Founded Google with Sergey Brin, initially operating out of a garage in Menlo Park." },
+      { year: "2004", title: "Google IPO", description: "Took Google public." },
+      { year: "2015", title: "Became Alphabet CEO", description: "Took the chief executive role of newly formed parent company Alphabet." },
+      { year: "2019", title: "Stepped back from Alphabet", description: "Left the CEO role to Sundar Pichai, remaining a controlling shareholder." },
+    ],
   },
 
   "sergey-brin": {
@@ -440,6 +459,13 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Co-created the PageRank algorithm with Larry Page.",
       "Has been closely involved in Alphabet's AI and moonshot projects.",
     ],
+    careerTimeline: [
+      { year: "1979", title: "Emigrated from Moscow", description: "Moved to the United States with his family as a child." },
+      { year: "1995", title: "Met Larry Page at Stanford", description: "Began the research partnership behind Google's search technology." },
+      { year: "1998", title: "Co-founded Google", description: "Founded Google with Larry Page." },
+      { year: "2004", title: "Google IPO", description: "Took Google public." },
+      { year: "2019", title: "Stepped down as Alphabet president", description: "Left his formal executive role, remaining a controlling shareholder and active on AI projects." },
+    ],
   },
 
   "steve-ballmer": {
@@ -454,6 +480,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Was Microsoft's 30th employee and first business manager.",
       "Bought the Los Angeles Clippers for $2 billion in 2014.",
       "Founded USAFacts, a government-data transparency project.",
+    ],
+    careerTimeline: [
+      { year: "1980", title: "Joined Microsoft", description: "Became Microsoft's first business manager and 30th employee." },
+      { year: "2000", title: "Became CEO", description: "Succeeded Bill Gates as Microsoft's chief executive." },
+      { year: "2014", title: "Stepped down as CEO", description: "Retired as Microsoft CEO, succeeded by Satya Nadella." },
+      { year: "2014", title: "Bought the LA Clippers", description: "Purchased the NBA's Los Angeles Clippers for $2 billion." },
     ],
   },
 
@@ -493,6 +525,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Has led Nvidia as CEO for more than 30 years.",
       "A central figure in the AI hardware boom.",
     ],
+    careerTimeline: [
+      { year: "1993", title: "Co-founded Nvidia", description: "Started Nvidia with Chris Malachowsky and Curtis Priem." },
+      { year: "1999", title: "Nvidia IPO", description: "Took Nvidia public and shipped the GeForce 256, marketed as the first GPU." },
+      { year: "2006", title: "Launched CUDA", description: "Introduced Nvidia's CUDA computing platform, which later became central to AI workloads." },
+      { year: "2023", title: "AI boom", description: "Nvidia's chips became the backbone of the generative-AI buildout, propelling the company's market value past $1 trillion." },
+    ],
   },
 
   "michael-dell": {
@@ -508,6 +546,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Took Dell private in a $25 billion deal in 2013.",
       "Returned Dell to the public markets in 2018.",
     ],
+    careerTimeline: [
+      { year: "1984", title: "Founded Dell", description: "Started the company from his University of Texas dorm room, selling custom PCs directly to customers." },
+      { year: "1988", title: "Dell IPO", description: "Took the company public." },
+      { year: "2013", title: "Took Dell private", description: "Led a roughly $25 billion buyout to take Dell private." },
+      { year: "2018", title: "Returned to public markets", description: "Brought Dell Technologies back to the stock market." },
+    ],
   },
 
   "phil-knight": {
@@ -522,6 +566,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Co-founded Nike with his track coach, Bill Bowerman.",
       "Started out selling shoes from the trunk of his car.",
       "A major donor to the University of Oregon and Stanford.",
+    ],
+    careerTimeline: [
+      { year: "1964", title: "Co-founded Blue Ribbon Sports", description: "Started the company with his track coach Bill Bowerman, selling imported running shoes out of the trunk of his car." },
+      { year: "1971", title: "Renamed Nike", description: "Rebranded the company Nike, adopting the now-famous Swoosh logo." },
+      { year: "1980", title: "Nike IPO", description: "Took Nike public." },
+      { year: "2016", title: "Stepped down as chairman", description: "Retired as Nike's chairman, becoming chairman emeritus." },
     ],
   },
 
@@ -715,6 +765,11 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Built a ports-to-energy infrastructure empire.",
       "Has at times been Asia's richest person.",
     ],
+    careerTimeline: [
+      { year: "1988", title: "Founded Adani Enterprises", description: "Started what became the Adani Group as a commodity-trading business." },
+      { year: "1998", title: "Mundra Port", description: "Began developing Mundra Port in Gujarat, which grew into India's largest commercial port." },
+      { year: "2022", title: "Acquired Ambuja Cements", description: "Took control of Ambuja Cements and ACC, making Adani one of India's largest cement producers." },
+    ],
   },
 
   "shiv-nadar": {
@@ -729,6 +784,11 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Founded HCL in 1976, an early Indian IT pioneer.",
       "A leading Indian philanthropist in education.",
       "Founded Shiv Nadar University.",
+    ],
+    careerTimeline: [
+      { year: "1976", title: "Founded HCL", description: "Started HCL (originally Microcomp) with a small group of engineers, becoming one of the pioneers of India's IT industry." },
+      { year: "1991", title: "Entered software services", description: "Launched HCL Technologies to build out the group's IT services business." },
+      { year: "1994", title: "Founded the Shiv Nadar Foundation", description: "Established his philanthropic foundation focused on education." },
     ],
   },
 
@@ -804,6 +864,11 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Was among the youngest self-made billionaires at Snap's 2017 IPO.",
       "Serves as Snap's CEO.",
     ],
+    careerTimeline: [
+      { year: "2011", title: "Launched Snapchat", description: "Co-founded the disappearing-photo app, initially called Picaboo, with Bobby Murphy and Reggie Brown while at Stanford." },
+      { year: "2013", title: "Turned down Facebook's offer", description: "Reportedly rejected a multibillion-dollar acquisition offer from Facebook, choosing to stay independent." },
+      { year: "2017", title: "Snap IPO", description: "Took Snap public on the NYSE." },
+    ],
   },
 
   "bobby-murphy": {
@@ -818,6 +883,10 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Co-founded Snapchat and built its early technology.",
       "Serves as Snap's chief technology officer.",
       "Keeps a famously low public profile.",
+    ],
+    careerTimeline: [
+      { year: "2011", title: "Co-founded Snapchat", description: "Built the early engineering behind the disappearing-photo app with Evan Spiegel at Stanford." },
+      { year: "2017", title: "Snap IPO", description: "Took Snap public on the NYSE." },
     ],
   },
 
@@ -834,6 +903,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Built the world's largest music-streaming service.",
       "An active investor in European tech.",
     ],
+    careerTimeline: [
+      { year: "2006", title: "Co-founded Spotify", description: "Started Spotify with Martin Lorentzon as a licensed alternative to music piracy." },
+      { year: "2008", title: "Public launch", description: "Launched Spotify to the public in Europe." },
+      { year: "2011", title: "US launch", description: "Brought Spotify to the United States." },
+      { year: "2018", title: "Direct listing on NYSE", description: "Took Spotify public via an unconventional direct listing rather than a traditional IPO." },
+    ],
   },
 
   "brian-chesky": {
@@ -848,6 +923,11 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Started Airbnb by renting air mattresses in his apartment.",
       "A trained industrial designer.",
       "Led Airbnb's 2020 IPO.",
+    ],
+    careerTimeline: [
+      { year: "2007", title: "Air mattresses to cover rent", description: "With roommate Joe Gebbia, rented out air mattresses in their San Francisco apartment during a design conference." },
+      { year: "2008", title: "Founded Airbnb", description: "Formally launched Airbnb with Gebbia and Nathan Blecharczyk." },
+      { year: "2020", title: "Airbnb IPO", description: "Led the company through its Nasdaq initial public offering." },
     ],
   },
 
@@ -864,6 +944,10 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Chinese-born Canadian citizen; based in Dubai.",
       "Often ranked as the richest person in Canada.",
     ],
+    careerTimeline: [
+      { year: "2017", title: "Founded Binance", description: "Launched the cryptocurrency exchange, which grew into the largest in the world by trading volume." },
+      { year: "2023", title: "Stepped down as CEO", description: "Pleaded guilty to a US anti-money-laundering violation and stepped down as Binance's CEO." },
+    ],
   },
 
   "pavel-durov": {
@@ -878,6 +962,11 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Founder of Telegram, one of the world's largest messaging apps.",
       "Previously founded the Russian social network VK.",
       "Holds four citizenships and is based in Dubai.",
+    ],
+    careerTimeline: [
+      { year: "2006", title: "Co-founded VK", description: "Launched the Russian social network VKontakte (VK) with his brother Nikolai." },
+      { year: "2013", title: "Founded Telegram", description: "Launched the encrypted messaging app Telegram with Nikolai after leaving VK." },
+      { year: "2014", title: "Left Russia", description: "Sold his stake in VK and left Russia amid disputes over user data." },
     ],
   },
 };

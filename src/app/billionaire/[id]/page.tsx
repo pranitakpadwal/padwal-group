@@ -20,6 +20,7 @@ import PersonAvatar from "@/components/PersonAvatar";
 import Sparkline from "@/components/Sparkline";
 import PersonalStats from "@/components/PersonalStats";
 import NetWorthHistorySection from "@/components/NetWorthHistorySection";
+import CareerTimelineTable from "@/components/CareerTimelineTable";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -101,10 +102,19 @@ export default async function BillionaireProfile({
       : "text-neutral-400";
   const arrow = isUp ? "▲" : isDown ? "▼" : "•";
 
-  const subpageLinks = [
+  const journeyRows =
     profile?.careerTimeline && profile.careerTimeline.length > 0
-      ? { href: `/billionaire/${id}/journey`, label: "Journey & Timeline" }
-      : null,
+      ? [
+          ...profile.careerTimeline,
+          {
+            year: "Today",
+            title: `Ranked #${ranked.rank} in the world`,
+            description: `${firstName}'s net worth is an estimated ${formatUsdCompact(ranked.netWorthUsd)}, updated in real time from public holdings.`,
+          },
+        ]
+      : null;
+
+  const subpageLinks = [
     profile?.ventures && profile.ventures.length > 0
       ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
       : null,
@@ -322,6 +332,18 @@ export default async function BillionaireProfile({
             )}
 
             <NetWorthHistorySection points={history} firstName={firstName} />
+
+            {journeyRows && (
+              <section aria-labelledby="journey-heading" className="flex flex-col gap-3">
+                <h2 id="journey-heading" className="text-lg font-bold">
+                  {firstName}&apos;s Journey
+                </h2>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  The milestones that built the fortune — from the early days to today.
+                </p>
+                <CareerTimelineTable timeline={journeyRows} />
+              </section>
+            )}
 
             {subpageLinks.length > 0 && (
               <section aria-labelledby="more-heading">

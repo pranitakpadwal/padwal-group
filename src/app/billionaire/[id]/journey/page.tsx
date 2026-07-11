@@ -5,6 +5,7 @@ import { getPersonProfile } from "@/data/profiles";
 import { formatUsdCompact } from "@/lib/format";
 import ProfileSubpageLayout from "@/components/ProfileSubpageLayout";
 import ProfileBreadcrumbJsonLd from "@/components/ProfileBreadcrumbJsonLd";
+import CareerTimelineTable from "@/components/CareerTimelineTable";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,17 @@ export default async function JourneyPage({ params }: { params: Promise<RoutePar
   const ranked = leaderboard.people.find((p) => p.id === id);
   const firstName = person.name.split(" ")[0];
 
+  const rows = ranked
+    ? [
+        ...timeline,
+        {
+          year: "Today",
+          title: `Ranked #${ranked.rank} in the world`,
+          description: `${firstName}'s net worth is an estimated ${formatUsdCompact(ranked.netWorthUsd)}, updated in real time from public holdings.`,
+        },
+      ]
+    : timeline;
+
   return (
     <ProfileSubpageLayout personName={person.name} personId={person.id} sectionLabel="Journey">
       <div>
@@ -58,29 +70,7 @@ export default async function JourneyPage({ params }: { params: Promise<RoutePar
         </p>
       </div>
 
-      <ol className="relative flex flex-col gap-6 border-l border-line pl-6">
-        {timeline.map((entry, index) => (
-          <li key={index} className="relative">
-            <span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-surface bg-brand" />
-            <div className="font-display text-lg font-semibold text-brand-dark">{entry.year}</div>
-            <div className="font-medium text-foreground">{entry.title}</div>
-            <p className="mt-0.5 text-sm text-foreground/70">{entry.description}</p>
-          </li>
-        ))}
-        {ranked && (
-          <li className="relative">
-            <span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-surface bg-brand-dark" />
-            <div className="font-display text-lg font-semibold text-brand-dark">Today</div>
-            <div className="font-medium text-foreground">
-              Ranked #{ranked.rank} in the world
-            </div>
-            <p className="mt-0.5 text-sm text-foreground/70">
-              {firstName}&apos;s net worth is an estimated {formatUsdCompact(ranked.netWorthUsd)},
-              updated in real time from public holdings.
-            </p>
-          </li>
-        )}
-      </ol>
+      <CareerTimelineTable timeline={rows} />
 
       <p className="text-xs text-neutral-400">
         Milestones are drawn from widely-reported public history. Dates reflect
