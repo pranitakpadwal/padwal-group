@@ -5,6 +5,8 @@ import type { Category } from "@/lib/categories";
 
 const NAV_LINKS = [
   { href: "/why", label: "Why Today" },
+  { href: "/crypto", label: "Crypto" },
+  { href: "/energy", label: "Energy" },
   { href: "/calculators", label: "Calculators" },
   { href: "/articles", label: "Daily Recaps" },
 ];

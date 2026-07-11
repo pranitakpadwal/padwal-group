@@ -21,6 +21,30 @@ export const metadata: Metadata = {
 
 const CALCULATORS = [
   {
+    href: "/calculators/spend",
+    title: "Spend a Billionaire's Fortune",
+    description:
+      "Their live net worth is your budget. Buy superyachts, NFL teams, islands — even Twitter — and see how hard it is to run out.",
+  },
+  {
+    href: "/calculators/birthday",
+    title: "Richest Person When You Were Born",
+    description:
+      "Enter your birth year and see who wore the crown when you arrived, when you turned 18 and 30 — and who holds it right now.",
+  },
+  {
+    href: "/calculators/billionaire-by-age",
+    title: "When They Were Your Age...",
+    description:
+      "Pick a billionaire and an age. See exactly what they'd achieved by then — and how much runway you still have.",
+  },
+  {
+    href: "/calculators/inflation",
+    title: "Wealth Inflation Calculator",
+    description:
+      "What does $100M in 1980 — or Rockefeller's first billion — equal in today's dollars? Convert any historical fortune.",
+  },
+  {
     href: "/calculators/own-a-company",
     title: "If You Owned a Piece of a Company",
     description:

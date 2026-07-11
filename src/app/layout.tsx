@@ -22,9 +22,9 @@ const fraunces = Fraunces({
   weight: ["400", "500", "600", "700", "900"],
 });
 
-const title = "Real-Time Billionaires Tracker";
+const title = "RealTimeBillionaire — The Live Database of Global Wealth";
 const description =
-  "A live-updating leaderboard estimating billionaire net worth from public stock holdings, with World, India, Women, and Under-45 lists.";
+  "A structured, real-time database of global wealth: live billionaire rankings, the stocks, crypto, and energy markets behind the fortunes, plus interactive wealth tools.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     title,
     description,
     type: "website",
-    siteName: "Real-Time Billionaires Tracker",
+    siteName: "RealTimeBillionaire",
   },
   twitter: {
     card: "summary",

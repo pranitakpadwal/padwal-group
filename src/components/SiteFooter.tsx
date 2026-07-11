@@ -14,9 +14,9 @@ export default function SiteFooter() {
               </span>
             </div>
             <p className="mt-3 text-sm text-[--muted]">
-              A live-updating tracker of the world&apos;s richest people,
-              estimating net worth from public stock holdings. Not affiliated
-              with or endorsed by Forbes.
+              A structured, live database of global wealth — billionaires,
+              the companies and markets behind their fortunes, and the tools
+              to explore it all. Not affiliated with or endorsed by Forbes.
             </p>
           </div>
           <nav className="grid grid-cols-2 gap-x-10 gap-y-2 text-sm">
@@ -34,6 +34,12 @@ export default function SiteFooter() {
             </Link>
             <Link href="/countries" className="text-foreground/70 hover:text-brand">
               By Country
+            </Link>
+            <Link href="/crypto" className="text-foreground/70 hover:text-brand">
+              Crypto Wealth
+            </Link>
+            <Link href="/energy" className="text-foreground/70 hover:text-brand">
+              Energy & Oil
             </Link>
             <Link href="/calculators" className="text-foreground/70 hover:text-brand">
               Calculators

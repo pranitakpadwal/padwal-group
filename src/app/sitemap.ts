@@ -9,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
 
-  const categoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/why", "/articles"].map(
+  const categoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/why", "/articles", "/crypto", "/energy"].map(
     (path) => ({
       url: `${base}${path}`,
       changeFrequency: "hourly",
@@ -21,6 +21,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators",
     "/calculators/own-a-company",
     "/calculators/net-worth-rank",
+    "/calculators/spend",
+    "/calculators/birthday",
+    "/calculators/billionaire-by-age",
+    "/calculators/inflation",
     "/about",
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
 
