@@ -34,6 +34,21 @@ export function formatCompactNumber(value: number): string {
   return compactNumber.format(value);
 }
 
+/** Compact value in an arbitrary currency, e.g. "$1.2B" / "₹1.2K Cr". */
+export function formatCurrencyCompact(value: number, currency: string): string {
+  const locale = currency === "INR" ? "en-IN" : "en-US";
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency,
+      notation: "compact",
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `${compactNumber.format(value)} ${currency}`;
+  }
+}
+
 export function formatUsdCompact(value: number): string {
   return compactUsd.format(value);
 }
