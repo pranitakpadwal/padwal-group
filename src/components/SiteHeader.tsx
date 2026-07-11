@@ -1,27 +1,25 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import CategoryTabs from "@/components/CategoryTabs";
 import type { Category } from "@/lib/categories";
 
 export default function SiteHeader({ activeCategory }: { activeCategory: Category }) {
   return (
-    <header className="w-full border-b border-neutral-200 dark:border-neutral-800">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-8">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <Link href="/" className="flex items-baseline gap-2">
-            <span className="text-xl font-black tracking-tight text-black dark:text-zinc-50">
-              Real-Time Billionaires
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-30 w-full border-b border-line bg-background/85 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Logo />
+          <div className="flex items-center gap-5 text-sm">
             <Link
               href="/articles"
-              className="text-sm font-medium text-neutral-600 hover:underline dark:text-neutral-300"
+              className="font-medium text-foreground/70 transition-colors hover:text-brand"
             >
               Daily Recaps
             </Link>
-            <p className="hidden text-xs text-neutral-500 dark:text-neutral-400 sm:block">
-              Live estimates from public stock holdings &mdash; not affiliated with Forbes
-            </p>
+            <span className="hidden items-center gap-1.5 text-xs text-[--muted] sm:flex">
+              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand" />
+              Live estimates
+            </span>
           </div>
         </div>
         <CategoryTabs active={activeCategory} />

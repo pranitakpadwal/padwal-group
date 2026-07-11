@@ -19,8 +19,8 @@ export default function CategoryTabs({ active }: { active: Category }) {
             href={HREF_BY_CATEGORY[category]}
             className={`shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
               isActive
-                ? "border-black text-black dark:border-white dark:text-white"
-                : "border-transparent text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white"
+                ? "border-brand text-brand"
+                : "border-transparent text-foreground/60 hover:text-brand"
             }`}
           >
             {categoryLabel(category)}

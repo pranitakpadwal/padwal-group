@@ -122,61 +122,60 @@ export default function Leaderboard({
       <MoversStrip topGainers={data.topGainers} topLosers={data.topLosers} />
 
       {data.people.length === 0 ? (
-        <div className="rounded-xl border border-neutral-200 p-8 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
+        <div className="rounded-xl border border-line bg-surface p-8 text-center text-sm text-[--muted]">
           No one in this tracker matches this list right now.
         </div>
       ) : (
-      <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-surface">
         <table className="w-full min-w-[720px] border-collapse text-left">
-          <thead className="bg-neutral-50 text-xs uppercase tracking-wide text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
+          <thead className="border-b border-line bg-brand-soft/60 text-xs uppercase tracking-wide text-brand-dark">
             <tr>
-              <th className="px-4 py-3 font-medium">Rank</th>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Age</th>
-              <th className="px-4 py-3 font-medium hidden sm:table-cell">
+              <th className="px-4 py-3 font-semibold">Rank</th>
+              <th className="px-4 py-3 font-semibold">Name</th>
+              <th className="px-4 py-3 font-semibold">Age</th>
+              <th className="px-4 py-3 font-semibold hidden sm:table-cell">
                 Source / Industry
               </th>
-              <th className="px-4 py-3 font-medium text-right">Net Worth</th>
-              <th className="px-4 py-3 font-medium text-right">Today</th>
+              <th className="px-4 py-3 font-semibold text-right">Net Worth</th>
+              <th className="px-4 py-3 font-semibold text-right">Today</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+          <tbody className="divide-y divide-line">
             {data.people.map((person) => (
               <tr
                 key={person.id}
-                className="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900/60"
+                className="transition-colors hover:bg-brand-soft/40"
               >
-                <td className="px-4 py-3 text-sm font-semibold text-neutral-500 tabular-nums">
+                <td className="px-4 py-3 text-sm font-semibold text-[--muted] tabular-nums">
                   {person.rank}
                 </td>
                 <td className="px-4 py-3">
                   <Link
                     href={`/billionaire/${person.id}`}
-                    className="flex items-center gap-3"
+                    className="group flex items-center gap-3"
                   >
                     <PersonAvatar name={person.name} photoUrl={person.photoUrl} size={36} />
                     <div>
-                      <div className="font-medium hover:underline">{person.name}</div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                        {person.country}
+                      <div className="font-medium text-foreground group-hover:text-brand">
+                        {person.name}
                       </div>
+                      <div className="text-xs text-[--muted]">{person.country}</div>
                     </div>
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-sm tabular-nums text-neutral-600 dark:text-neutral-300">
+                <td className="px-4 py-3 text-sm tabular-nums text-foreground/70">
                   {person.age}
                 </td>
-                <td className="hidden px-4 py-3 text-sm text-neutral-600 dark:text-neutral-300 sm:table-cell">
+                <td className="hidden px-4 py-3 text-sm text-foreground/70 sm:table-cell">
                   {person.primarySource}
-                  <div className="text-xs text-neutral-400">{person.industry}</div>
+                  <div className="text-xs text-[--muted]">{person.industry}</div>
                   {person.ticker && person.sharePrice !== null && (
-                    <div className="text-xs text-neutral-400">
-                      {person.ticker} @ {person.sharePrice.toFixed(2)}{" "}
-                      {person.currency ?? ""}
+                    <div className="text-xs text-[--muted]">
+                      {person.ticker} @ {person.sharePrice.toFixed(2)} USD
                     </div>
                   )}
                 </td>
-                <td className="px-4 py-3 text-right text-sm font-semibold tabular-nums">
+                <td className="px-4 py-3 text-right text-sm font-semibold tabular-nums text-foreground">
                   {formatUsdCompact(person.netWorthUsd)}
                 </td>
                 <td className="px-4 py-3 text-right">

@@ -138,7 +138,7 @@ export default async function BillionaireProfile({
   };
 
   return (
-    <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-black">
+    <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
         <Link
@@ -149,22 +149,22 @@ export default async function BillionaireProfile({
         </Link>
 
         {/* Hero */}
-        <div className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-950 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
           <PersonAvatar name={ranked.name} photoUrl={ranked.photoUrl} size={96} />
           <div className="flex-1">
-            <h1 className="text-3xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               {ranked.name}
             </h1>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="mt-1 text-sm text-[--muted]">
               #{ranked.rank} in the World &middot; Age {ranked.age} &middot;{" "}
               {profile?.residenceCity ?? ranked.country}
             </p>
           </div>
           <div className="sm:text-right">
-            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+            <div className="text-xs uppercase tracking-wide text-[--muted]">
               Real-Time Net Worth
             </div>
-            <div className="text-3xl font-bold tabular-nums sm:text-4xl">
+            <div className="font-display text-3xl font-semibold tabular-nums text-brand-dark sm:text-4xl">
               {formatUsdCompact(ranked.netWorthUsd)}
             </div>
             <div className={`text-sm font-medium tabular-nums ${changeColor}`}>
@@ -172,7 +172,7 @@ export default async function BillionaireProfile({
               {formatPercentChange(ranked.dayChangePercent)}) today
             </div>
             {moveExplanation && (
-              <p className="mt-2 max-w-xs text-xs text-neutral-500 dark:text-neutral-400 sm:ml-auto">
+              <p className="mt-2 max-w-xs text-xs text-[--muted] sm:ml-auto">
                 {moveExplanation}
               </p>
             )}
