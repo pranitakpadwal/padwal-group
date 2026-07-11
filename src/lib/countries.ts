@@ -12,6 +12,7 @@ export function countrySlug(country: string): string {
 /** Nationality adjective for headlines, e.g. "Indian", "Emirati". Falls back to the country name. */
 const DEMONYMS: Record<string, string> = {
   "United States": "American",
+  Canada: "Canadian",
   India: "Indian",
   China: "Chinese",
   Japan: "Japanese",
@@ -55,6 +56,7 @@ export function countryFromSlug(slug: string): string | null {
 
 const REGION_BY_COUNTRY: Record<string, string> = {
   "United States": "North America",
+  Canada: "North America",
   Mexico: "North America",
   India: "Asia",
   China: "Asia",

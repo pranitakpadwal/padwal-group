@@ -797,6 +797,36 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Led Airbnb's 2020 IPO.",
     ],
   },
+
+  "changpeng-zhao": {
+    residenceCity: "Dubai, UAE",
+    citizenship: "Canada",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Changpeng Zhao, known as CZ, founded the cryptocurrency exchange Binance in 2017 and built it into the largest in the world by trading volume. Born in Jiangsu, China, he emigrated to Canada as a child and is a Canadian citizen.",
+      "He stepped down as Binance's CEO in 2023. Though he is based in Dubai, he is typically ranked as the richest Canadian; his fortune is tied largely to Binance and crypto holdings, so estimates move with the market.",
+    ],
+    keyFacts: [
+      "Founded Binance in 2017, the world's largest crypto exchange by volume.",
+      "Chinese-born Canadian citizen; based in Dubai.",
+      "Often ranked as the richest person in Canada.",
+    ],
+  },
+
+  "pavel-durov": {
+    residenceCity: "Dubai, UAE",
+    citizenship: "UAE, France, Russia, St. Kitts and Nevis",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Pavel Durov founded the messaging app Telegram in 2013 and runs it from Dubai. He earlier created the Russian social network VK before leaving Russia.",
+      "He holds Emirati, French, Russian, and St. Kitts and Nevis citizenship. Because Telegram is privately held, published estimates of his net worth vary widely.",
+    ],
+    keyFacts: [
+      "Founder of Telegram, one of the world's largest messaging apps.",
+      "Previously founded the Russian social network VK.",
+      "Holds four citizenships and is based in Dubai.",
+    ],
+  },
 };
 
 export function getPersonProfile(id: string): PersonProfile | undefined {

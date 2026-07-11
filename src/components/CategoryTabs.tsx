@@ -27,6 +27,12 @@ export default function CategoryTabs({ active }: { active: Category }) {
           </Link>
         );
       })}
+      <Link
+        href="/countries"
+        className="shrink-0 border-b-2 border-transparent px-3 py-2 text-sm font-medium text-foreground/60 transition-colors hover:text-brand"
+      >
+        Countries
+      </Link>
     </nav>
   );
 }
