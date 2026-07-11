@@ -102,6 +102,9 @@ export default async function BillionaireProfile({
   const arrow = isUp ? "▲" : isDown ? "▼" : "•";
 
   const subpageLinks = [
+    profile?.careerTimeline && profile.careerTimeline.length > 0
+      ? { href: `/billionaire/${id}/journey`, label: "Journey & Timeline" }
+      : null,
     profile?.ventures && profile.ventures.length > 0
       ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
       : null,

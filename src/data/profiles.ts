@@ -38,8 +38,19 @@ export interface NotableAsset {
 export interface FamilyInfo {
   maritalStatus: string;
   spouseName?: string;
+  /** If the (former) spouse is also in our roster, link to them. */
+  spouseId?: string;
+  formerSpouseName?: string;
+  formerSpouseId?: string;
   childrenCount?: number;
   note?: string;
+}
+
+/** A single milestone in a person's career/wealth journey. Bedrock, well-documented facts only. */
+export interface TimelineEntry {
+  year: string;
+  title: string;
+  description: string;
 }
 
 /**
@@ -58,6 +69,8 @@ export interface PersonProfile {
   longBio?: string[];
   /** Punchy, widely-reported facts. */
   keyFacts?: string[];
+  /** Career/wealth journey, oldest milestone first. */
+  careerTimeline?: TimelineEntry[];
   ventures?: Venture[];
   notableAssets?: NotableAsset[];
   family?: FamilyInfo;
@@ -77,6 +90,15 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Taught himself to code as a child and sold his first game, Blastar, for around $500.",
       "Co-founder of multiple companies including Tesla, SpaceX, Neuralink, and xAI.",
       "Acquired Twitter (now X) in 2022 for roughly $44 billion.",
+    ],
+    careerTimeline: [
+      { year: "1995", title: "Co-founded Zip2", description: "Started his first company, the web-software firm Zip2, with his brother Kimbal." },
+      { year: "1999", title: "Founded X.com", description: "After selling Zip2, he founded the online bank X.com, which became PayPal." },
+      { year: "2002", title: "PayPal sale & SpaceX", description: "eBay acquired PayPal; Musk used the proceeds to found the rocket company SpaceX." },
+      { year: "2004", title: "Invested in Tesla", description: "Led an early investment in Tesla and joined as chairman of its board." },
+      { year: "2008", title: "Became Tesla CEO", description: "Took over as Tesla's CEO; SpaceX reached orbit with the Falcon 1." },
+      { year: "2022", title: "Acquired Twitter", description: "Bought Twitter for about $44 billion and later renamed it X." },
+      { year: "2023", title: "Founded xAI", description: "Launched the artificial-intelligence company xAI." },
     ],
     ventures: [
       {
@@ -151,6 +173,15 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Founded aerospace company Blue Origin in 2000.",
       "Bought The Washington Post for $250 million in 2013.",
     ],
+    careerTimeline: [
+      { year: "1986", title: "Graduated Princeton", description: "Earned degrees in computer science and electrical engineering." },
+      { year: "1990", title: "Joined D. E. Shaw", description: "Worked at the hedge fund D. E. Shaw, rising to senior vice president." },
+      { year: "1994", title: "Founded Amazon", description: "Left Wall Street and started Amazon as an online bookstore, out of his Seattle garage." },
+      { year: "1997", title: "Amazon IPO", description: "Took Amazon public on the Nasdaq." },
+      { year: "2000", title: "Founded Blue Origin", description: "Started his aerospace company Blue Origin." },
+      { year: "2013", title: "Bought The Washington Post", description: "Acquired the newspaper for $250 million." },
+      { year: "2021", title: "Stepped down as Amazon CEO", description: "Became executive chairman and flew to space aboard Blue Origin's New Shepard." },
+    ],
     ventures: [
       {
         name: "Blue Origin",
@@ -186,8 +217,10 @@ export const personProfiles: Record<string, PersonProfile> = {
     family: {
       maritalStatus: "Married",
       spouseName: "Lauren Sánchez",
+      formerSpouseName: "MacKenzie Scott",
+      formerSpouseId: "mackenzie-scott",
       childrenCount: 4,
-      note: "The 4 children are from his prior marriage to MacKenzie Scott.",
+      note: "His four children are from his prior marriage to MacKenzie Scott.",
     },
   },
 
@@ -204,6 +237,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Chairs Reliance Industries, India's most valuable company.",
       "Launched telecom operator Jio in 2016, rapidly gaining hundreds of millions of subscribers.",
       "Lives in Antilia, a 27-story private residence in Mumbai.",
+    ],
+    careerTimeline: [
+      { year: "1981", title: "Joined Reliance", description: "Began working in his father Dhirubhai Ambani's company, Reliance." },
+      { year: "2005", title: "Became Reliance chairman", description: "Took the helm of Reliance Industries after the family business was divided with his brother." },
+      { year: "2016", title: "Launched Jio", description: "Rolled out the Jio mobile network, rapidly reshaping India's telecom market." },
+      { year: "2020", title: "Record Jio fundraising", description: "Raised record investment for Jio Platforms from global technology firms." },
     ],
     ventures: [
       {
@@ -296,6 +335,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Launched Facebook from his Harvard dorm room in 2004.",
       "Dropped out of Harvard to build the company full-time.",
       "Owns roughly 13% of Meta Platforms.",
+    ],
+    careerTimeline: [
+      { year: "2004", title: "Launched Facebook", description: "Started 'TheFacebook' from his Harvard dorm room, then dropped out to run it full-time." },
+      { year: "2012", title: "Facebook IPO & Instagram", description: "Took Facebook public in a landmark tech IPO and acquired Instagram." },
+      { year: "2014", title: "Acquired WhatsApp", description: "Bought the messaging app WhatsApp." },
+      { year: "2021", title: "Renamed to Meta", description: "Rebranded the company Meta to signal a focus on the metaverse." },
     ],
     ventures: [
       {
@@ -424,6 +469,14 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Bought his first stock at age 11.",
       "Still lives in the Omaha home he purchased in 1958.",
       "Has pledged to give away more than 99% of his wealth.",
+    ],
+    careerTimeline: [
+      { year: "1942", title: "First stock at age 11", description: "Bought his first shares — Cities Service preferred stock." },
+      { year: "1951", title: "Studied under Benjamin Graham", description: "Learned value investing from Graham at Columbia Business School." },
+      { year: "1956", title: "Started his first partnership", description: "Launched the Buffett Partnership in Omaha." },
+      { year: "1965", title: "Took control of Berkshire Hathaway", description: "Gained control of the struggling textile maker and reshaped it into a holding company." },
+      { year: "1988", title: "Bought into Coca-Cola", description: "Began accumulating a signature long-term stake in Coca-Cola." },
+      { year: "2006", title: "The Giving Pledge era", description: "Pledged to give away the bulk of his fortune, largely through the Gates Foundation." },
     ],
   },
 

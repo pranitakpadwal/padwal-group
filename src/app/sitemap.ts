@@ -36,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       return [];
     }
     const slugs: string[] = [];
+    if (profile.careerTimeline && profile.careerTimeline.length > 0) slugs.push("journey");
     if (profile.ventures && profile.ventures.length > 0) slugs.push("ventures");
     if (profile.notableAssets && profile.notableAssets.length > 0) slugs.push("lifestyle");
     if (profile.family) slugs.push("family");

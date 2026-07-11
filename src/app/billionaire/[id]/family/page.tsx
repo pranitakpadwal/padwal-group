@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBillionaireById } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
@@ -56,7 +57,29 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
         {family.spouseName && (
           <div className="flex justify-between border-t border-neutral-200 py-2 dark:border-neutral-800">
             <dt className="text-neutral-500 dark:text-neutral-400">Spouse</dt>
-            <dd className="font-medium">{family.spouseName}</dd>
+            <dd className="font-medium">
+              {family.spouseId ? (
+                <Link href={`/billionaire/${family.spouseId}`} className="hover:underline">
+                  {family.spouseName}
+                </Link>
+              ) : (
+                family.spouseName
+              )}
+            </dd>
+          </div>
+        )}
+        {family.formerSpouseName && (
+          <div className="flex justify-between border-t border-neutral-200 py-2 dark:border-neutral-800">
+            <dt className="text-neutral-500 dark:text-neutral-400">Former spouse</dt>
+            <dd className="font-medium">
+              {family.formerSpouseId ? (
+                <Link href={`/billionaire/${family.formerSpouseId}`} className="text-brand hover:underline">
+                  {family.formerSpouseName}
+                </Link>
+              ) : (
+                family.formerSpouseName
+              )}
+            </dd>
           </div>
         )}
         {family.childrenCount !== undefined && (
