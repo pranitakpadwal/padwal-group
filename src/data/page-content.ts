@@ -17,7 +17,7 @@ export function getHero(category: Category): HeroContent {
     case "world":
       return {
         h1: "Real-Time Billionaires",
-        lede: "The world's richest people, ranked live by net worth. Net worth updates continuously from public stock holdings, so the list moves as markets move.",
+        lede: "The real-time billionaires list — a live index of the world's richest people, ranked by net worth. Every fortune updates continuously from public stock holdings, so the ranking moves as markets move.",
       };
     case "india":
       return {

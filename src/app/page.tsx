@@ -11,7 +11,10 @@ export const metadata: Metadata = {
   keywords: [
     "real time billionaires",
     "real time billionaires list",
+    "real time billionaires index",
+    "billionaires real time",
     "billionaires real time net worth",
+    "real time world billionaires",
     "world billionaires list",
     "richest people in the world",
     "live billionaire net worth",
