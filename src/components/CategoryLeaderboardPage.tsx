@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { getCategoryView, type Category } from "@/lib/categories";
 import { getHero, getFaqs, getMethodology } from "@/data/page-content";
@@ -49,6 +50,12 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
               <p key={index}>{paragraph}</p>
             ))}
           </div>
+          <Link
+            href="/about"
+            className="mt-4 inline-block text-sm font-medium text-brand hover:underline"
+          >
+            Read our full methodology &amp; data sources &rarr;
+          </Link>
         </section>
 
         <FaqBlock faqs={faqs} />

@@ -56,7 +56,7 @@ export const billionaires: Billionaire[] = [
     wikipediaTitle: "Elon_Musk",
     ticker: "TSLA",
     sharesHeld: 411_000_000,
-    otherAssetsUsd: 150_000_000_000,
+    otherAssetsUsd: 250_000_000_000,
   },
   {
     id: "jeff-bezos",
@@ -111,8 +111,8 @@ export const billionaires: Billionaire[] = [
     bio: "Co-founder of Google, former CEO of Alphabet Inc.",
     wikipediaTitle: "Larry_Page",
     ticker: "GOOGL",
-    sharesHeld: 340_000_000,
-    otherAssetsUsd: 10_000_000_000,
+    sharesHeld: 700_000_000,
+    otherAssetsUsd: 15_000_000_000,
   },
   {
     id: "sergey-brin",
@@ -125,8 +125,8 @@ export const billionaires: Billionaire[] = [
     bio: "Co-founder of Google, former president of Alphabet Inc.",
     wikipediaTitle: "Sergey_Brin",
     ticker: "GOOGL",
-    sharesHeld: 325_000_000,
-    otherAssetsUsd: 10_000_000_000,
+    sharesHeld: 670_000_000,
+    otherAssetsUsd: 15_000_000_000,
   },
   {
     id: "steve-ballmer",
@@ -387,7 +387,7 @@ export const billionaires: Billionaire[] = [
     bio: "Chairman and managing director of Reliance Industries, India's most valuable company.",
     wikipediaTitle: "Mukesh_Ambani",
     ticker: "RELIANCE.NS",
-    sharesHeld: 670_000_000,
+    sharesHeld: 4_800_000_000,
     otherAssetsUsd: 15_000_000_000,
   },
   {
@@ -402,7 +402,7 @@ export const billionaires: Billionaire[] = [
     wikipediaTitle: "Gautam_Adani",
     ticker: "ADANIENT.NS",
     sharesHeld: 320_000_000,
-    otherAssetsUsd: 10_000_000_000,
+    otherAssetsUsd: 40_000_000_000,
   },
   {
     id: "shiv-nadar",

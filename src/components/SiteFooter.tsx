@@ -41,6 +41,9 @@ export default function SiteFooter() {
             <Link href="/articles" className="text-foreground/70 hover:text-brand">
               Daily Recaps
             </Link>
+            <Link href="/about" className="text-foreground/70 hover:text-brand">
+              Methodology
+            </Link>
           </nav>
         </div>
         <div className="border-t border-line pt-4 text-xs text-[--muted]">
