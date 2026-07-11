@@ -32,6 +32,12 @@ export default function SiteFooter() {
             <Link href="/young" className="text-foreground/70 hover:text-brand">
               Under 45
             </Link>
+            <Link href="/countries" className="text-foreground/70 hover:text-brand">
+              By Country
+            </Link>
+            <Link href="/calculators" className="text-foreground/70 hover:text-brand">
+              Calculators
+            </Link>
             <Link href="/articles" className="text-foreground/70 hover:text-brand">
               Daily Recaps
             </Link>

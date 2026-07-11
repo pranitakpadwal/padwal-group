@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { billionaires } from "@/data/billionaires";
 import { getPersonProfile } from "@/data/profiles";
 import { getAllTickers } from "@/lib/holdings";
+import { listCountries } from "@/lib/countries";
 import { listArticles } from "@/lib/articles";
 import { siteUrl } from "@/lib/site";
 
@@ -45,6 +46,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
   });
 
+  const countryRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/countries`, changeFrequency: "weekly" as const, priority: 0.7 },
+    ...listCountries().map((c) => ({
+      url: `${base}/country/${c.slug}`,
+      changeFrequency: "daily" as const,
+      priority: 0.6,
+    })),
+  ];
+
   const stockRoutes: MetadataRoute.Sitemap = getAllTickers().map((ticker) => ({
     url: `${base}/stock/${ticker}`,
     changeFrequency: "daily",
@@ -60,6 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...categoryRoutes,
+    ...countryRoutes,
     ...calculatorRoutes,
     ...profileRoutes,
     ...profileSubpageRoutes,
