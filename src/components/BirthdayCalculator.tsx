@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { RICHEST_BY_YEAR, FIRST_RANKED_YEAR, richestInYear, type RichestOfYear } from "@/data/richest-by-year";
 import { formatUsdCompact } from "@/lib/format";
+import ShareBar from "@/components/ShareBar";
 
 const LATEST_YEAR = RICHEST_BY_YEAR[RICHEST_BY_YEAR.length - 1].year;
 
@@ -94,6 +95,16 @@ export default function BirthdayCalculator({
             </div>
           </div>
         </div>
+      )}
+
+      {validYear && (
+        <ShareBar
+          text={
+            bornEntry
+              ? `The year I was born, ${bornEntry.name} was the richest person on Earth. Who topped the list when YOU were born? Find out:`
+              : `I was born before the world even ranked its richest people (the first list was ${FIRST_RANKED_YEAR}). Who was #1 when you were born? Find out:`
+          }
+        />
       )}
 
       <p className="text-xs text-neutral-400">

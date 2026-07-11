@@ -9,6 +9,7 @@ import Leaderboard from "@/components/Leaderboard";
 import PageHero from "@/components/PageHero";
 import FaqBlock from "@/components/FaqBlock";
 import ItemListJsonLd from "@/components/ItemListJsonLd";
+import ExploreHub from "@/components/ExploreHub";
 
 export default async function CategoryLeaderboardPage({ category }: { category: Category }) {
   const leaderboard = await getLeaderboard();
@@ -40,6 +41,8 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
             activeCategory={category}
           />
         </div>
+
+        {category === "world" && <ExploreHub />}
 
         <section className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
           <h2 className="font-display text-2xl font-semibold text-foreground">

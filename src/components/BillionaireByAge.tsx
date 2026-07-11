@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatUsdCompact } from "@/lib/format";
+import ShareBar from "@/components/ShareBar";
 
 export interface AgePerson {
   id: string;
@@ -105,6 +106,14 @@ export default function BillionaireByAge({ people }: { people: AgePerson[] }) {
             : "ranks among the world's richest people."}
         </p>
       </div>
+
+      <ShareBar
+        text={
+          byAge.length > 0
+            ? `By age ${age}, ${person.name} had already: ${byAge[byAge.length - 1].title.toLowerCase()}. See what the world's richest had done at YOUR age:`
+            : `At ${age}, ${person.name} hadn't hit a single milestone on the public record yet. There's hope for all of us 😅 Check your age:`
+        }
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { SPEND_ITEMS } from "@/data/spend-items";
 import { formatUsdCompact } from "@/lib/format";
+import ShareBar from "@/components/ShareBar";
 
 export interface SpendBudget {
   id: string;
@@ -124,6 +125,15 @@ export default function SpendBillionaireMoney({ budgets }: { budgets: SpendBudge
           );
         })}
       </ul>
+
+      <ShareBar
+        label="Brag about it"
+        text={
+          spent > 0
+            ? `I just spent ${formatUsdCompact(spent)} of ${budget.name}'s fortune — and there's STILL ${formatUsdCompact(remaining)} left 🤯 Try it yourself:`
+            : `Can you spend ${budget.name}'s entire ${formatUsdCompact(budget.netWorthUsd)} fortune? Harder than it sounds. Try it:`
+        }
+      />
 
       <p className="text-xs text-neutral-400">
         Net worth is our live estimate; item prices are rounded public figures

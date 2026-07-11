@@ -46,34 +46,31 @@ export default async function LifestylePage({ params }: { params: Promise<RouteP
   return (
     <ProfileSubpageLayout personName={person.name} personId={person.id} sectionLabel="Lifestyle & Assets">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-3xl">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
           {person.name}&apos;s Homes, Jets &amp; Notable Assets
         </h1>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-foreground/70">
           Widely and credibly reported assets — not our own valuations, and
           not a complete inventory. Home locations are kept to city/region
           level, not exact addresses.
         </p>
       </div>
 
-      <ul className="flex flex-col gap-5">
+      <ul className="flex flex-col gap-4">
         {assets.map((asset) => (
-          <li
-            key={asset.name}
-            className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
-          >
+          <li key={asset.name} className="rounded-2xl border border-line bg-surface p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <h2 className="text-lg font-semibold">{asset.name}</h2>
-              <span className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+              <h2 className="font-display text-lg font-semibold text-foreground">{asset.name}</h2>
+              <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide text-brand-dark">
                 {CATEGORY_LABEL[asset.category]}
               </span>
             </div>
-            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{asset.description}</p>
+            <p className="mt-2 text-sm text-foreground/70">{asset.description}</p>
             <a
               href={asset.sourceUrl}
               target="_blank"
               rel="noopener noreferrer nofollow"
-              className="mt-2 inline-block text-xs text-neutral-400 hover:underline"
+              className="mt-2 inline-block text-xs text-[--muted] hover:text-brand hover:underline"
             >
               Source: {asset.sourceName}
             </a>

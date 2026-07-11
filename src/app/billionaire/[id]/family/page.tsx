@@ -39,27 +39,27 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
   return (
     <ProfileSubpageLayout personName={person.name} personId={person.id} sectionLabel="Family">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-3xl">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
           {person.name}&apos;s Family
         </h1>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-foreground/70">
           We deliberately keep this to marital status and number of
           children — never names, ages, or other details about children,
           out of respect for their privacy and safety.
         </p>
       </div>
 
-      <dl className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <dl className="rounded-2xl border border-line bg-surface p-5">
         <div className="flex justify-between py-2">
-          <dt className="text-neutral-500 dark:text-neutral-400">Marital status</dt>
-          <dd className="font-medium">{family.maritalStatus}</dd>
+          <dt className="text-[--muted]">Marital status</dt>
+          <dd className="font-medium text-foreground">{family.maritalStatus}</dd>
         </div>
         {family.spouseName && (
-          <div className="flex justify-between border-t border-neutral-200 py-2 dark:border-neutral-800">
-            <dt className="text-neutral-500 dark:text-neutral-400">Spouse</dt>
-            <dd className="font-medium">
+          <div className="flex justify-between border-t border-line py-2">
+            <dt className="text-[--muted]">Spouse</dt>
+            <dd className="font-medium text-foreground">
               {family.spouseId ? (
-                <Link href={`/billionaire/${family.spouseId}`} className="hover:underline">
+                <Link href={`/billionaire/${family.spouseId}`} className="text-brand hover:underline">
                   {family.spouseName}
                 </Link>
               ) : (
@@ -69,9 +69,9 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
           </div>
         )}
         {family.formerSpouseName && (
-          <div className="flex justify-between border-t border-neutral-200 py-2 dark:border-neutral-800">
-            <dt className="text-neutral-500 dark:text-neutral-400">Former spouse</dt>
-            <dd className="font-medium">
+          <div className="flex justify-between border-t border-line py-2">
+            <dt className="text-[--muted]">Former spouse</dt>
+            <dd className="font-medium text-foreground">
               {family.formerSpouseId ? (
                 <Link href={`/billionaire/${family.formerSpouseId}`} className="text-brand hover:underline">
                   {family.formerSpouseName}
@@ -83,13 +83,13 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
           </div>
         )}
         {family.childrenCount !== undefined && (
-          <div className="flex justify-between border-t border-neutral-200 py-2 dark:border-neutral-800">
-            <dt className="text-neutral-500 dark:text-neutral-400">Children</dt>
-            <dd className="font-medium">{family.childrenCount}</dd>
+          <div className="flex justify-between border-t border-line py-2">
+            <dt className="text-[--muted]">Children</dt>
+            <dd className="font-medium text-foreground">{family.childrenCount}</dd>
           </div>
         )}
         {family.note && (
-          <p className="mt-3 border-t border-neutral-200 pt-3 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-300">
+          <p className="mt-3 border-t border-line pt-3 text-sm text-foreground/70">
             {family.note}
           </p>
         )}

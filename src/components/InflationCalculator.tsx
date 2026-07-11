@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CPI_BY_YEAR, CPI_BASE_YEAR, inflationMultiplier } from "@/data/cpi";
+import ShareBar from "@/components/ShareBar";
 
 const YEARS = Object.keys(CPI_BY_YEAR)
   .map(Number)
@@ -86,6 +87,12 @@ export default function InflationCalculator() {
             <span className="font-medium tabular-nums">{multiplier.toFixed(1)}×</span> higher.
           </div>
         </div>
+      )}
+
+      {converted !== null && (
+        <ShareBar
+          text={`${formatMoney(amount)} in ${year} = ${formatMoney(converted)} in today's money. Convert any historical fortune:`}
+        />
       )}
 
       <p className="text-xs text-neutral-400">

@@ -7,6 +7,7 @@ import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import MarketQuotesTable from "@/components/MarketQuotesTable";
 import PersonAvatar from "@/components/PersonAvatar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -41,8 +42,9 @@ export default async function EnergyPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <SiteHeader activeCategory="world" />
+      <SiteHeader activeCategory="energy" />
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-4 py-8 sm:px-8">
+        <Breadcrumbs crumbs={[{ label: "Energy & Oil" }]} />
         <header>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Energy Markets & The Billionaires Behind Them

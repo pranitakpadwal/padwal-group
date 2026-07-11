@@ -5,6 +5,7 @@ import { personProfiles } from "@/data/profiles";
 import { calculateAge } from "@/lib/age";
 import { siteUrl } from "@/lib/site";
 import BillionaireByAge, { type AgePerson } from "@/components/BillionaireByAge";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -49,6 +50,7 @@ export default async function BillionaireByAgePage() {
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
+        <Breadcrumbs crumbs={[{ label: "Calculators", href: "/calculators" }, { label: "When They Were Your Age" }]} />
         <header>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             When They Were Your Age...

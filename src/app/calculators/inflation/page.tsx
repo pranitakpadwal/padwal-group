@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteUrl } from "@/lib/site";
 import InflationCalculator from "@/components/InflationCalculator";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -22,6 +23,7 @@ export default function InflationPage() {
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
+        <Breadcrumbs crumbs={[{ label: "Calculators", href: "/calculators" }, { label: "Wealth Inflation" }]} />
         <header>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Wealth Inflation Calculator

@@ -38,28 +38,30 @@ export default async function VenturesPage({ params }: { params: Promise<RoutePa
   return (
     <ProfileSubpageLayout personName={person.name} personId={person.id} sectionLabel="Ventures">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-3xl">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
           {person.name}&apos;s Ventures &amp; Investments
         </h1>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-foreground/70">
           Beyond {person.primarySource}, publicly reported ventures and
           investments — each sourced.
         </p>
       </div>
 
-      <ul className="flex flex-col gap-5">
+      <ul className="flex flex-col gap-4">
         {ventures.map((venture) => (
-          <li key={venture.name} className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+          <li key={venture.name} className="rounded-2xl border border-line bg-surface p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <h2 className="text-lg font-semibold">{venture.name}</h2>
-              <span className="text-sm text-neutral-500 dark:text-neutral-400">{venture.role}</span>
+              <h2 className="font-display text-lg font-semibold text-foreground">{venture.name}</h2>
+              <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium text-brand-dark">
+                {venture.role}
+              </span>
             </div>
-            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{venture.description}</p>
+            <p className="mt-2 text-sm text-foreground/70">{venture.description}</p>
             <a
               href={venture.sourceUrl}
               target="_blank"
               rel="noopener noreferrer nofollow"
-              className="mt-2 inline-block text-xs text-neutral-400 hover:underline"
+              className="mt-2 inline-block text-xs text-[--muted] hover:text-brand hover:underline"
             >
               Source: {venture.sourceName}
             </a>

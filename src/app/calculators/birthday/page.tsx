@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLeaderboard } from "@/lib/net-worth";
 import { siteUrl } from "@/lib/site";
 import BirthdayCalculator from "@/components/BirthdayCalculator";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -28,6 +29,7 @@ export default async function BirthdayPage() {
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
+        <Breadcrumbs crumbs={[{ label: "Calculators", href: "/calculators" }, { label: "Richest on Your Birthday" }]} />
         <header>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Who Was the Richest Person When You Were Born?

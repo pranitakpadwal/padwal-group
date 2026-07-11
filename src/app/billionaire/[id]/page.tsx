@@ -23,6 +23,8 @@ import NetWorthHistorySection from "@/components/NetWorthHistorySection";
 import CareerTimelineTable from "@/components/CareerTimelineTable";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import ShareBar from "@/components/ShareBar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -155,12 +157,7 @@ export default async function BillionaireProfile({
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
-        <Link
-          href="/"
-          className="text-sm text-neutral-500 hover:underline dark:text-neutral-400"
-        >
-          &larr; Back to leaderboard
-        </Link>
+        <Breadcrumbs crumbs={[{ label: "Billionaires", href: "/" }, { label: ranked.name }]} />
 
         {/* Hero */}
         <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
@@ -194,6 +191,11 @@ export default async function BillionaireProfile({
             )}
           </div>
         </div>
+
+        <ShareBar
+          label={`Share ${firstName}'s net worth`}
+          text={`${ranked.name} is worth ${formatUsdCompact(ranked.netWorthUsd)} right now — #${ranked.rank} in the world. Track it live:`}
+        />
 
         <div className="flex flex-col gap-8 lg:flex-row">
           {/* Main column */}
