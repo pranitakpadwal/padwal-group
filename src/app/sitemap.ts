@@ -8,7 +8,7 @@ import { siteUrl } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
 
-  const categoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/articles"].map(
+  const categoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/why", "/articles"].map(
     (path) => ({
       url: `${base}${path}`,
       changeFrequency: "hourly",

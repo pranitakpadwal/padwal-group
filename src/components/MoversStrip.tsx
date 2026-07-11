@@ -10,7 +10,7 @@ function MoverCard({ person, isGainer }: { person: RankedBillionaire; isGainer: 
   return (
     <Link
       href={`/billionaire/${person.id}`}
-      className="flex min-w-[180px] shrink-0 flex-col gap-2 rounded-lg border border-neutral-200 bg-white p-3 transition-colors hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-neutral-700"
+      className="flex min-w-[180px] shrink-0 flex-col gap-2 rounded-lg border border-line bg-surface p-3 transition-colors hover:border-brand"
     >
       <div className="flex items-center gap-2">
         <PersonAvatar name={person.name} photoUrl={person.photoUrl} size={28} />
@@ -39,10 +39,15 @@ export default function MoversStrip({
   }
 
   return (
-    <section className="w-full rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900/40">
-      <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-black dark:text-white">
-        Today&apos;s Biggest Movers
-      </h2>
+    <section className="w-full rounded-2xl border border-line bg-brand-soft/40 p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-brand-dark">
+          Today&apos;s Biggest Movers
+        </h2>
+        <Link href="/why" className="text-xs font-medium text-brand hover:underline">
+          Why? &rarr;
+        </Link>
+      </div>
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
         {topGainers.length > 0 && (
           <div>
