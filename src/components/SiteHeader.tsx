@@ -11,6 +11,12 @@ export default function SiteHeader({ activeCategory }: { activeCategory: Categor
           <Logo />
           <div className="flex items-center gap-5 text-sm">
             <Link
+              href="/calculators"
+              className="font-medium text-foreground/70 transition-colors hover:text-brand"
+            >
+              Calculators
+            </Link>
+            <Link
               href="/articles"
               className="font-medium text-foreground/70 transition-colors hover:text-brand"
             >

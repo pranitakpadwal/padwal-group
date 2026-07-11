@@ -16,6 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
+  const calculatorRoutes: MetadataRoute.Sitemap = [
+    "/calculators",
+    "/calculators/own-a-company",
+    "/calculators/net-worth-rank",
+  ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
+
   const profileRoutes: MetadataRoute.Sitemap = billionaires.map((person) => ({
     url: `${base}/billionaire/${person.id}`,
     changeFrequency: "daily",
@@ -54,6 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...categoryRoutes,
+    ...calculatorRoutes,
     ...profileRoutes,
     ...profileSubpageRoutes,
     ...stockRoutes,
