@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = "G-2K1F0PWXWN";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +27,14 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description,
+  // Google Search Console site verification.
+  verification: {
+    google: "rSDbPuMzdQLLLF9pFCko69X3zHalnLRHqY4Xl2Bq_8E",
+  },
+  // Google AdSense account association meta tag.
+  other: {
+    "google-adsense-account": "ca-pub-2121262893172079",
+  },
   openGraph: {
     title,
     description,
@@ -47,7 +58,23 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+
+        {/* Google Analytics (gtag.js) */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+      </body>
     </html>
   );
 }
