@@ -51,6 +51,63 @@ export function countryFromSlug(slug: string): string | null {
   return listCountries().find((c) => c.slug === slug)?.country ?? null;
 }
 
+// --- Regions (continent / area landing pages) ---
+
+const REGION_BY_COUNTRY: Record<string, string> = {
+  "United States": "North America",
+  Mexico: "North America",
+  India: "Asia",
+  China: "Asia",
+  Japan: "Asia",
+  Nigeria: "Africa",
+  Egypt: "Africa",
+  France: "Europe",
+  Germany: "Europe",
+  Sweden: "Europe",
+  "Saudi Arabia": "Middle East",
+  "United Arab Emirates": "Middle East",
+  Australia: "Oceania",
+};
+
+export function regionForCountry(country: string): string | null {
+  return REGION_BY_COUNTRY[country] ?? null;
+}
+
+export function regionSlug(region: string): string {
+  return countrySlug(region);
+}
+
+export interface RegionInfo {
+  region: string;
+  slug: string;
+  count: number;
+}
+
+export function listRegions(): RegionInfo[] {
+  const counts = new Map<string, number>();
+  for (const person of billionaires) {
+    const region = REGION_BY_COUNTRY[person.country];
+    if (region) counts.set(region, (counts.get(region) ?? 0) + 1);
+  }
+  return Array.from(counts.entries())
+    .map(([region, count]) => ({ region, slug: regionSlug(region), count }))
+    .sort((a, b) => b.count - a.count || a.region.localeCompare(b.region));
+}
+
+export function regionFromSlug(slug: string): string | null {
+  return listRegions().find((r) => r.slug === slug)?.region ?? null;
+}
+
+export function getRegionView(leaderboard: Leaderboard, region: string): CountryView {
+  const ranked = leaderboard.people
+    .filter((p) => REGION_BY_COUNTRY[p.country] === region)
+    .slice()
+    .sort((a, b) => b.netWorthUsd - a.netWorthUsd)
+    .map((person, index) => ({ ...person, rank: index + 1 }));
+  const { topGainers, topLosers } = selectMovers(ranked);
+  return { country: region, people: ranked, topGainers, topLosers };
+}
+
 export interface CountryView {
   country: string;
   people: RankedBillionaire[];

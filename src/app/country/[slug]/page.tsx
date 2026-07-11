@@ -100,6 +100,29 @@ export default async function CountryPage({ params }: { params: Promise<RoutePar
 
         <LeaderboardTable people={view.people} />
 
+        <section className="rounded-2xl border border-line bg-surface p-6 text-sm leading-relaxed text-foreground/70 sm:p-8">
+          <h2 className="font-display text-2xl font-semibold text-foreground">
+            {demonym(country)} billionaires, tracked in real time
+          </h2>
+          <p className="mt-4">
+            We currently track {view.people.length}{" "}
+            {view.people.length === 1 ? "billionaire" : "billionaires"} based in{" "}
+            {country}, worth a combined {formatUsdCompact(total)} by our latest
+            estimate. {leader.name} leads the list — their fortune comes from{" "}
+            {leader.primarySource}
+            {view.people[1] ? `, followed by ${view.people[1].name} (${view.people[1].primarySource})` : ""}
+            {view.people[2] ? ` and ${view.people[2].name}` : ""}.
+          </p>
+          <p className="mt-3">
+            Where a {demonym(country)} fortune sits in a publicly-listed company,
+            we value it live from the current share price and convert to US
+            dollars, so the ranking above moves throughout the trading day.
+            Privately-held wealth is added as a manually-updated estimate. All
+            figures are independent, directional estimates — not audited
+            valuations, and not affiliated with Forbes or Bloomberg.
+          </p>
+        </section>
+
         <FaqBlock faqs={faqs} />
 
         <p className="text-xs text-[--muted]">
