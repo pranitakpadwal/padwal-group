@@ -1,52 +1,81 @@
-# Real-Time Billionaires Tracker
+# MedCheck — fact-checked answers for medical students
 
-A live-updating leaderboard inspired by Forbes' Real-Time Billionaires,
-estimating net worth from public stock prices. Built with Next.js (App
-Router) and [`yahoo-finance2`](https://github.com/gadicc/yahoo-finance2)
-for market data.
+A mobile-friendly web app where final-year medical students (and, later, PGs)
+can ask clinical and lab questions and get answers that are **grounded only in
+vetted sources, with citations** — or an honest "not covered yet" when the
+library doesn't have a trustworthy source. Built with Next.js (App Router) and
+installable to a phone home screen as a PWA.
+
+It exists because students told us the status quo is hours in the library and
+still no confident, source-backed answer. The design goal is the opposite of a
+chatbot that sounds sure: **no answer without a citation, and abstention over
+guessing.**
+
+## Why grounded, not generative
+
+The whole point is trust for a clinical audience, so the answering engine never
+free-generates medical content. It:
+
+1. **Retrieves** the most relevant passages from a vetted source library.
+2. **Answers only from those passages**, quoting them and linking the source
+   (issuing body, year, evidence level).
+3. **Abstains** when retrieval confidence is below threshold — telling the user
+   to ask faculty rather than inventing an answer
+   (`src/lib/answer.ts`, `ABSTAIN_THRESHOLD`).
+4. Shows an **evidence label** on every source (guideline > systematic review >
+   single study > textbook) so the reader can judge strength at a glance.
+5. Frames everything as an **educational reference, not medical advice**, in the
+   UI itself — not buried in fine print.
+
+This mirrors the approach that made tools like OpenEvidence trusted by
+clinicians: every answer carries its citations.
 
 ## How it works
 
-- `src/data/billionaires.ts` — a curated roster of people, each with their
-  main publicly-traded ticker, an approximate share count, and a static
-  estimate for everything else (private companies, cash, real estate, art,
-  etc.).
-- `src/lib/net-worth.ts` — fetches live quotes for every ticker, computes
-  `net worth = shares held × current price + other assets`, ranks
-  everyone, and caches the result for ~20s so concurrent visitors don't
-  each trigger a fresh upstream call. If the quote provider is unreachable,
-  it degrades to the static "other assets" estimate and flags the response
-  as stale rather than failing the page.
-- `src/app/api/billionaires/route.ts` — serves that leaderboard as JSON.
-- `src/app/page.tsx` + `src/components/Leaderboard.tsx` — renders the
-  table server-side for a fast first paint, then polls the API client-side
-  every 20s to keep numbers moving.
+- `src/data/sources.ts` — the vetted library: `Source` records (issuing body,
+  year, URL, evidence level) and `Chunk` records (the retrievable, quotable
+  text). **This is currently a small hand-curated demonstration seed set** of
+  well-established teaching facts, so the end-to-end flow works with no API keys
+  or database. In production this table is replaced by chunked, embedded text
+  from real ingested sources.
+- `src/lib/retrieval.ts` — dependency-free lexical retrieval over the seed
+  library. This is the single seam to swap for embedding-based semantic search
+  (e.g. Postgres + pgvector); everything downstream only consumes
+  `RetrievedPassage[]`.
+- `src/lib/answer.ts` — the grounding engine: retrieve → decide answer vs.
+  abstain → return cited passages with the safety disclaimer.
+- `src/app/api/ask/route.ts` — POST `{ question }` → grounded `Answer` JSON.
+- `src/app/page.tsx` + `src/components/AskChat.tsx` — **Ask mode**, a chat UI
+  that renders each answer with citations and evidence badges.
+- `src/app/learn/page.tsx` + `src/data/cases.ts` — **Learn mode**, short
+  clinical case studies with a guided reveal for "tired mode" revision.
+- `src/app/manifest.ts` — PWA manifest so the app installs to a home screen.
 
-### Important data caveats
+## Roadmap
 
-This is **not** a Forbes data feed and isn't affiliated with Forbes. A few
-things to know before you rely on it:
+- **Phase 1 (this repo):** PWA, Ask mode with grounded/cited answers and honest
+  abstention, Learn mode case studies, seed content.
+- **Phase 2 — real content + trust layer:** ingestion pipeline (chunk + embed
+  national guidelines, standard textbooks, PubMed, uploaded lab manuals);
+  semantic retrieval via pgvector; verified PG/faculty accounts who can endorse
+  or correct answers ("verified by a PG" badge); per-answer flagging; analytics
+  on most-asked questions to drive the content roadmap.
+- **Phase 3 — scale:** LLM synthesis layer that phrases retrieved passages into
+  prose (only ever over the cited text, never model memory); WhatsApp bot as a
+  second front-end; institution partnerships.
 
-1. **Only the public-equity portion is truly "live."** Forbes' real
-   figures also fold in private company valuations, real estate, art, etc.
-   — none of which is available from any public API. The `otherAssetsUsd`
-   field is a static placeholder you should periodically update by hand.
-2. **Share counts are manually curated estimates**, not pulled from a live
-   filings feed. Revisit them against SEC 13D/13G/Form 4 filings or other
-   public sources periodically — insiders' holdings change with sales,
-   grants, and pledges.
-3. **`yahoo-finance2` is an unofficial client** for an undocumented Yahoo
-   endpoint. It works well in practice but can break without notice. If
-   you need contractual reliability, swap `src/lib/net-worth.ts` to a paid
-   provider (Finnhub, Alpha Vantage, IEX Cloud, Polygon.io, etc.) — the
-   rest of the app only depends on the `RankedBillionaire`/`Leaderboard`
-   shapes, not on where the quotes come from.
-4. **Outbound network access must be allowed** to Yahoo's quote endpoints
-   (`query1.finance.yahoo.com`, `fc.yahoo.com`) from wherever this is
-   hosted. If quotes never populate, that's almost always a network/egress
-   policy issue on the host, not a bug in the app — the leaderboard falls
-   back to the static estimate and shows a "Live prices unavailable"
-   banner when it can't reach the provider.
+## Important caveats
+
+1. **The source library here is a demonstration seed**, not a full clinical
+   knowledge base. Facts are stable teaching points; source URLs point at the
+   issuing body's landing page rather than deep links, so nothing pretends to be
+   a verified deep citation it is not. Do not rely on it clinically.
+2. **Not medical advice and not a clinical decision tool.** It is an educational
+   reference that guides users back to guidelines and seniors for any
+   patient-specific decision.
+3. **Retrieval is currently lexical**, so phrasing far from the seed keywords
+   may abstain even when a related fact exists — expected until semantic search
+   lands in Phase 2.
 
 ## Getting started locally
 
@@ -57,33 +86,9 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Deploying to Railway
+## Deploying
 
-1. Push this repo to GitHub (already done if you're reading this from the
-   repo).
-2. In Railway, **New Project → Deploy from GitHub repo** and pick this
-   repository.
-3. Railway auto-detects Next.js via Nixpacks — no extra config needed. It
-   will run `npm install`, `npm run build`, then `npm run start` (which
-   Next.js binds to Railway's `$PORT` automatically).
-4. Once deployed, go to the service's **Settings → Networking** and either
-   use the generated `*.up.railway.app` domain or add your own custom
-   domain there (Railway will show you the CNAME/A record to add at your
-   registrar).
-5. No environment variables are required for the default Yahoo Finance
-   data source. If you switch to a paid market-data provider, add its API
-   key under **Variables** and read it via `process.env` in
-   `src/lib/net-worth.ts`.
-
-## Extending the roster
-
-Add or edit entries in `src/data/billionaires.ts`. Each person needs:
-
-- `ticker` — must be a symbol `yahoo-finance2` recognizes (append exchange
-  suffixes for non-US listings, e.g. `MC.PA` for LVMH on Euronext Paris,
-  `RELIANCE.NS` for Reliance Industries on the NSE).
-- `sharesHeld` — approximate shares in that ticker.
-- `otherAssetsUsd` — a static estimate (USD) for wealth outside that
-  ticker.
-
-The leaderboard re-sorts and re-ranks automatically on every refresh.
+Any Next.js host works (Railway, Vercel). No environment variables are required
+for the seed-content version. When the Phase 2 ingestion pipeline and a real
+LLM synthesis step are added, their API keys and database URL are read from
+`process.env`.
