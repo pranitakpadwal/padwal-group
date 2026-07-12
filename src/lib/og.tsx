@@ -11,11 +11,13 @@ export function brandOgImage({
   title,
   stat,
   subtitle,
+  statColor = "#7ee2c0",
 }: {
   eyebrow: string;
   title: string;
   stat?: string;
   subtitle?: string;
+  statColor?: string;
 }) {
   return new ImageResponse(
     (
@@ -70,7 +72,7 @@ export function brandOgImage({
             {title}
           </div>
           {stat && (
-            <div style={{ display: "flex", fontSize: 58, fontWeight: 700, color: "#7ee2c0" }}>
+            <div style={{ display: "flex", fontSize: 58, fontWeight: 700, color: statColor }}>
               {stat}
             </div>
           )}

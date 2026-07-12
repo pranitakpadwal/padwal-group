@@ -5,7 +5,10 @@ import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
 import { formatUsdCompact } from "@/lib/format";
+import { formatDateLong } from "@/lib/dates";
+import { listNews } from "@/lib/news";
 import { siteUrl } from "@/lib/site";
+import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
 import SiteHeader from "@/components/SiteHeader";
@@ -74,15 +77,39 @@ export default async function StoryPage({ params }: { params: Promise<RouteParam
       : `The fortune didn't appear overnight — this is the documented chain of decisions behind it, year by year.`,
   ];
 
+  const url = `${siteUrl()}/story/${person.id}`;
+  const personNews = listNews({ personId: id, limit: 3 });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: `How ${person.name} Built the Fortune`,
     description: intro[0],
-    author: { "@type": "Organization", name: "RealTimeBillionaire" },
-    publisher: { "@type": "Organization", name: "RealTimeBillionaire", url: siteUrl() },
-    mainEntityOfPage: `${siteUrl()}/story/${person.id}`,
+    image: [`${url}/opengraph-image`],
+    author: { "@type": "Organization", name: SITE_NAME, url: siteUrl() },
+    publisher: publisherJsonLd(),
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    url,
+    articleSection: "Wealth Stories",
+    inLanguage: "en",
+    isAccessibleForFree: true,
+    keywords: `how did ${person.name} get rich, ${person.name} success story, ${person.primarySource}`,
     about: { "@type": "Person", name: person.name, url: `${siteUrl()}/billionaire/${person.id}` },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl() },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: person.name,
+        item: `${siteUrl()}/billionaire/${person.id}`,
+      },
+      { "@type": "ListItem", position: 3, name: "The Full Story", item: url },
+    ],
   };
 
   return (
@@ -163,6 +190,24 @@ export default async function StoryPage({ params }: { params: Promise<RouteParam
             }
           />
 
+          {personNews.length > 0 && (
+            <section aria-labelledby="story-news" className="border-t border-line pt-5">
+              <h2 id="story-news" className="mb-2 text-lg font-bold">
+                {firstName} in the News
+              </h2>
+              <ul className="flex flex-col gap-2 text-sm">
+                {personNews.map((item) => (
+                  <li key={item.slug}>
+                    <Link href={`/news/${item.slug}`} className="text-brand hover:underline">
+                      {item.title}
+                    </Link>{" "}
+                    <span className="text-xs text-[--muted]">({formatDateLong(item.date)})</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <p className="text-xs text-neutral-400">
             Milestones are drawn from widely-reported public history; ages are
             computed from the birth year and can be off by one depending on
@@ -174,6 +219,10 @@ export default async function StoryPage({ params }: { params: Promise<RouteParam
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
     </div>
   );

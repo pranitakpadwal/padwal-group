@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { ensureArticle } from "@/lib/generate-article";
 import { isCategory, categoryArticleTitle } from "@/lib/categories";
 import { isValidDateString, formatDateLong } from "@/lib/dates";
+import { formatClock } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ShareBar from "@/components/ShareBar";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ArticleBody from "@/components/ArticleBody";
@@ -69,25 +72,43 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory={article.category} />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
-        <nav className="text-sm text-neutral-500 dark:text-neutral-400" aria-label="Breadcrumb">
-          <Link href="/articles" className="hover:underline">
-            Daily Recaps
-          </Link>{" "}
-          &rsaquo; {categoryArticleTitle(article.category)}
-        </nav>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Daily Recaps", href: "/articles" },
+            { label: categoryArticleTitle(article.category) },
+          ]}
+        />
 
         <header>
-          <h1 className="text-2xl font-bold tracking-tight text-black dark:text-zinc-50 sm:text-3xl">
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             {title}
           </h1>
-          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-            <time dateTime={article.date}>{formatDateLong(article.date)}</time>
+          <p className="mt-2 text-xs text-[--muted]">
+            Published <time dateTime={article.generatedAt}>{formatDateLong(article.date)}, {formatClock(article.generatedAt)}</time>{" "}
+            · By RealTimeBillionaire Data Desk
           </p>
-          <p className="mt-4 text-base text-neutral-700 dark:text-neutral-200">{summary}</p>
+          <p className="mt-4 text-base text-foreground/80">{summary}</p>
         </header>
 
         <ArticleBody facts={article.facts} />
         <FaqSection faqs={faqs} />
+
+        <section className="rounded-2xl border border-line bg-brand-soft/40 p-5 text-sm">
+          <span className="text-foreground/70">Keep going: </span>
+          <Link href="/news" className="font-medium text-brand hover:underline">
+            today&apos;s biggest wealth moves
+          </Link>
+          <span className="text-foreground/70"> · </span>
+          <Link href="/" className="font-medium text-brand hover:underline">
+            the live leaderboard
+          </Link>
+          <span className="text-foreground/70"> · </span>
+          <Link href="/quotes" className="font-medium text-brand hover:underline">
+            verified billionaire quotes
+          </Link>
+        </section>
+
+        <ShareBar text={`${title} — the daily numbers:`} />
 
         <p className="text-xs text-neutral-400">
           Figures are directional estimates from public stock holdings, not
@@ -101,6 +122,7 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
         title={title}
         summary={summary}
         faqs={faqs}
+        generatedAt={article.generatedAt}
       />
     </div>
   );

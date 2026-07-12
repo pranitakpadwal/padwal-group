@@ -1,6 +1,7 @@
 import type { Faq } from "@/lib/article-template";
 import { categoryArticleTitle, categoryLabel, type Category } from "@/lib/categories";
 import { siteUrl } from "@/lib/site";
+import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 
 export default function ArticleJsonLd({
   date,
@@ -8,29 +9,38 @@ export default function ArticleJsonLd({
   title,
   summary,
   faqs,
+  generatedAt,
 }: {
   date: string;
   category: Category;
   title: string;
   summary: string;
   faqs: Faq[];
+  generatedAt?: string;
 }) {
   const url = `${siteUrl()}/articles/${date}/${category}`;
-  const publishedAt = `${date}T23:59:00Z`;
+  const publishedAt = generatedAt ?? `${date}T23:59:00Z`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "NewsArticle",
     headline: title,
     description: summary,
+    image: [`${siteUrl()}/opengraph-image`],
     datePublished: publishedAt,
     dateModified: publishedAt,
     url,
-    mainEntityOfPage: url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@type": "Organization", name: SITE_NAME, url: siteUrl() },
+    publisher: publisherJsonLd(),
+    articleSection: "Daily Recaps",
+    inLanguage: "en",
+    isAccessibleForFree: true,
+    keywords: `billionaires today, ${categoryArticleTitle(category)}, net worth ranking, ${date}`,
     about: categoryArticleTitle(category),
     isPartOf: {
       "@type": "WebSite",
-      name: "Real-Time Billionaires Tracker",
+      name: SITE_NAME,
       url: siteUrl(),
     },
   };

@@ -2,6 +2,7 @@ import { getDb } from "@/lib/db";
 import type { Leaderboard, RankedBillionaire } from "@/lib/net-worth";
 import { formatUsdCompact, formatUsdChange, formatPercentMagnitude } from "@/lib/format";
 import { formatDateLong } from "@/lib/dates";
+import { slugifyTitle } from "@/lib/schema";
 
 /**
  * Event-driven news: when someone's net worth moves big in a day, we
@@ -156,9 +157,10 @@ export function buildNewsBody(facts: NewsFacts): string[] {
 
 export function saveNewsArticle(facts: NewsFacts): NewsArticle {
   const db = getDb();
-  const direction = facts.deltaUsd > 0 ? "gains" : "loses";
-  const slug = `${facts.personId}-${direction}-${formatUsdCompact(Math.abs(facts.deltaUsd)).replace(/[^a-z0-9.]/gi, "").toLowerCase()}-${facts.date}`;
   const title = buildNewsTitle(facts);
+  // Full headline in the URL (the pattern news sites rank with),
+  // date-suffixed so each day's story on a person is its own URL.
+  const slug = `${slugifyTitle(title)}-${facts.date}`;
   const summary = buildNewsSummary(facts);
   const generatedAt = new Date().toISOString();
 
