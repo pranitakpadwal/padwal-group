@@ -31,6 +31,8 @@ const GROUPS: { heading: string; links: MenuLink[] }[] = [
   {
     heading: "Tools & Reads",
     links: [
+      { href: "/news", label: "News" },
+      { href: "/quotes", label: "Quotes" },
       { href: "/calculators", label: "Calculators" },
       { href: "/why", label: "Why Today" },
       { href: "/articles", label: "Daily Recaps" },

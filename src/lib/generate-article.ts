@@ -4,6 +4,7 @@ import { hydrateHistoricalCategoryView, saveSnapshot } from "@/lib/snapshots";
 import { computeArticleFacts } from "@/lib/article-facts";
 import { buildArticleText } from "@/lib/article-template";
 import { getArticle, saveArticle, type StoredArticle } from "@/lib/articles";
+import { generateBigMoverNews, listNews, type NewsArticle } from "@/lib/news";
 import { previousDateString, todayDateString } from "@/lib/dates";
 
 function generateOne(date: string, category: Category, leaderboard: Leaderboard): StoredArticle {
@@ -25,7 +26,26 @@ export async function generateAllTodayArticles(): Promise<StoredArticle[]> {
   const leaderboard = await getLeaderboard();
   saveSnapshot(date, leaderboard.people);
 
+  // Event-driven news: one article per person whose net worth moved big today.
+  generateBigMoverNews(leaderboard, date);
+
   return CATEGORIES.map((category) => generateOne(date, category, leaderboard));
+}
+
+/**
+ * Makes sure today's big-mover news exists (used by the /news index so
+ * the section works even before the daily cron fires), then returns the
+ * latest stories. Regenerates today's stories at most once per visit
+ * wave — saveNewsArticle upserts, so repeats are harmless.
+ */
+export async function ensureTodayNews(): Promise<NewsArticle[]> {
+  const date = todayDateString();
+  const existingToday = listNews({ limit: 1 }).filter((n) => n.date === date);
+  if (existingToday.length === 0) {
+    const leaderboard = await getLeaderboard();
+    generateBigMoverNews(leaderboard, date);
+  }
+  return listNews({ limit: 30 });
 }
 
 /**

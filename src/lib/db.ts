@@ -46,6 +46,19 @@ function openDatabase(): Database.Database {
     );
 
     CREATE INDEX IF NOT EXISTS idx_articles_date ON articles (article_date);
+
+    CREATE TABLE IF NOT EXISTS news_articles (
+      slug TEXT PRIMARY KEY,
+      article_date TEXT NOT NULL,
+      person_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      facts_json TEXT NOT NULL,
+      generated_at TEXT NOT NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_news_date ON news_articles (article_date);
+    CREATE INDEX IF NOT EXISTS idx_news_person ON news_articles (person_id);
   `);
 
   return db;

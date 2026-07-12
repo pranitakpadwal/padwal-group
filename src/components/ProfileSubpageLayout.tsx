@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPersonProfile } from "@/data/profiles";
+import { getPersonQuotes } from "@/data/quotes";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -34,6 +35,12 @@ export default function ProfileSubpageLayout({
       ? { label: "Lifestyle & Assets", href: `/billionaire/${personId}/lifestyle` }
       : null,
     profile?.family ? { label: "Family", href: `/billionaire/${personId}/family` } : null,
+    profile?.careerTimeline && profile.careerTimeline.length > 0
+      ? { label: "Story", href: `/story/${personId}` }
+      : null,
+    getPersonQuotes(personId).length > 0
+      ? { label: "Quotes", href: `/quotes/${personId}` }
+      : null,
   ].filter((section) => section !== null);
 
   return (

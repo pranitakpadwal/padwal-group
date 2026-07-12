@@ -5,6 +5,7 @@ import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
 import { getPersonHistory } from "@/lib/snapshots";
 import { getPersonProfile } from "@/data/profiles";
+import { getPersonQuotes } from "@/data/quotes";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { countrySlug } from "@/lib/countries";
 import { getHolding, getTickerHolders } from "@/lib/holdings";
@@ -117,6 +118,12 @@ export default async function BillionaireProfile({
       : null;
 
   const subpageLinks = [
+    profile?.careerTimeline && profile.careerTimeline.length > 0
+      ? { href: `/story/${id}`, label: "The Full Story" }
+      : null,
+    getPersonQuotes(id).length > 0
+      ? { href: `/quotes/${id}`, label: "Quotes (Verified)" }
+      : null,
     profile?.ventures && profile.ventures.length > 0
       ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
       : null,

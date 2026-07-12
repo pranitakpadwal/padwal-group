@@ -4,6 +4,8 @@ import { getPersonProfile } from "@/data/profiles";
 import { getAllTickers } from "@/lib/holdings";
 import { listCountries, listRegions } from "@/lib/countries";
 import { listArticles } from "@/lib/articles";
+import { listNews } from "@/lib/news";
+import { listQuotePeopleIds } from "@/data/quotes";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -79,6 +81,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  const newsRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/news`, changeFrequency: "hourly" as const, priority: 0.8 },
+    ...listNews({ limit: 1000 }).map((article) => ({
+      url: `${base}/news/${article.slug}`,
+      lastModified: article.generatedAt,
+      changeFrequency: "never" as const,
+      priority: 0.7,
+    })),
+  ];
+
+  const storyRoutes: MetadataRoute.Sitemap = billionaires
+    .filter((person) => {
+      const profile = getPersonProfile(person.id);
+      return profile?.careerTimeline && profile.careerTimeline.length > 0;
+    })
+    .map((person) => ({
+      url: `${base}/story/${person.id}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+
+  const quoteRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/quotes`, changeFrequency: "weekly" as const, priority: 0.7 },
+    ...listQuotePeopleIds().map((id) => ({
+      url: `${base}/quotes/${id}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  ];
+
   return [
     ...categoryRoutes,
     ...countryRoutes,
@@ -87,5 +119,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...profileSubpageRoutes,
     ...stockRoutes,
     ...articleRoutes,
+    ...newsRoutes,
+    ...storyRoutes,
+    ...quoteRoutes,
   ];
 }

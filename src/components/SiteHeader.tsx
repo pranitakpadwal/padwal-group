@@ -4,7 +4,8 @@ import CategoryTabs, { type NavSection } from "@/components/CategoryTabs";
 import MobileMenu from "@/components/MobileMenu";
 
 const NAV_LINKS = [
-  { href: "/why", label: "Why Today" },
+  { href: "/news", label: "News" },
+  { href: "/quotes", label: "Quotes" },
   { href: "/calculators", label: "Calculators" },
   { href: "/articles", label: "Daily Recaps" },
 ];
