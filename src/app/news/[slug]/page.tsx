@@ -163,6 +163,16 @@ export default async function NewsArticlePage({ params }: { params: Promise<Rout
             </p>
           </header>
 
+          {/* Visible hero — same generated card used for shares/Discover. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/news/${article.slug}/opengraph-image`}
+            alt={article.title}
+            width={1200}
+            height={630}
+            className="w-full rounded-2xl border border-line"
+          />
+
           <div className="flex flex-col gap-4 text-[15px] leading-relaxed text-foreground/85">
             {body.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>

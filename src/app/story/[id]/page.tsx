@@ -131,6 +131,16 @@ export default async function StoryPage({ params }: { params: Promise<RouteParam
             </h1>
           </header>
 
+          {/* Visible hero — same generated card used for shares/Discover. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/story/${person.id}/opengraph-image`}
+            alt={`How ${person.name} built the fortune`}
+            width={1200}
+            height={630}
+            className="w-full rounded-2xl border border-line"
+          />
+
           <div className="flex flex-col gap-4 text-[15px] leading-relaxed text-foreground/85">
             {intro.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
