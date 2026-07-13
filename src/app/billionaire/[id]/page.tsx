@@ -6,6 +6,7 @@ import { getPriceHistory } from "@/lib/price-history";
 import { getPersonHistory } from "@/lib/snapshots";
 import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
+import { isSpotlightEligible } from "@/lib/spotlight";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { countrySlug } from "@/lib/countries";
 import { getHolding, getTickerHolders } from "@/lib/holdings";
@@ -124,6 +125,7 @@ export default async function BillionaireProfile({
     getPersonQuotes(id).length > 0
       ? { href: `/quotes/${id}`, label: "Quotes (Verified)" }
       : null,
+    isSpotlightEligible(profile) ? { href: `/good-news/${id}`, label: "Good News" } : null,
     profile?.ventures && profile.ventures.length > 0
       ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
       : null,

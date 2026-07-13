@@ -6,6 +6,7 @@ import { listCountries, listRegions } from "@/lib/countries";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuotePeopleIds } from "@/data/quotes";
+import { isSpotlightEligible } from "@/lib/spotlight";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -111,6 +112,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const goodNewsRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/good-news`, changeFrequency: "weekly" as const, priority: 0.7 },
+    ...billionaires
+      .filter((person) => isSpotlightEligible(getPersonProfile(person.id)))
+      .map((person) => ({
+        url: `${base}/good-news/${person.id}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
+  ];
+
   return [
     ...categoryRoutes,
     ...countryRoutes,
@@ -122,5 +134,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...newsRoutes,
     ...storyRoutes,
     ...quoteRoutes,
+    ...goodNewsRoutes,
   ];
 }

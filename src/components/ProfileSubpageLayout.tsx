@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
+import { isSpotlightEligible } from "@/lib/spotlight";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -41,6 +42,7 @@ export default function ProfileSubpageLayout({
     getPersonQuotes(personId).length > 0
       ? { label: "Quotes", href: `/quotes/${personId}` }
       : null,
+    isSpotlightEligible(profile) ? { label: "Good News", href: `/good-news/${personId}` } : null,
   ].filter((section) => section !== null);
 
   return (
