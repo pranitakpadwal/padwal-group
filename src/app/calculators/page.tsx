@@ -21,6 +21,12 @@ export const metadata: Metadata = {
 
 const CALCULATORS = [
   {
+    href: "/calculators/wealth-race",
+    title: "Wealth Race",
+    description:
+      "Elon vs Zuckerberg, or anyone vs anyone — pick two billionaires and race their net worth over time, live.",
+  },
+  {
     href: "/calculators/spend",
     title: "Spend a Billionaire's Fortune",
     description:

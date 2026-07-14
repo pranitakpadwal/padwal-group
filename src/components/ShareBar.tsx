@@ -49,13 +49,15 @@ export default function ShareBar({
 
   const buttonClass =
     "shrink-0 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-foreground/80 transition-colors hover:border-brand hover:text-brand";
+  const primaryButtonClass =
+    "shrink-0 rounded-full border border-brand bg-brand px-3.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-dark";
 
   return (
     <div className="flex flex-wrap items-center gap-2" aria-label="Share">
       <span className="text-xs font-semibold uppercase tracking-wide text-[--muted]">
         {label}
       </span>
-      <button type="button" onClick={nativeShare} className={`${buttonClass} border-brand bg-brand text-white hover:bg-brand-dark hover:text-white`}>
+      <button type="button" onClick={nativeShare} className={primaryButtonClass}>
         Share
       </button>
       <button

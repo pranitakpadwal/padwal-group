@@ -45,8 +45,26 @@ export default async function ExploreHub() {
     {
       href: "/calculators",
       title: "Wealth Tools",
-      description: "Spend a fortune, check your birthday's richest, and more.",
-      teaser: "6 interactive tools",
+      description: "Spend a fortune, race two billionaires, and more.",
+      teaser: "7 interactive tools",
+    },
+    {
+      href: "/companies",
+      title: "By Company",
+      description: "Tesla, Reliance, Adani, Tencent — who owns what.",
+      teaser: null,
+    },
+    {
+      href: "/universities",
+      title: "By University",
+      description: "Where the world's richest studied — or dropped out.",
+      teaser: null,
+    },
+    {
+      href: "/cities",
+      title: "By City",
+      description: "Mumbai, Austin, Paris, Dubai — where fortunes live.",
+      teaser: null,
     },
   ];
 

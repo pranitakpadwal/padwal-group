@@ -3,6 +3,8 @@ import { billionaires } from "@/data/billionaires";
 import { getPersonProfile } from "@/data/profiles";
 import { getAllTickers } from "@/lib/holdings";
 import { listCountries, listRegions } from "@/lib/countries";
+import { listUniversities } from "@/lib/universities";
+import { listCities } from "@/lib/cities";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
@@ -29,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators/birthday",
     "/calculators/billionaire-by-age",
     "/calculators/inflation",
+    "/calculators/wealth-race",
     "/about",
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
 
@@ -75,6 +78,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "daily",
     priority: 0.4,
   }));
+
+  const companyRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/companies`, changeFrequency: "weekly" as const, priority: 0.7 },
+  ];
+
+  const universityRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/universities`, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...listUniversities().map((u) => ({
+      url: `${base}/university/${u.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+
+  const cityRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/cities`, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...listCities().map((c) => ({
+      url: `${base}/city/${c.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+
 
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
@@ -141,6 +167,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...profileRoutes,
     ...profileSubpageRoutes,
     ...stockRoutes,
+    ...companyRoutes,
+    ...universityRoutes,
+    ...cityRoutes,
     ...articleRoutes,
     ...newsRoutes,
     ...storyRoutes,
