@@ -5,6 +5,7 @@ import { getAllTickers } from "@/lib/holdings";
 import { listCountries, listRegions } from "@/lib/countries";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
+import { listQuoteOfDay } from "@/lib/quote-of-day";
 import { listQuotePeopleIds } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
 import { siteUrl } from "@/lib/site";
@@ -112,6 +113,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const quoteOfDayRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/quote-of-the-day`, changeFrequency: "daily" as const, priority: 0.8 },
+    ...listQuoteOfDay(1000).map((entry) => ({
+      url: `${base}/quote-of-the-day/${entry.slug}`,
+      lastModified: entry.generatedAt,
+      changeFrequency: "never" as const,
+      priority: 0.6,
+    })),
+  ];
+
   const goodNewsRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/good-news`, changeFrequency: "weekly" as const, priority: 0.7 },
     ...billionaires
@@ -134,6 +145,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...newsRoutes,
     ...storyRoutes,
     ...quoteRoutes,
+    ...quoteOfDayRoutes,
     ...goodNewsRoutes,
   ];
 }

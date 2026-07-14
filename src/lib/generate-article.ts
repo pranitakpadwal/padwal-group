@@ -5,6 +5,7 @@ import { computeArticleFacts } from "@/lib/article-facts";
 import { buildArticleText } from "@/lib/article-template";
 import { getArticle, saveArticle, type StoredArticle } from "@/lib/articles";
 import { generateBigMoverNews, listNews, type NewsArticle } from "@/lib/news";
+import { ensureQuoteOfDay } from "@/lib/quote-of-day";
 import { previousDateString, todayDateString } from "@/lib/dates";
 
 function generateOne(date: string, category: Category, leaderboard: Leaderboard): StoredArticle {
@@ -28,6 +29,9 @@ export async function generateAllTodayArticles(): Promise<StoredArticle[]> {
 
   // Event-driven news: one article per person whose net worth moved big today.
   generateBigMoverNews(leaderboard, date);
+
+  // Daily "Quote of the Day" — one fresh, dated, postable article per day.
+  ensureQuoteOfDay(date);
 
   return CATEGORIES.map((category) => generateOne(date, category, leaderboard));
 }

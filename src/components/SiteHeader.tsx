@@ -6,6 +6,7 @@ import MobileMenu from "@/components/MobileMenu";
 const NAV_LINKS = [
   { href: "/news", label: "News" },
   { href: "/good-news", label: "Good News" },
+  { href: "/quote-of-the-day", label: "Quote of the Day" },
   { href: "/quotes", label: "Quotes" },
   { href: "/calculators", label: "Calculators" },
   { href: "/articles", label: "Daily Recaps" },

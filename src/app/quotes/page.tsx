@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { listQuotePeopleIds, getPersonQuotes } from "@/data/quotes";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
+import { ensureAndListQuoteOfDay } from "@/lib/quote-of-day";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import PersonAvatar from "@/components/PersonAvatar";
@@ -25,7 +26,11 @@ export const metadata: Metadata = {
 };
 
 export default async function QuotesHub() {
-  const leaderboard = await getLeaderboard();
+  const [leaderboard, quoteOfDayHistory] = await Promise.all([
+    getLeaderboard(),
+    ensureAndListQuoteOfDay(1),
+  ]);
+  const today = quoteOfDayHistory[0];
   const people = listQuotePeopleIds()
     .map((id) => {
       const person = findBillionaireById(id);
@@ -59,6 +64,20 @@ export default async function QuotesHub() {
             source next to each one.
           </p>
         </header>
+
+        {today && (
+          <Link
+            href={`/quote-of-the-day/${today.slug}`}
+            className="flex flex-col gap-2 rounded-2xl border border-brand/40 bg-brand-soft/50 p-5 transition-colors hover:border-brand"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-brand-dark">
+              Today&apos;s Quote of the Day &rarr;
+            </span>
+            <p className="italic text-foreground">
+              &ldquo;{today.quoteText}&rdquo; — {today.personName}
+            </p>
+          </Link>
+        )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {people.map((entry) => (

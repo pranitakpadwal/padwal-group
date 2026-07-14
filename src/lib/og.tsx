@@ -64,9 +64,10 @@ export function brandOgImage({
           <div
             style={{
               display: "flex",
-              fontSize: title.length > 26 ? 64 : 84,
+              width: 1072,
+              fontSize: title.length > 90 ? 40 : title.length > 26 ? 64 : 84,
               fontWeight: 700,
-              lineHeight: 1.05,
+              lineHeight: 1.15,
             }}
           >
             {title}
