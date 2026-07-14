@@ -10,6 +10,7 @@ import PageHero from "@/components/PageHero";
 import FaqBlock from "@/components/FaqBlock";
 import ItemListJsonLd from "@/components/ItemListJsonLd";
 import ExploreHub from "@/components/ExploreHub";
+import TodayWidgets from "@/components/TodayWidgets";
 
 export default async function CategoryLeaderboardPage({ category }: { category: Category }) {
   const leaderboard = await getLeaderboard();
@@ -41,6 +42,8 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
             activeCategory={category}
           />
         </div>
+
+        {category === "world" && <TodayWidgets />}
 
         {category === "world" && <ExploreHub />}
 

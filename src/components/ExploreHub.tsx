@@ -66,6 +66,18 @@ export default async function ExploreHub() {
       description: "Mumbai, Austin, Paris, Dubai — where fortunes live.",
       teaser: null,
     },
+    {
+      href: "/industries",
+      title: "By Industry",
+      description: "Technology, AI, retail, mining, crypto, and more.",
+      teaser: null,
+    },
+    {
+      href: "/families",
+      title: "By Family",
+      description: "The Waltons, the Sawiris brothers, and more.",
+      teaser: null,
+    },
   ];
 
   return (

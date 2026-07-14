@@ -14,6 +14,7 @@ import PersonAvatar from "@/components/PersonAvatar";
 import MoversStrip from "@/components/MoversStrip";
 
 const POLL_INTERVAL_MS = 20_000;
+const COLLAPSED_ROW_COUNT = 10;
 
 function ChangeCell({ usd, percent }: { usd: number; percent: number }) {
   const isUp = usd > 0;
@@ -43,6 +44,7 @@ export default function Leaderboard({
   category: Category;
 }) {
   const [data, setData] = useState<LeaderboardData>(initialData);
+  const [showAll, setShowAll] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [secondsToNextRefresh, setSecondsToNextRefresh] = useState(
@@ -141,10 +143,12 @@ export default function Leaderboard({
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
-            {data.people.map((person) => (
+            {data.people.map((person, index) => (
               <tr
                 key={person.id}
-                className="transition-colors hover:bg-brand-soft/40"
+                className={`transition-colors hover:bg-brand-soft/40 ${
+                  !showAll && index >= COLLAPSED_ROW_COUNT ? "hidden" : ""
+                }`}
               >
                 <td className="px-2 py-3 text-sm font-semibold text-[--muted] tabular-nums sm:px-4">
                   {person.rank}
@@ -186,6 +190,16 @@ export default function Leaderboard({
           </tbody>
         </table>
       </div>
+      )}
+
+      {data.people.length > COLLAPSED_ROW_COUNT && !showAll && (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="self-center rounded-full border border-line bg-surface px-5 py-2 text-sm font-medium text-brand transition-colors hover:border-brand"
+        >
+          Show all {data.people.length} &rarr;
+        </button>
       )}
     </div>
   );

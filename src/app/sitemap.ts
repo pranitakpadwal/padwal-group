@@ -5,6 +5,8 @@ import { getAllTickers } from "@/lib/holdings";
 import { listCountries, listRegions } from "@/lib/countries";
 import { listUniversities } from "@/lib/universities";
 import { listCities } from "@/lib/cities";
+import { listIndustries } from "@/lib/industries";
+import { listFamilies } from "@/lib/families";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
@@ -101,6 +103,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const industryRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/industries`, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...listIndustries().map((i) => ({
+      url: `${base}/industry/${i.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+
+  const familyRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/families`, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...listFamilies().map((f) => ({
+      url: `${base}/family/${f.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+
 
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
@@ -170,6 +190,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...companyRoutes,
     ...universityRoutes,
     ...cityRoutes,
+    ...industryRoutes,
+    ...familyRoutes,
     ...articleRoutes,
     ...newsRoutes,
     ...storyRoutes,
