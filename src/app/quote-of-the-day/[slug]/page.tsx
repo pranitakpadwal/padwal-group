@@ -97,8 +97,9 @@ export default async function QuoteOfDayPage({ params }: { params: Promise<Route
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteUrl() },
-      { "@type": "ListItem", position: 2, name: "Quote of the Day", item: `${siteUrl()}/quote-of-the-day` },
-      { "@type": "ListItem", position: 3, name: entry.personName, item: url },
+      { "@type": "ListItem", position: 2, name: "Quotes", item: `${siteUrl()}/quotes` },
+      { "@type": "ListItem", position: 3, name: "Quote of the Day", item: `${siteUrl()}/quote-of-the-day` },
+      { "@type": "ListItem", position: 4, name: entry.personName, item: url },
     ],
   };
 
@@ -107,7 +108,11 @@ export default async function QuoteOfDayPage({ params }: { params: Promise<Route
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
         <Breadcrumbs
-          crumbs={[{ label: "Quote of the Day", href: "/quote-of-the-day" }, { label: entry.personName }]}
+          crumbs={[
+            { label: "Quotes", href: "/quotes" },
+            { label: "Quote of the Day", href: "/quote-of-the-day" },
+            { label: entry.personName },
+          ]}
         />
 
         <article className="flex flex-col gap-5">

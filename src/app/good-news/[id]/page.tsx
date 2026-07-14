@@ -100,8 +100,9 @@ export default async function GoodNewsPage({ params }: { params: Promise<RoutePa
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteUrl() },
-      { "@type": "ListItem", position: 2, name: "Good News", item: `${siteUrl()}/good-news` },
-      { "@type": "ListItem", position: 3, name: person.name, item: url },
+      { "@type": "ListItem", position: 2, name: "News", item: `${siteUrl()}/news` },
+      { "@type": "ListItem", position: 3, name: "Good News", item: `${siteUrl()}/good-news` },
+      { "@type": "ListItem", position: 4, name: person.name, item: url },
     ],
   };
 
@@ -109,7 +110,13 @@ export default async function GoodNewsPage({ params }: { params: Promise<RoutePa
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
-        <Breadcrumbs crumbs={[{ label: "Good News", href: "/good-news" }, { label: person.name }]} />
+        <Breadcrumbs
+          crumbs={[
+            { label: "News", href: "/news" },
+            { label: "Good News", href: "/good-news" },
+            { label: person.name },
+          ]}
+        />
 
         <article className="flex flex-col gap-5">
           <header>

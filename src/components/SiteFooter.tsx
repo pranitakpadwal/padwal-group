@@ -47,12 +47,6 @@ export default function SiteFooter() {
             <Link href="/news" className="text-foreground/70 hover:text-brand">
               News
             </Link>
-            <Link href="/good-news" className="text-foreground/70 hover:text-brand">
-              Good News
-            </Link>
-            <Link href="/quote-of-the-day" className="text-foreground/70 hover:text-brand">
-              Quote of the Day
-            </Link>
             <Link href="/quotes" className="text-foreground/70 hover:text-brand">
               Quotes
             </Link>

@@ -66,17 +66,19 @@ export default async function QuotesHub() {
         </header>
 
         {today && (
-          <Link
-            href={`/quote-of-the-day/${today.slug}`}
-            className="flex flex-col gap-2 rounded-2xl border border-brand/40 bg-brand-soft/50 p-5 transition-colors hover:border-brand"
-          >
-            <span className="text-xs font-semibold uppercase tracking-wide text-brand-dark">
-              Today&apos;s Quote of the Day &rarr;
-            </span>
-            <p className="italic text-foreground">
-              &ldquo;{today.quoteText}&rdquo; — {today.personName}
-            </p>
-          </Link>
+          <div className="flex flex-col gap-2 rounded-2xl border border-brand/40 bg-brand-soft/50 p-5">
+            <Link href={`/quote-of-the-day/${today.slug}`} className="flex flex-col gap-2 hover:opacity-90">
+              <span className="text-xs font-semibold uppercase tracking-wide text-brand-dark">
+                Today&apos;s Quote of the Day &rarr;
+              </span>
+              <p className="italic text-foreground">
+                &ldquo;{today.quoteText}&rdquo; — {today.personName}
+              </p>
+            </Link>
+            <Link href="/quote-of-the-day" className="text-xs font-medium text-brand hover:underline">
+              See past days &rarr;
+            </Link>
+          </div>
         )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
