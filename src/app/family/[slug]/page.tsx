@@ -9,6 +9,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -95,6 +96,11 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
         </p>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/family/${family.slug}`}
+        name={family.name}
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

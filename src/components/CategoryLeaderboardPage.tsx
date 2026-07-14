@@ -11,6 +11,15 @@ import FaqBlock from "@/components/FaqBlock";
 import ItemListJsonLd from "@/components/ItemListJsonLd";
 import ExploreHub from "@/components/ExploreHub";
 import TodayWidgets from "@/components/TodayWidgets";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
+import { siteUrl } from "@/lib/site";
+
+const PATH_BY_CATEGORY: Record<Category, string> = {
+  world: "/",
+  india: "/india",
+  women: "/women",
+  young: "/young",
+};
 
 export default async function CategoryLeaderboardPage({ category }: { category: Category }) {
   const leaderboard = await getLeaderboard();
@@ -68,6 +77,12 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
       </main>
       <SiteFooter />
       <ItemListJsonLd category={category} people={view.people} />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}${PATH_BY_CATEGORY[category]}`}
+        name={hero.h1}
+        description={hero.lede}
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

@@ -10,6 +10,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import FaqBlock from "@/components/FaqBlock";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -145,6 +146,11 @@ export default async function RegionPage({ params }: { params: Promise<RoutePara
             })),
           }),
         }}
+      />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/region/${regionSlug(region)}`}
+        name={`Richest People in ${region}`}
+        asOf={leaderboard.asOf}
       />
     </div>
   );

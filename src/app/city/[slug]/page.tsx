@@ -10,6 +10,7 @@ import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -94,6 +95,11 @@ export default async function CityPage({ params }: { params: Promise<RouteParams
         </p>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/city/${info.slug}`}
+        name={`Billionaires in ${info.city}`}
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

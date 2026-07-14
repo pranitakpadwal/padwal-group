@@ -16,14 +16,24 @@ import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
+  // Honest freshness signal: these pages re-fetch live leaderboard/market
+  // data on every request (force-dynamic), so "now" is accurate, not gamed.
+  const now = new Date();
 
-  const categoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/why", "/articles", "/crypto", "/energy"].map(
+  const liveCategoryRoutes: MetadataRoute.Sitemap = ["", "/india", "/women", "/young", "/crypto", "/energy"].map(
     (path) => ({
       url: `${base}${path}`,
+      lastModified: now,
       changeFrequency: "hourly",
       priority: path === "" ? 1 : 0.8,
     }),
   );
+
+  const staticCategoryRoutes: MetadataRoute.Sitemap = ["/why", "/articles"].map((path) => ({
+    url: `${base}${path}`,
+    changeFrequency: "hourly",
+    priority: 0.8,
+  }));
 
   const calculatorRoutes: MetadataRoute.Sitemap = [
     "/calculators",
@@ -39,6 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const profileRoutes: MetadataRoute.Sitemap = billionaires.map((person) => ({
     url: `${base}/billionaire/${person.id}`,
+    lastModified: now,
     changeFrequency: "daily",
     priority: 0.5,
   }));
@@ -65,11 +76,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/countries`, changeFrequency: "weekly" as const, priority: 0.7 },
     ...listRegions().map((r) => ({
       url: `${base}/region/${r.slug}`,
+      lastModified: now,
       changeFrequency: "daily" as const,
       priority: 0.7,
     })),
     ...listCountries().map((c) => ({
       url: `${base}/country/${c.slug}`,
+      lastModified: now,
       changeFrequency: "daily" as const,
       priority: 0.6,
     })),
@@ -77,12 +90,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const stockRoutes: MetadataRoute.Sitemap = getAllTickers().map((ticker) => ({
     url: `${base}/stock/${ticker}`,
+    lastModified: now,
     changeFrequency: "daily",
     priority: 0.4,
   }));
 
   const companyRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}/companies`, changeFrequency: "weekly" as const, priority: 0.7 },
+    { url: `${base}/companies`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.7 },
   ];
 
   const universityRoutes: MetadataRoute.Sitemap = [
@@ -181,7 +195,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
-    ...categoryRoutes,
+    ...liveCategoryRoutes,
+    ...staticCategoryRoutes,
     ...countryRoutes,
     ...calculatorRoutes,
     ...profileRoutes,

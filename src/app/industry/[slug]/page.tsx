@@ -10,6 +10,7 @@ import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +98,11 @@ export default async function IndustryPage({ params }: { params: Promise<RoutePa
         </p>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/industry/${info.slug}`}
+        name={`${info.industry} Billionaires`}
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

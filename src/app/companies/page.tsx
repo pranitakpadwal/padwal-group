@@ -6,6 +6,7 @@ import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +72,11 @@ export default async function CompaniesIndex() {
         </div>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/companies`}
+        name="Billionaires by Company"
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

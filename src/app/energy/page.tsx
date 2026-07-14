@@ -8,6 +8,7 @@ import { siteUrl } from "@/lib/site";
 import MarketQuotesTable from "@/components/MarketQuotesTable";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -108,6 +109,11 @@ export default async function EnergyPage() {
         </section>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/energy`}
+        name="Energy Markets & The Billionaires Behind Them"
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

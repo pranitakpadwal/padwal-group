@@ -13,6 +13,7 @@ import {
 } from "@/lib/format";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -163,6 +164,11 @@ export default async function StockPage({ params }: { params: Promise<RouteParam
             ],
           }),
         }}
+      />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/stock/${ticker}`}
+        name={`${company} Billionaires`}
+        asOf={leaderboard.asOf}
       />
     </div>
   );

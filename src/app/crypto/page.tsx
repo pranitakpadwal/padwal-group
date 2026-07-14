@@ -8,6 +8,7 @@ import { siteUrl } from "@/lib/site";
 import MarketQuotesTable from "@/components/MarketQuotesTable";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -120,6 +121,11 @@ export default async function CryptoPage() {
         </section>
       </main>
       <SiteFooter />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/crypto`}
+        name="Crypto Billionaires & Live Crypto Prices"
+        asOf={leaderboard.asOf}
+      />
     </div>
   );
 }

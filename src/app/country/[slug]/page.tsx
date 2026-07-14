@@ -10,6 +10,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import FaqBlock from "@/components/FaqBlock";
+import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -150,6 +151,11 @@ export default async function CountryPage({ params }: { params: Promise<RoutePar
             })),
           }),
         }}
+      />
+      <LiveWebPageJsonLd
+        url={`${siteUrl()}/country/${countrySlug(country)}`}
+        name={`Richest People in ${country}`}
+        asOf={leaderboard.asOf}
       />
     </div>
   );
