@@ -26,13 +26,14 @@ export async function generateMetadata({
     return { title: "Not found" };
   }
   const label = ASSET_CATEGORY_LABEL[category];
-  const title = `Most Expensive ${label} Owned by Billionaires`;
-  const description = `${label} owned by the world's richest people, each sourced to a named report — with the live net worth of the billionaire behind it.`;
+  const title = `Most Expensive ${label} Owned by Billionaires & Celebrities`;
+  const description = `${label} owned by the world's richest people and celebrities, each sourced to a named report.`;
   return {
     title,
     description,
     keywords: [
       `billionaire ${label.toLowerCase()}`,
+      `celebrity ${label.toLowerCase()}`,
       `most expensive ${label.toLowerCase()}`,
       `who owns the most expensive ${label.toLowerCase().replace(/s$/, "")}`,
     ],
@@ -65,7 +66,7 @@ export default async function ExpensiveCategoryPage({ params }: { params: Promis
 
         <header>
           <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Most Expensive {label} Owned by Billionaires
+            Most Expensive {label} Owned by Billionaires &amp; Celebrities
           </h1>
           <p className="mt-2 text-foreground/70">
             {assets.length} {assets.length === 1 ? "entry" : "entries"},
@@ -85,21 +86,22 @@ export default async function ExpensiveCategoryPage({ params }: { params: Promis
                 </div>
                 <p className="mt-2 text-sm text-foreground/70">{asset.description}</p>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
-                  <Link
-                    href={`/billionaire/${asset.personId}`}
-                    className="flex items-center gap-2 hover:opacity-80"
-                  >
+                  <Link href={asset.profileUrl} className="flex items-center gap-2 hover:opacity-80">
                     <PersonAvatar
                       name={asset.personName}
                       photoUrl={ranked?.photoUrl ?? null}
                       size={28}
                     />
                     <span className="text-sm font-medium text-foreground">{asset.personName}</span>
-                    {ranked && (
+                    {asset.isLive && ranked ? (
                       <span className="text-xs text-[--muted]">
                         · {formatUsdCompact(ranked.netWorthUsd)}, #{ranked.rank}
                       </span>
-                    )}
+                    ) : !asset.isLive ? (
+                      <span className="text-xs text-[--muted]">
+                        · est. {formatUsdCompact(asset.sortWeight)} net worth
+                      </span>
+                    ) : null}
                   </Link>
                   <a
                     href={asset.sourceUrl}
@@ -117,8 +119,9 @@ export default async function ExpensiveCategoryPage({ params }: { params: Promis
 
         <p className="text-xs text-neutral-400">
           Curated from public reporting at a point in time, not a live feed
-          — ownership and prices can change. Sorted by the owner&apos;s
-          current real-time net worth.{" "}
+          — ownership and prices can change. Billionaires are sorted by
+          real-time net worth; celebrities by a static, labeled estimate
+          (their wealth isn&apos;t tied to public stock we can price live).{" "}
           <Link href="/expensive" className="text-brand hover:underline">
             Browse all categories &rarr;
           </Link>

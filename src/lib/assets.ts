@@ -1,5 +1,6 @@
 import { billionaires } from "@/data/billionaires";
 import { getPersonProfile, type NotableAsset } from "@/data/profiles";
+import { listCelebrities } from "@/data/celebrities";
 import type { Leaderboard } from "@/lib/net-worth";
 
 export type AssetCategory = NotableAsset["category"];
@@ -33,18 +34,47 @@ export function categoryFromSlug(slug: string): AssetCategory | null {
 export interface OwnedAsset extends NotableAsset {
   personId: string;
   personName: string;
+  /** Where the owner's profile lives — billionaires and celebrities use different routes. */
+  profileUrl: string;
+  /** False for celebrities: their net worth is a static, labeled estimate, not a live figure. */
+  isLive: boolean;
+  /** Used only for sorting — live net worth for billionaires, the static estimate for celebrities. */
+  sortWeight: number;
 }
 
-/** Every notable asset across all profiles, tagged with its owner. */
+/** Every notable asset across billionaire profiles AND the (much smaller) celebrities track. */
 export function listAllAssets(): OwnedAsset[] {
   const assets: OwnedAsset[] = [];
+
   for (const person of billionaires) {
     const profile = getPersonProfile(person.id);
     if (!profile?.notableAssets) continue;
     for (const asset of profile.notableAssets) {
-      assets.push({ ...asset, personId: person.id, personName: person.name });
+      assets.push({
+        ...asset,
+        personId: person.id,
+        personName: person.name,
+        profileUrl: `/billionaire/${person.id}`,
+        isLive: true,
+        sortWeight: 0, // filled in with live net worth by getAssetsByCategory
+      });
     }
   }
+
+  for (const celebrity of listCelebrities()) {
+    if (!celebrity.notableAssets) continue;
+    for (const asset of celebrity.notableAssets) {
+      assets.push({
+        ...asset,
+        personId: celebrity.id,
+        personName: celebrity.name,
+        profileUrl: `/celebrity/${celebrity.id}`,
+        isLive: false,
+        sortWeight: celebrity.netWorthUsd,
+      });
+    }
+  }
+
   return assets;
 }
 
@@ -71,10 +101,11 @@ export function listAssetCategories(): AssetCategoryInfo[] {
     .sort((a, b) => b.count - a.count);
 }
 
-/** Assets in one category, ordered by the owner's current net worth (a reasonable prominence proxy). */
+/** Assets in one category, ordered by the owner's net worth (live for billionaires, static estimate for celebrities). */
 export function getAssetsByCategory(category: AssetCategory, leaderboard: Leaderboard): OwnedAsset[] {
   const netWorthById = new Map(leaderboard.people.map((p) => [p.id, p.netWorthUsd]));
   return listAllAssets()
     .filter((a) => a.category === category)
-    .sort((a, b) => (netWorthById.get(b.personId) ?? 0) - (netWorthById.get(a.personId) ?? 0));
+    .map((a) => ({ ...a, sortWeight: a.isLive ? (netWorthById.get(a.personId) ?? 0) : a.sortWeight }))
+    .sort((a, b) => b.sortWeight - a.sortWeight);
 }
