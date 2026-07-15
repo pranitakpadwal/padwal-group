@@ -78,6 +78,12 @@ export default async function ExploreHub() {
       description: "The Waltons, the Sawiris brothers, and more.",
       teaser: null,
     },
+    {
+      href: "/expensive",
+      title: "What They Own",
+      description: "Yachts, jets, mansions, islands, and cars — sourced.",
+      teaser: null,
+    },
   ];
 
   return (

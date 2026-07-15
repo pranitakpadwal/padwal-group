@@ -14,6 +14,7 @@ const CATEGORY_LABEL: Record<NotableAsset["category"], string> = {
   vehicle: "Vehicle",
   yacht: "Yacht",
   jet: "Private Jet",
+  island: "Private Island",
   other: "Notable Asset",
 };
 

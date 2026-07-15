@@ -50,6 +50,9 @@ export default function SiteFooter() {
             <Link href="/quotes" className="text-foreground/70 hover:text-brand">
               Quotes
             </Link>
+            <Link href="/expensive" className="text-foreground/70 hover:text-brand">
+              What They Own
+            </Link>
             <Link href="/articles" className="text-foreground/70 hover:text-brand">
               Daily Recaps
             </Link>

@@ -7,6 +7,7 @@ import { listUniversities } from "@/lib/universities";
 import { listCities } from "@/lib/cities";
 import { listIndustries } from "@/lib/industries";
 import { listFamilies } from "@/lib/families";
+import { listAssetCategories } from "@/lib/assets";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
@@ -135,6 +136,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const expensiveRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/expensive`, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...listAssetCategories().map((c) => ({
+      url: `${base}/expensive/${c.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    })),
+  ];
+
 
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
@@ -207,6 +218,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...cityRoutes,
     ...industryRoutes,
     ...familyRoutes,
+    ...expensiveRoutes,
     ...articleRoutes,
     ...newsRoutes,
     ...storyRoutes,

@@ -28,7 +28,7 @@ export interface Venture {
 }
 
 export interface NotableAsset {
-  category: "residence" | "vehicle" | "yacht" | "jet" | "other";
+  category: "residence" | "vehicle" | "yacht" | "jet" | "island" | "other";
   name: string;
   description: string;
   sourceName: string;
@@ -151,6 +151,20 @@ export const personProfiles: Record<string, PersonProfile> = {
         description: "Purchased in 2013; notable partly because Musk has otherwise sold off most of his real estate and says he doesn't own a yacht.",
         sourceName: "SuperYacht Fan",
         sourceUrl: "https://www.superyachtfan.com/private-jet/owner/elon-musk/",
+      },
+      {
+        category: "vehicle",
+        name: "2008 Tesla Roadster",
+        description: "His personal Roadster was launched into space aboard a SpaceX Falcon Heavy in 2018 and is still orbiting the sun, with a mannequin named 'Starman' at the wheel.",
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/Tesla_Roadster_(2008)#In_popular_culture",
+      },
+      {
+        category: "vehicle",
+        name: "1976 Lotus Esprit \"Wet Nellie\"",
+        description: "Owns the submarine-converting Lotus Esprit used as the \"Wet Nellie\" prop car in the 1977 James Bond film The Spy Who Loved Me.",
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/Lotus_Esprit_S1",
       },
     ],
     family: {
@@ -275,6 +289,13 @@ export const personProfiles: Record<string, PersonProfile> = {
         sourceName: "Luxurylaunches",
         sourceUrl: "https://luxurylaunches.com/real_estate/mukesh-ambani-properties-11232024.php",
       },
+      {
+        category: "vehicle",
+        name: "Antilia car collection",
+        description: "Antilia's six-level, 168-car garage reportedly holds around 170 vehicles, including a Rolls-Royce Cullinan Black Badge, Ferrari SF90 Stradale, Lamborghini Urus, and Bentley Continental Flying Spur.",
+        sourceName: "South China Morning Post",
+        sourceUrl: "https://www.scmp.com/magazines/style/celebrity/article/3196258/inside-mukesh-ambanis-latest-extravagant-car-splurge",
+      },
     ],
     family: {
       maritalStatus: "Married",
@@ -319,6 +340,13 @@ export const personProfiles: Record<string, PersonProfile> = {
         description: "A large, largely private collection displayed in part at the Fondation Louis Vuitton since 2014.",
         sourceName: "The Art Newspaper",
         sourceUrl: "https://www.theartnewspaper.com/2006/11/01/bernard-arnault-luxury-goods-billionaire-to-show-his-art-in-new-private-foundation-in-paris",
+      },
+      {
+        category: "residence",
+        name: "22 Avenue Montaigne, Paris",
+        description: "His main Paris residence on the Seine, reported to be worth over $200M, spanning roughly 7,000 sq ft with 12 bedrooms.",
+        sourceName: "Tuko",
+        sourceUrl: "https://www.tuko.co.ke/facts-lifehacks/celebrity-biographies/602544-inside-bernard-arnaults-house-worth-200m-paris-billionaires-main-residence/",
       },
     ],
     family: {
@@ -396,11 +424,18 @@ export const personProfiles: Record<string, PersonProfile> = {
     ventures: [],
     notableAssets: [
       {
-        category: "other",
+        category: "island",
         name: "Lanai, Hawaii",
         description: "Owns roughly 98% of the Hawaiian island, purchased in 2012 for about $300M, including its resorts and much of its commercial property.",
         sourceName: "CNBC",
         sourceUrl: "https://www.cnbc.com/2017/11/14/see-lanai-the-hawaiian-island-larry-ellison-bought-for-300-million.html",
+      },
+      {
+        category: "vehicle",
+        name: "Acura NSX collection",
+        description: "Bought several new Acura NSX supercars every year for 15 years, gifting many to friends and top Oracle employees; also previously owned a 1995 McLaren F1.",
+        sourceName: "Luxurylaunches",
+        sourceUrl: "https://luxurylaunches.com/transport/oracle-founder-ditched-ferraris-and-fell-in-love-with-the-acura-nsx.php",
       },
       {
         category: "yacht",
@@ -465,6 +500,15 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "1998", title: "Co-founded Google", description: "Founded Google with Larry Page." },
       { year: "2004", title: "Google IPO", description: "Took Google public." },
       { year: "2019", title: "Stepped down as Alphabet president", description: "Left his formal executive role, remaining a controlling shareholder and active on AI projects." },
+    ],
+    notableAssets: [
+      {
+        category: "yacht",
+        name: "Dragonfly",
+        description: "142-meter Lürssen superyacht reported at roughly $450M, delivered in December 2024 — the largest superyacht in the United States.",
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/billspringer/2024/12/13/just-how-big-is-google-co-founder-sergey-brins-new-superyacht/",
+      },
     ],
   },
 
@@ -551,6 +595,15 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "1988", title: "Dell IPO", description: "Took the company public." },
       { year: "2013", title: "Took Dell private", description: "Led a roughly $25 billion buyout to take Dell private." },
       { year: "2018", title: "Returned to public markets", description: "Brought Dell Technologies back to the stock market." },
+    ],
+    notableAssets: [
+      {
+        category: "residence",
+        name: "\"The Castle,\" West Lake Hills",
+        description: "A 33,000 sq ft home on 119 acres overlooking Lake Austin, built in 1997 with a tennis court and both indoor and outdoor pools.",
+        sourceName: "The Real Deal",
+        sourceUrl: "https://therealdeal.com/texas/2022/06/23/heres-where-michael-dell-hangs-up-his-many-hats/",
+      },
     ],
   },
 
@@ -769,6 +822,22 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "1988", title: "Founded Adani Enterprises", description: "Started what became the Adani Group as a commodity-trading business." },
       { year: "1998", title: "Mundra Port", description: "Began developing Mundra Port in Gujarat, which grew into India's largest commercial port." },
       { year: "2022", title: "Acquired Ambuja Cements", description: "Took control of Ambuja Cements and ACC, making Adani one of India's largest cement producers." },
+    ],
+    notableAssets: [
+      {
+        category: "residence",
+        name: "Shantivan House, Ahmedabad",
+        description: "His primary residence off SG Road in Ahmedabad, in a prime location behind the Karnavati Club.",
+        sourceName: "IndexTap",
+        sourceUrl: "https://www.indextap.com/blog/gautam-adani-house-addresses-value-net-worth-and-latest-news/",
+      },
+      {
+        category: "jet",
+        name: "Boeing BBJ 737 MAX 8",
+        description: "A business-jet version of the 737 MAX reported to have cost around ₹1,000 crore (roughly $120M), part of a private fleet that also includes several Bombardier and Embraer jets.",
+        sourceName: "CarToq",
+        sourceUrl: "https://www.cartoq.com/car-life/gautam-adani-adds-rs-1000-crore-boeing-bbj-737-max-8-to-his-private-jet-fleet/",
+      },
     ],
   },
 
