@@ -82,12 +82,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily" as const,
       priority: 0.7,
     })),
-    ...listCountries().map((c) => ({
-      url: `${base}/country/${c.slug}`,
-      lastModified: now,
-      changeFrequency: "daily" as const,
-      priority: 0.6,
-    })),
+    // India excluded: /country/india redirects to /india, the canonical page.
+    ...listCountries()
+      .filter((c) => c.country !== "India")
+      .map((c) => ({
+        url: `${base}/country/${c.slug}`,
+        lastModified: now,
+        changeFrequency: "daily" as const,
+        priority: 0.6,
+      })),
   ];
 
   const stockRoutes: MetadataRoute.Sitemap = getAllTickers().map((ticker) => ({

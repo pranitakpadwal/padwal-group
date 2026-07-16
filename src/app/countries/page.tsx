@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { listCountries, listRegions } from "@/lib/countries";
+import { listCountries, listRegions, countryPagePath } from "@/lib/countries";
 import { siteUrl } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -62,7 +62,7 @@ export default function CountriesIndex() {
             {countries.map((c) => (
               <Link
                 key={c.slug}
-                href={`/country/${c.slug}`}
+                href={countryPagePath(c.country)}
                 className="flex items-center justify-between rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-brand"
               >
                 <span className="font-medium text-foreground">{c.country}</span>

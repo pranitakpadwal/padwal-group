@@ -8,7 +8,7 @@ import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
-import { countrySlug } from "@/lib/countries";
+import { countryPagePath } from "@/lib/countries";
 import { getHolding, getTickerHolders } from "@/lib/holdings";
 import { explainMove } from "@/lib/explain-move";
 import { siteUrl } from "@/lib/site";
@@ -177,7 +177,7 @@ export default async function BillionaireProfile({
             </h1>
             <p className="mt-1 text-sm text-[--muted]">
               #{ranked.rank} in the World &middot; Age {ranked.age} &middot;{" "}
-              <Link href={`/country/${countrySlug(ranked.country)}`} className="hover:text-brand hover:underline">
+              <Link href={countryPagePath(ranked.country)} className="hover:text-brand hover:underline">
                 {ranked.country}
               </Link>
             </p>

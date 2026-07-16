@@ -52,6 +52,18 @@ export function countryFromSlug(slug: string): string | null {
   return listCountries().find((c) => c.slug === slug)?.country ?? null;
 }
 
+/**
+ * India already has a dedicated, heavily-linked top-level page (/india) as
+ * one of the four main categories. Routing every internal link through
+ * /country/india too would mean two live, indexable pages targeting the
+ * same "richest people in India" query with the same roster — keyword
+ * cannibalization that splits ranking signal instead of reinforcing it.
+ * Every link builder should call this instead of hardcoding /country/[slug].
+ */
+export function countryPagePath(country: string): string {
+  return country === "India" ? "/india" : `/country/${countrySlug(country)}`;
+}
+
 // --- Regions (continent / area landing pages) ---
 
 const REGION_BY_COUNTRY: Record<string, string> = {

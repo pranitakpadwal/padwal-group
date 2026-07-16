@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { countryFromSlug, getCountryView, demonym, countrySlug } from "@/lib/countries";
 import { siteUrl } from "@/lib/site";
@@ -48,6 +48,11 @@ export default async function CountryPage({ params }: { params: Promise<RoutePar
   const country = countryFromSlug(slug);
   if (!country) {
     notFound();
+  }
+  if (country === "India") {
+    // /india is the canonical, nav-linked page for this roster — this route
+    // would otherwise be a duplicate competing for the same search queries.
+    permanentRedirect("/india");
   }
 
   const leaderboard = await getLeaderboard();

@@ -6,7 +6,7 @@ import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
 import { formatDateLong } from "@/lib/dates";
 import { formatUsdCompact, formatClock } from "@/lib/format";
-import { countrySlug } from "@/lib/countries";
+import { countryPagePath } from "@/lib/countries";
 import { siteUrl } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -98,7 +98,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<Rout
       ? { href: `/stock/${facts.ticker}`, label: `Who owns ${facts.ticker}?` }
       : null,
     {
-      href: `/country/${countrySlug(facts.country)}`,
+      href: countryPagePath(facts.country),
       label: `Richest people in ${facts.country}`,
     },
     { href: `/articles/${article.date}/world`, label: `Full recap for ${formatDateLong(article.date)}` },
