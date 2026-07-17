@@ -130,6 +130,7 @@ export default async function BillionaireProfile({
       : null;
 
   const subpageLinks = [
+    { href: `/net-worth/${id}`, label: "Net Worth Explainer" },
     profile?.careerTimeline && profile.careerTimeline.length > 0
       ? { href: `/story/${id}`, label: "The Full Story" }
       : null,

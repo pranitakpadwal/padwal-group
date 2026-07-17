@@ -166,6 +166,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const netWorthRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/net-worth`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
+    ...billionaires.map((person) => ({
+      url: `${base}/net-worth/${person.id}`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 0.5,
+    })),
+  ];
+
 
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
@@ -241,6 +251,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...expensiveRoutes,
     ...celebrityRoutes,
     ...estimatedBillionaireRoutes,
+    ...netWorthRoutes,
     ...articleRoutes,
     ...newsRoutes,
     ...storyRoutes,

@@ -28,7 +28,18 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
   const hero = getHero(category);
   const faqs = getFaqs(category, view.people[0]?.name);
   const methodology = getMethodology(category);
-  const combinedRoster = category === "world" ? getCombinedRoster(leaderboard) : null;
+  // The Estimated tier has country and gender data but not age, so
+  // "coverage" stats that blend it in make sense for World, Women, and
+  // India — Under 45 stays pure-live since we can't scope the Estimated
+  // tier to an age cutoff.
+  const combinedRoster =
+    category === "world"
+      ? getCombinedRoster(leaderboard)
+      : category === "women"
+        ? getCombinedRoster(leaderboard).filter((entry) => entry.gender === "female")
+        : category === "india"
+          ? getCombinedRoster(leaderboard).filter((entry) => entry.country === "India")
+          : null;
   const coverageOverride = combinedRoster
     ? {
         peopleLabel: "People Covered",

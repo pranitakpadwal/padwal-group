@@ -19,6 +19,12 @@ export default async function ExploreHub() {
       teaser: null,
     },
     {
+      href: "/net-worth",
+      title: "Net Worth Explainers",
+      description: "How much is each billionaire actually worth, and how it breaks down.",
+      teaser: null,
+    },
+    {
       href: "/india",
       title: "India's Richest",
       description: "The Indian billionaires, re-ranked live within their own list.",

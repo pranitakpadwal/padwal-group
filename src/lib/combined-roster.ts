@@ -15,6 +15,7 @@ export interface RosterEntry {
   industry: string;
   primarySource: string;
   netWorthUsd: number;
+  gender: "male" | "female";
   isLive: boolean;
   profileUrl: string;
   photoUrl: string | null;
@@ -31,6 +32,7 @@ export function getCombinedRoster(leaderboard: Leaderboard): RosterEntry[] {
     industry: p.industry,
     primarySource: p.primarySource,
     netWorthUsd: p.netWorthUsd,
+    gender: p.gender,
     isLive: true,
     profileUrl: `/billionaire/${p.id}`,
     photoUrl: p.photoUrl,
@@ -44,6 +46,7 @@ export function getCombinedRoster(leaderboard: Leaderboard): RosterEntry[] {
     industry: e.industry,
     primarySource: e.primarySource,
     netWorthUsd: e.netWorthUsd,
+    gender: e.gender,
     isLive: false,
     profileUrl: `/estimated/${e.id}`,
     photoUrl: null,
