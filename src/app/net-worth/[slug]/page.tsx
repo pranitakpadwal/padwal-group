@@ -77,6 +77,14 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
   const arrow = isUp ? "▲" : isDown ? "▼" : "•";
 
   const faqs = [
+    ...(hook
+      ? [
+          {
+            question: `${hook.title}?`,
+            answer: `${hook.fact} (Per ${hook.sourceName}.)`,
+          },
+        ]
+      : []),
     {
       question: `What is ${person.name}'s net worth in ${year}?`,
       answer: `As of the latest update, ${person.name}'s real-time net worth is an estimated ${formatUsdCompact(ranked.netWorthUsd)}, ranking #${ranked.rank} on our live world list. This figure updates continuously as markets move.`,
@@ -155,6 +163,27 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
                 </a>
               </section>
             )}
+
+            {profile?.deepDive?.map((section, index) => (
+              <section key={index} aria-labelledby={`deep-dive-${index}`}>
+                <h2 id={`deep-dive-${index}`} className="mb-2 text-lg font-bold text-foreground">
+                  {section.heading}
+                </h2>
+                <div className="flex flex-col gap-3 text-sm leading-relaxed text-foreground/80">
+                  {section.paragraphs.map((paragraph, pIndex) => (
+                    <p key={pIndex}>{paragraph}</p>
+                  ))}
+                </div>
+                <a
+                  href={section.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="mt-2 inline-block text-xs text-[--muted] hover:text-brand hover:underline"
+                >
+                  Source: {section.sourceName}
+                </a>
+              </section>
+            ))}
 
             <section aria-labelledby="breakdown-heading">
               <h2 id="breakdown-heading" className="mb-2 text-lg font-bold text-foreground">

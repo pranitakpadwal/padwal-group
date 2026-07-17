@@ -74,6 +74,19 @@ export interface NetWorthHook {
   sourceUrl: string;
 }
 
+/**
+ * A researched, individually-sourced section for a /net-worth deep dive —
+ * the actual reporting a real net-worth explainer needs (not just a reused
+ * profile bio). Each section cites its own source so a multi-part story
+ * can draw on several different articles honestly.
+ */
+export interface DeepDiveSection {
+  heading: string;
+  paragraphs: string[];
+  sourceName: string;
+  sourceUrl: string;
+}
+
 export interface PersonProfile {
   /** City/region only, never a street address. */
   residenceCity?: string;
@@ -90,6 +103,8 @@ export interface PersonProfile {
   notableAssets?: NotableAsset[];
   family?: FamilyInfo;
   netWorthHook?: NetWorthHook;
+  /** Longer-form, individually-sourced sections for the /net-worth page. */
+  deepDive?: DeepDiveSection[];
 }
 
 export const personProfiles: Record<string, PersonProfile> = {
@@ -707,6 +722,49 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Fortune",
       sourceUrl: "https://fortune.com/2026/06/25/mackenzie-scott-largest-megadonor-2025-7-billion-donations-giving-usa-iu-report/",
     },
+    deepDive: [
+      {
+        heading: "The Divorce That Created the Fortune",
+        paragraphs: [
+          "Scott and Amazon founder Jeff Bezos divorced in 2019 after 25 years of marriage. As part of the settlement, she received roughly a 4% stake in Amazon — about 19.7 million shares at the time, worth an estimated $36 billion. Bezos retained voting control over the shares, but the economic value was hers outright.",
+        ],
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/MacKenzie_Scott",
+      },
+      {
+        heading: "Richer Now Than the Day She Left",
+        paragraphs: [
+          "Despite giving away more than $26 billion since the divorce, Scott's fortune has kept growing. Amazon's stock has climbed so much that even after her donations and periodic share sales, she is wealthier today than she was the day the marriage ended — the giving has barely dented the underlying stake.",
+        ],
+        sourceName: "Fortune",
+        sourceUrl: "https://fortune.com/article/mackenzie-scott-26-billion-donations-net-worth-amazon-shares/",
+      },
+      {
+        heading: "Where the Money Has Gone",
+        paragraphs: [
+          "A large share of Scott's giving has gone to higher education, especially Historically Black Colleges and Universities — her HBCU giving alone has topped $1 billion, spread across 24 schools plus endowment support for all 37 UNCF-member institutions.",
+          "Named gifts include $80 million to Howard University, $63 million each to Morgan State University and Prairie View A&M University, $42 million to Elizabeth City State University, $38 million each to Alabama State University and Spelman College, and a $70 million gift to the United Negro College Fund.",
+        ],
+        sourceName: "Higher Ed Dive",
+        sourceUrl: "https://www.highereddive.com/news/mackenzie-scotts-hbcu-college-gifts-2025/805854/",
+      },
+      {
+        heading: "Giving With \"No Strings Attached\"",
+        paragraphs: [
+          "Scott's philanthropy is built around large, unrestricted gifts — grants with no application process, minimal reporting requirements, and no conditions on how recipients use the money. She typically explains her reasoning in her own posts rather than through a foundation press office.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/lisettevoytko/2021/07/07/inside-mackenzie-scotts-no-strings-attached-philanthropy-i-was-in-tears/",
+      },
+      {
+        heading: "Researchers Say the Approach Is Working",
+        paragraphs: [
+          "A multi-year study by the Center for Effective Philanthropy found that the large, unrestricted nature of Scott's gifts has strengthened the financial position of the nonprofits that received them, according to CBS News' coverage of the research.",
+        ],
+        sourceName: "CBS News",
+        sourceUrl: "https://www.cbsnews.com/news/mackenzie-scotts-large-unrestricted-gifts-have-transformed-non-profits-research-shows/",
+      },
+    ],
   },
 
   "julia-koch": {
