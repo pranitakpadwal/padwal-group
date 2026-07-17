@@ -9,6 +9,7 @@ import { listIndustries } from "@/lib/industries";
 import { listFamilies } from "@/lib/families";
 import { listAssetCategories } from "@/lib/assets";
 import { listCelebrities } from "@/data/celebrities";
+import { listEstimatedBillionaires } from "@/data/estimated-billionaires";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
@@ -156,6 +157,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.4,
   }));
 
+  const estimatedBillionaireRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/billionaires`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
+    ...listEstimatedBillionaires().map((e) => ({
+      url: `${base}/estimated/${e.id}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.4,
+    })),
+  ];
+
 
   const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
@@ -230,6 +240,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...familyRoutes,
     ...expensiveRoutes,
     ...celebrityRoutes,
+    ...estimatedBillionaireRoutes,
     ...articleRoutes,
     ...newsRoutes,
     ...storyRoutes,

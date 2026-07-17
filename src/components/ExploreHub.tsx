@@ -13,6 +13,12 @@ export default async function ExploreHub() {
 
   const cards = [
     {
+      href: "/billionaires",
+      title: "The Full List",
+      description: "Every billionaire we cover, live-tracked and researched, ranked together.",
+      teaser: null,
+    },
+    {
       href: "/india",
       title: "India's Richest",
       description: "The Indian billionaires, re-ranked live within their own list.",
