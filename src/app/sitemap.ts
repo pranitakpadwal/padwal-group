@@ -10,6 +10,7 @@ import { listFamilies } from "@/lib/families";
 import { listAssetCategories } from "@/lib/assets";
 import { listCelebrities } from "@/data/celebrities";
 import { listEstimatedBillionaires } from "@/data/estimated-billionaires";
+import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
@@ -166,10 +167,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const netWorthYear = new Date().getFullYear();
   const netWorthRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/net-worth`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
     ...billionaires.map((person) => ({
-      url: `${base}/net-worth/${person.id}`,
+      url: `${base}${netWorthUrl(person.id, person.name, netWorthYear)}`,
       lastModified: now,
       changeFrequency: "daily" as const,
       priority: 0.5,

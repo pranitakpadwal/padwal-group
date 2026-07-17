@@ -11,6 +11,7 @@ import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { countryPagePath } from "@/lib/countries";
 import { listIndustries } from "@/lib/industries";
 import { listCities } from "@/lib/cities";
+import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { getHolding, getTickerHolders } from "@/lib/holdings";
 import { explainMove } from "@/lib/explain-move";
 import { siteUrl } from "@/lib/site";
@@ -130,7 +131,7 @@ export default async function BillionaireProfile({
       : null;
 
   const subpageLinks = [
-    { href: `/net-worth/${id}`, label: "Net Worth Explainer" },
+    { href: netWorthUrl(id, ranked.name, new Date().getFullYear()), label: "Net Worth Explainer" },
     profile?.careerTimeline && profile.careerTimeline.length > 0
       ? { href: `/story/${id}`, label: "The Full Story" }
       : null,

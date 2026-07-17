@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
+import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -24,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function NetWorthIndex() {
   const leaderboard = await getLeaderboard();
   const year = new Date().getFullYear();
+  const sorted = leaderboard.people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="flex flex-1 flex-col">
@@ -42,10 +44,10 @@ export default async function NetWorthIndex() {
         </header>
 
         <div className="flex flex-col gap-2">
-          {leaderboard.people.map((person) => (
+          {sorted.map((person) => (
             <Link
               key={person.id}
-              href={`/net-worth/${person.id}`}
+              href={netWorthUrl(person.id, person.name, year)}
               className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-brand"
             >
               <div className="flex items-center gap-3">

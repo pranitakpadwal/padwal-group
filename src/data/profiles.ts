@@ -59,6 +59,21 @@ export interface TimelineEntry {
  */
 export type WealthOrigin = "Self-made" | "Inherited" | "Inherited and growing it";
 
+/**
+ * A genuine, sourced "trending explainer" angle for the /net-worth page —
+ * the kind of hook outlets like Times of India's etimes run ("how much is
+ * left after giving away $X"). Only set this when there's a real, cited
+ * fact behind it; most people just get the generic net-worth framing.
+ */
+export interface NetWorthHook {
+  /** The headline hook, e.g. "How Much Is Left After Giving Away Over $26 Billion in 5 Years" */
+  title: string;
+  /** The sourced sentence(s) explaining the hook. */
+  fact: string;
+  sourceName: string;
+  sourceUrl: string;
+}
+
 export interface PersonProfile {
   /** City/region only, never a street address. */
   residenceCity?: string;
@@ -74,6 +89,7 @@ export interface PersonProfile {
   ventures?: Venture[];
   notableAssets?: NotableAsset[];
   family?: FamilyInfo;
+  netWorthHook?: NetWorthHook;
 }
 
 export const personProfiles: Record<string, PersonProfile> = {
@@ -685,6 +701,12 @@ export const personProfiles: Record<string, PersonProfile> = {
       "Has given away tens of billions in unrestricted gifts.",
       "A published novelist.",
     ],
+    netWorthHook: {
+      title: "How Much Is Left After Giving Away Over $26 Billion in 5 Years",
+      fact: "Through her giving vehicle Yield Giving, Scott has donated roughly $26.2 billion across more than 2,700 unrestricted gifts since 2019 — including $7.2 billion in 2025 alone, more than a third of all US megagifts that year.",
+      sourceName: "Fortune",
+      sourceUrl: "https://fortune.com/2026/06/25/mackenzie-scott-largest-megadonor-2025-7-billion-donations-giving-usa-iu-report/",
+    },
   },
 
   "julia-koch": {

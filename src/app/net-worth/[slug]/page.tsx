@@ -5,6 +5,7 @@ import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import { getHolding } from "@/lib/holdings";
 import { countryPagePath } from "@/lib/countries";
+import { netWorthHeadline, netWorthUrl, personIdFromNetWorthSlug } from "@/lib/net-worth-explainer";
 import { formatUsdCompact, formatUsdChange, formatPercentChange } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -17,20 +18,21 @@ import SiteFooter from "@/components/SiteFooter";
 
 export const dynamic = "force-dynamic";
 
-type RouteParams = { id: string };
+type RouteParams = { slug: string };
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<RouteParams>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const person = findBillionaireById(id);
+  const { slug } = await params;
+  const year = new Date().getFullYear();
+  const id = personIdFromNetWorthSlug(slug, year);
+  const person = id ? findBillionaireById(id) : null;
   if (!person) {
     return { title: "Not found" };
   }
-  const year = new Date().getFullYear();
-  const title = `${person.name} Net Worth in ${year}: How Rich Is ${person.name.split(" ")[0]}?`;
+  const title = netWorthHeadline(person.id, person.name, year);
   const description = `${person.name}'s real-time net worth in ${year}, how it breaks down between public stock and other assets, and how it's calculated — updated live from public holdings.`;
   return {
     title,
@@ -41,30 +43,33 @@ export async function generateMetadata({
       `how much is ${person.name} worth`,
       `how rich is ${person.name}`,
     ],
-    alternates: { canonical: `${siteUrl()}/net-worth/${person.id}` },
+    alternates: { canonical: `${siteUrl()}${netWorthUrl(person.id, person.name, year)}` },
     openGraph: { title, description, type: "article" },
   };
 }
 
 export default async function NetWorthPage({ params }: { params: Promise<RouteParams> }) {
-  const { id } = await params;
-  const person = findBillionaireById(id);
+  const { slug } = await params;
+  const year = new Date().getFullYear();
+  const id = personIdFromNetWorthSlug(slug, year);
+  const person = id ? findBillionaireById(id) : null;
   if (!person) {
     notFound();
   }
 
   const leaderboard = await getLeaderboard();
-  const ranked = leaderboard.people.find((p) => p.id === id);
+  const ranked = leaderboard.people.find((p) => p.id === person.id);
   if (!ranked) {
     notFound();
   }
 
-  const profile = getPersonProfile(id);
+  const profile = getPersonProfile(person.id);
+  const hook = profile?.netWorthHook;
   const holding = getHolding(ranked);
-  const year = new Date().getFullYear();
   const firstName = ranked.name.split(" ")[0];
   const pronounCap = ranked.gender === "female" ? "She" : "He";
   const possessive = ranked.gender === "female" ? "her" : "his";
+  const url = `${siteUrl()}${netWorthUrl(person.id, person.name, year)}`;
 
   const isUp = ranked.dayChangeUsd > 0;
   const isDown = ranked.dayChangeUsd < 0;
@@ -93,7 +98,7 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
     "@type": "Person",
     name: person.name,
     description: person.bio,
-    url: `${siteUrl()}/net-worth/${person.id}`,
+    url,
     nationality: person.country,
   };
 
@@ -106,8 +111,9 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
         <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
           <PersonAvatar name={ranked.name} photoUrl={ranked.photoUrl} size={96} />
           <div className="flex-1">
-            <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
               {person.name} Net Worth in {year}
+              {hook && <>: {hook.title}</>}
             </h1>
             <p className="mt-1 text-sm text-[--muted]">
               #{ranked.rank} in the World &middot; {ranked.primarySource}
@@ -133,6 +139,23 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
 
         <div className="flex flex-col gap-8 lg:flex-row">
           <div className="flex min-w-0 flex-1 flex-col gap-8">
+            {hook && (
+              <section aria-labelledby="hook-heading" className="rounded-2xl border border-brand/40 bg-brand-soft/40 p-5">
+                <h2 id="hook-heading" className="mb-2 text-lg font-bold text-foreground">
+                  {hook.title}
+                </h2>
+                <p className="text-sm leading-relaxed text-foreground/80">{hook.fact}</p>
+                <a
+                  href={hook.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="mt-2 inline-block text-xs text-[--muted] hover:text-brand hover:underline"
+                >
+                  Source: {hook.sourceName}
+                </a>
+              </section>
+            )}
+
             <section aria-labelledby="breakdown-heading">
               <h2 id="breakdown-heading" className="mb-2 text-lg font-bold text-foreground">
                 How the {formatUsdCompact(ranked.netWorthUsd)} Breaks Down
@@ -237,7 +260,7 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
       <SiteFooter />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <LiveWebPageJsonLd
-        url={`${siteUrl()}/net-worth/${person.id}`}
+        url={url}
         name={`${person.name} Net Worth in ${year}`}
         asOf={leaderboard.asOf}
       />
