@@ -7,6 +7,7 @@ import { getPersonQuotes } from "@/data/quotes";
 import { formatDateLong } from "@/lib/dates";
 import { formatUsdCompact, formatClock } from "@/lib/format";
 import { countryPagePath } from "@/lib/countries";
+import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { siteUrl } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -87,6 +88,10 @@ export default async function NewsArticlePage({ params }: { params: Promise<Rout
     {
       href: `/billionaire/${article.personId}`,
       label: `${facts.name}'s live net worth & rank`,
+    },
+    {
+      href: netWorthUrl(article.personId, facts.name, new Date().getFullYear()),
+      label: `${facts.name}'s net worth explained`,
     },
     profile?.careerTimeline && profile.careerTimeline.length > 0
       ? { href: `/story/${article.personId}`, label: `How ${facts.name} built the fortune` }

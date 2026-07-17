@@ -202,6 +202,38 @@ export const personProfiles: Record<string, PersonProfile> = {
       maritalStatus: "Not currently married",
       note: "Has multiple children with more than one partner; the exact count is widely reported but continues to evolve, including active paternity proceedings — we don't try to pin an exact number.",
     },
+    netWorthHook: {
+      title: "How He Became the World's First Trillionaire",
+      fact: "On June 12, 2026, Musk became the first person in history with a net worth exceeding $1 trillion, driven by SpaceX's public listing and Tesla's climbing valuation.",
+      sourceName: "CNN Business",
+      sourceUrl: "https://www.cnn.com/2026/06/06/business/musk-trillionaire-how-much-is-one-trillion-dollars",
+    },
+    deepDive: [
+      {
+        heading: "The First Trillionaire in History",
+        paragraphs: [
+          "No one had ever been worth $1 trillion until Musk crossed that line in June 2026. The milestone was driven largely by SpaceX's public listing and continued gains in Tesla's share price, the two companies that make up the bulk of his fortune.",
+        ],
+        sourceName: "CNN Business",
+        sourceUrl: "https://www.cnn.com/2026/06/06/business/musk-trillionaire-how-much-is-one-trillion-dollars",
+      },
+      {
+        heading: "A Pay Package Worth Nearly $1 Trillion",
+        paragraphs: [
+          "Musk doesn't take a salary from Tesla. Instead, shareholders approved a compensation package that could be worth close to $1 trillion on its own if Tesla hits a series of ambitious valuation and operational targets over the next decade — potentially the largest pay package in corporate history.",
+        ],
+        sourceName: "Yahoo Finance",
+        sourceUrl: "https://finance.yahoo.com/news/elon-musk-net-worth-hits-123107810.html",
+      },
+      {
+        heading: "Wealth That Swings by Tens of Billions in a Day",
+        paragraphs: [
+          "Because so much of his fortune sits in two volatile stocks, Musk's net worth can move by tens of billions of dollars in a single trading session — he regained his trillionaire status in late June 2026 after SpaceX and Tesla gains added roughly $60 billion in a short span.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/06/29/musk-is-a-trillionaire-again-spacex-and-tesla-boost-net-worth-by-50-billion/",
+      },
+    ],
   },
 
   "jeff-bezos": {
@@ -267,6 +299,30 @@ export const personProfiles: Record<string, PersonProfile> = {
       childrenCount: 4,
       note: "His four children are from his prior marriage to MacKenzie Scott.",
     },
+    netWorthHook: {
+      title: "How He Still Owns 8% of Amazon After Selling Billions in Stock",
+      fact: "Bezos has sold tens of billions of dollars in Amazon shares since the company's IPO — much of it to fund Blue Origin — yet still holds roughly 8% of Amazon's outstanding stock, worth well over $150 billion.",
+      sourceName: "Britannica Money",
+      sourceUrl: "https://www.britannica.com/money/Jeff-Bezos",
+    },
+    deepDive: [
+      {
+        heading: "Funding Blue Origin, a Billion Dollars a Year",
+        paragraphs: [
+          "Bezos has said he funds Blue Origin largely by selling roughly $1 billion a year in Amazon stock — a pace he's kept up for years to bankroll the rocket company's development of the New Shepard and New Glenn launch vehicles.",
+        ],
+        sourceName: "Britannica Money",
+        sourceUrl: "https://www.britannica.com/money/Jeff-Bezos",
+      },
+      {
+        heading: "A Venice Wedding Estimated at Up to $56 Million",
+        paragraphs: [
+          "Bezos married journalist and pilot Lauren Sánchez in Venice in June 2025, in a multi-day event with guests including Oprah Winfrey, Leonardo DiCaprio, and Kim Kardashian. Reported cost estimates for the celebration range as high as $56 million.",
+        ],
+        sourceName: "Britannica Money",
+        sourceUrl: "https://www.britannica.com/money/Jeff-Bezos",
+      },
+    ],
   },
 
   "mukesh-ambani": {
@@ -333,6 +389,30 @@ export const personProfiles: Record<string, PersonProfile> = {
       spouseName: "Nita Ambani",
       childrenCount: 3,
     },
+    netWorthHook: {
+      title: "The Six-Day Wedding His Family Threw for a Reported $600 Million-Plus",
+      fact: "The 2024 wedding of Ambani's son Anant to Radhika Merchant ran six days across multiple Indian cities; reported cost estimates range from roughly $150 million on conservative accounts to $600 million or more in others.",
+      sourceName: "Wikipedia",
+      sourceUrl: "https://en.wikipedia.org/wiki/Wedding_of_Anant_Ambani_and_Radhika_Merchant",
+    },
+    deepDive: [
+      {
+        heading: "Asia's Richest Man, Built on Reliance and Jio",
+        paragraphs: [
+          "Ambani chairs Reliance Industries, India's most valuable listed company, spanning energy, petrochemicals, retail, and telecom. Its Jio network has grown to more than 500 million subscribers, and Ambani has said he plans to list Jio Platforms separately in 2026.",
+        ],
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/Mukesh_Ambani",
+      },
+      {
+        heading: "A Six-Day Wedding That Made Global Headlines",
+        paragraphs: [
+          "The wedding of his son Anant Ambani and Radhika Merchant ran from July 12 to July 30, 2024, held partly at the family's Antilia residence and the Jio Convention Center in Mumbai. Reported estimates of the total cost vary widely by source, from roughly $150 million to $600 million or more — the family has not confirmed a figure.",
+        ],
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/Wedding_of_Anant_Ambani_and_Radhika_Merchant",
+      },
+    ],
   },
 
   "bernard-arnault": {
@@ -385,6 +465,38 @@ export const personProfiles: Record<string, PersonProfile> = {
       childrenCount: 5,
       note: "Several of his children hold senior executive roles within LVMH's portfolio of brands.",
     },
+    netWorthHook: {
+      title: "Why His Fortune Has Swung by Tens of Billions as Chinese Luxury Demand Cooled",
+      fact: "LVMH's revenue slid from €86.2 billion in 2023 to €80.8 billion in 2025 as Chinese luxury demand weakened, before Arnault's wealth jumped by roughly $19 billion in a single day in October 2025 as the slump showed signs of easing.",
+      sourceName: "Fortune",
+      sourceUrl: "https://fortune.com/2025/10/16/lvmh-ceo-bernard-arnault-billionaires-list-19-billion-overnight-wealth-surge-luxury-market-slowdown-after-months-of-bleeding-billions/",
+    },
+    deepDive: [
+      {
+        heading: "A Three-Year Slide in Chinese Luxury Demand",
+        paragraphs: [
+          "LVMH's revenue fell in each of the last two reported years — from €86.2 billion in 2023 to €84.7 billion in 2024 and €80.8 billion in 2025 — as Chinese consumers, long the engine of global luxury growth, pulled back spending amid a weaker domestic economy.",
+        ],
+        sourceName: "Finance Monthly",
+        sourceUrl: "https://www.finance-monthly.com/bernard-arnault-net-worth/",
+      },
+      {
+        heading: "A Family Succession Drama, in Slow Motion",
+        paragraphs: [
+          "All five of Arnault's children now hold senior roles across LVMH's brands, and speculation over who eventually succeeds him has become its own recurring story. Asked in December 2025 who would take over, Arnault told CNBC: \"Talk to me again in 10 years, I can give you a more precise answer.\"",
+        ],
+        sourceName: "Fortune",
+        sourceUrl: "https://fortune.com/article/who-is-bernard-arnault-and-family-net-worth-billionaires-luxury-succession-gen-z-heirs/",
+      },
+      {
+        heading: "Extending His Own Tenure to Age 85",
+        paragraphs: [
+          "Now 77, Arnault can keep running LVMH until he's 85 after shareholders approved a change to the company's bylaws raising the mandatory retirement age for its chairman and CEO.",
+        ],
+        sourceName: "Fortune",
+        sourceUrl: "https://fortune.com/2026/03/05/how-old-is-lvmh-ceo-bernard-arnault-how-long-can-he-run-company-85-bylaws/",
+      },
+    ],
   },
 
   "mark-zuckerberg": {
@@ -430,6 +542,38 @@ export const personProfiles: Record<string, PersonProfile> = {
       spouseName: "Priscilla Chan",
       childrenCount: 3,
     },
+    netWorthHook: {
+      title: "Betting Up to $145 Billion on the AI Race",
+      fact: "Meta raised its 2026 capital-expenditure guidance to as much as $145 billion, almost entirely aimed at AI infrastructure, after spending $72.2 billion in 2025 — a bet investors are still divided on.",
+      sourceName: "Fortune",
+      sourceUrl: "https://fortune.com/2026/04/29/meta-zuckerberg-145-billion-ai-spending-roi/",
+    },
+    deepDive: [
+      {
+        heading: "Meta's AI Spending Spree",
+        paragraphs: [
+          "Meta spent $72.2 billion on capital expenditures in 2025, then raised its 2026 guidance to a range of $125 billion to $145 billion — almost all of it earmarked for the servers, data centers, and networking gear behind Zuckerberg's AI push. Investors have openly questioned whether the spending will pay off.",
+        ],
+        sourceName: "Fortune",
+        sourceUrl: "https://fortune.com/2026/04/29/meta-zuckerberg-145-billion-ai-spending-roi/",
+      },
+      {
+        heading: "Nine-Figure Pay Packages to Win the AI Talent War",
+        paragraphs: [
+          "To staff its Superintelligence Labs, Meta has offered some AI researchers compensation packages reported as high as $300 million over four years, and brought on Scale AI founder Alexandr Wang as Chief AI Officer alongside a roughly $14 billion investment in Scale AI.",
+        ],
+        sourceName: "TechCrunch",
+        sourceUrl: "https://techcrunch.com/2025/06/27/meta-is-offering-multimillion-dollar-pay-for-ai-researchers-but-not-100m-signing-bonuses/",
+      },
+      {
+        heading: "Wealth That Rises and Falls With the AI Bet",
+        paragraphs: [
+          "Zuckerberg's net worth, tied closely to Meta's share price, has swung between roughly $217 billion and $237 billion within 2026 alone as the market's confidence in Meta's AI spending has wavered.",
+        ],
+        sourceName: "Finance Monthly",
+        sourceUrl: "https://www.finance-monthly.com/mark-zuckerberg-net-worth-2026-meta-ai-and-the-217-billion-fortune-behind-facebooks-founder/",
+      },
+    ],
   },
 
   "larry-ellison": {
@@ -917,6 +1061,31 @@ export const personProfiles: Record<string, PersonProfile> = {
         description: "A business-jet version of the 737 MAX reported to have cost around ₹1,000 crore (roughly $120M), part of a private fleet that also includes several Bombardier and Embraer jets.",
         sourceName: "CarToq",
         sourceUrl: "https://www.cartoq.com/car-life/gautam-adani-adds-rs-1000-crore-boeing-bbj-737-max-8-to-his-private-jet-fleet/",
+      },
+    ],
+    netWorthHook: {
+      title: "How a $265 Million US Bribery Case Was Dropped, and His Fortune Rebounded",
+      fact: "US prosecutors indicted Adani and his nephew in November 2024 over an alleged $265 million bribery scheme, wiping out roughly $12 billion of his net worth in a day; the Department of Justice moved to dismiss the case in May 2026, and his fortune has since climbed by billions.",
+      sourceName: "Forbes",
+      sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/06/05/gautam-adanis-net-worth-swells-by-2-billion-becomes-asias-richest-person/",
+    },
+    deepDive: [
+      {
+        heading: "The Hindenburg Report and Its Aftermath",
+        paragraphs: [
+          "Short-seller Hindenburg Research accused the Adani Group of stock manipulation and accounting fraud in a January 2023 report, briefly erasing tens of billions of dollars from the group's market value. India's Supreme Court ruled in the group's favor in January 2024, and the country's markets regulator later concluded the core Hindenburg allegations were \"not established.\"",
+        ],
+        sourceName: "Wikipedia",
+        sourceUrl: "https://en.wikipedia.org/wiki/Gautam_Adani",
+      },
+      {
+        heading: "A US Bribery Indictment, Then a Dismissal",
+        paragraphs: [
+          "US prosecutors in Brooklyn unsealed an indictment in November 2024 accusing Adani and his nephew Sagar Adani of a scheme to pay roughly $265 million in bribes to Indian officials for solar power contracts — a charge that cut about $12 billion from his net worth the day it broke.",
+          "In May 2026, the Department of Justice moved to dismiss the case with prejudice, and the SEC separately settled its civil case, with Gautam Adani agreeing to pay $6 million and Sagar Adani $12 million, neither admitting nor denying the allegations. Adani's fortune has climbed by billions since the dismissal.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/06/05/gautam-adanis-net-worth-swells-by-2-billion-becomes-asias-richest-person/",
       },
     ],
   },

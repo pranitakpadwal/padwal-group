@@ -52,6 +52,17 @@ export default async function NewsIndex() {
           <span className="shrink-0 text-sm font-medium text-brand">See Good News &rarr;</span>
         </Link>
 
+        <Link
+          href="/net-worth"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand"
+        >
+          <span className="text-sm text-foreground">
+            <span className="font-semibold text-foreground">Want the full story on someone&apos;s fortune?</span>{" "}
+            Net worth explainers, updated live, for every billionaire we track.
+          </span>
+          <span className="shrink-0 text-sm font-medium text-brand">See Net Worth Explainers &rarr;</span>
+        </Link>
+
         {news.length === 0 ? (
           <p className="rounded-2xl border border-line bg-surface p-6 text-sm text-foreground/70">
             No billion-dollar moves on the books yet today. Stories appear here
