@@ -17,17 +17,23 @@ export default function PageHero({
   lede,
   people,
   topGainer,
-  peopleTrackedOverride,
+  coverageOverride,
 }: {
   h1: string;
   lede: string;
   people: RankedBillionaire[];
   topGainer?: RankedBillionaire;
-  /** Use when "People Tracked" should reflect more than this page's live roster (e.g. homepage counting the Estimated tier too). */
-  peopleTrackedOverride?: { label: string; value: string };
+  /**
+   * Use when "People Tracked", "Combined Wealth", and "#1 Richest" should
+   * reflect more than this page's live roster (e.g. the homepage counting
+   * the Estimated tier too). All three come from the same wider set so
+   * they never drift out of sync with each other. "Top Mover Today" always
+   * stays live-only — the Estimated tier has no daily change to report.
+   */
+  coverageOverride?: { peopleLabel: string; peopleValue: string; combinedWealthUsd: number; topRichestName: string };
 }) {
-  const totalWealth = people.reduce((sum, person) => sum + person.netWorthUsd, 0);
-  const leader = people[0];
+  const totalWealth = coverageOverride?.combinedWealthUsd ?? people.reduce((sum, person) => sum + person.netWorthUsd, 0);
+  const leaderName = coverageOverride?.topRichestName ?? people[0]?.name;
 
   return (
     <section className="overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:p-9">
@@ -38,11 +44,11 @@ export default function PageHero({
 
       <dl className="mt-7 grid grid-cols-2 gap-5 border-t border-line pt-5 sm:grid-cols-4">
         <Stat
-          label={peopleTrackedOverride?.label ?? "People Tracked"}
-          value={peopleTrackedOverride?.value ?? String(people.length)}
+          label={coverageOverride?.peopleLabel ?? "People Tracked"}
+          value={coverageOverride?.peopleValue ?? String(people.length)}
         />
         <Stat label="Combined Wealth" value={formatUsdCompact(totalWealth)} />
-        {leader && <Stat label="#1 Richest" value={leader.name} />}
+        {leaderName && <Stat label="#1 Richest" value={leaderName} />}
         {topGainer && <Stat label="Top Mover Today" value={topGainer.name} />}
       </dl>
     </section>

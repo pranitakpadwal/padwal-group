@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getEstimatedBillionaire } from "@/data/estimated-billionaires";
+import { getEstimatedBillionaire, listEstimatedBillionaires } from "@/data/estimated-billionaires";
+import { countryPagePath } from "@/lib/countries";
 import { getPhotoUrl } from "@/lib/photos";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
@@ -49,6 +50,14 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
 
   const photoUrl = await getPhotoUrl(person.wikipediaTitle);
 
+  const others = listEstimatedBillionaires().filter((p) => p.id !== person.id);
+  const sameIndustry = others.filter((p) => p.industry === person.industry);
+  const sameCountry = others.filter((p) => p.country === person.country);
+  const related = (sameIndustry.length > 0 ? sameIndustry : sameCountry)
+    .slice()
+    .sort((a, b) => b.netWorthUsd - a.netWorthUsd)
+    .slice(0, 4);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -62,7 +71,7 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
         <Breadcrumbs crumbs={[{ label: "Full Billionaires List", href: "/billionaire" }, { label: person.name }]} />
 
         <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
@@ -88,36 +97,113 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
           </div>
         </div>
 
-        <section aria-labelledby="about-heading">
-          <h2 id="about-heading" className="mb-2 text-lg font-bold text-foreground">
-            About {person.name.split(" ")[0]}
-          </h2>
-          <p className="text-sm leading-relaxed text-foreground/80">{person.bio}</p>
-        </section>
-
-        <a
-          href={person.netWorthSourceUrl}
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className="inline-block w-fit rounded-xl border border-line bg-surface px-4 py-2 text-xs text-[--muted] hover:text-brand hover:underline"
-        >
-          Net worth source: {person.netWorthSourceName}
-        </a>
-
         <ShareBar
           text={`${person.name}'s estimated net worth: ${formatUsdCompact(person.netWorthUsd)}, per ${person.netWorthSourceName}.`}
         />
 
-        <p className="text-xs text-neutral-400">
-          {person.name} isn&apos;t part of our live-tracked core roster — we
-          haven&apos;t verified their public shareholdings to price them
-          minute-to-minute, so this figure is a static, point-in-time
-          estimate from {person.netWorthSourceName}, not derived from a
-          live stock price like the rest of this site.{" "}
-          <Link href="/billionaire" className="text-brand hover:underline">
-            See the full ranked list &rarr;
-          </Link>
-        </p>
+        <div className="flex flex-col gap-8 lg:flex-row">
+          {/* Main column */}
+          <div className="flex min-w-0 flex-1 flex-col gap-8">
+            <section aria-labelledby="about-heading">
+              <h2 id="about-heading" className="mb-2 text-lg font-bold text-foreground">
+                About {person.name.split(" ")[0]}
+              </h2>
+              <p className="text-sm leading-relaxed text-foreground/80">{person.bio}</p>
+            </section>
+
+            <a
+              href={person.netWorthSourceUrl}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-block w-fit rounded-xl border border-line bg-surface px-4 py-2 text-xs text-[--muted] hover:text-brand hover:underline"
+            >
+              Net worth source: {person.netWorthSourceName}
+            </a>
+
+            <p className="text-xs text-neutral-400">
+              {person.name} isn&apos;t part of our live-tracked core roster — we
+              haven&apos;t verified their public shareholdings to price them
+              minute-to-minute, so this figure is a static, point-in-time
+              estimate from {person.netWorthSourceName}, not derived from a
+              live stock price like the rest of this site.{" "}
+              <Link href="/billionaire" className="text-brand hover:underline">
+                See the full ranked list &rarr;
+              </Link>
+            </p>
+          </div>
+
+          {/* Sidebar */}
+          <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-6 lg:w-[300px] lg:shrink-0 lg:self-start">
+            <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                Quick Facts
+              </h2>
+              <dl className="text-sm">
+                <div className="flex justify-between gap-4 border-t border-neutral-200 py-2 first:border-t-0 dark:border-neutral-800">
+                  <dt className="shrink-0 text-neutral-500 dark:text-neutral-400">Source of Wealth</dt>
+                  <dd className="text-right font-medium">{person.primarySource}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-t border-neutral-200 py-2 dark:border-neutral-800">
+                  <dt className="shrink-0 text-neutral-500 dark:text-neutral-400">Industry</dt>
+                  <dd className="text-right font-medium">{person.industry}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-t border-neutral-200 py-2 dark:border-neutral-800">
+                  <dt className="shrink-0 text-neutral-500 dark:text-neutral-400">Country</dt>
+                  <dd className="text-right font-medium">{person.country}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-t border-neutral-200 py-2 dark:border-neutral-800">
+                  <dt className="shrink-0 text-neutral-500 dark:text-neutral-400">Net Worth As Of</dt>
+                  <dd className="text-right font-medium">{person.netWorthAsOf}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-t border-neutral-200 py-2 dark:border-neutral-800">
+                  <dt className="shrink-0 text-neutral-500 dark:text-neutral-400">Source</dt>
+                  <dd className="text-right font-medium">{person.netWorthSourceName}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {related.length > 0 && (
+              <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  {sameIndustry.length > 0 ? `More in ${person.industry}` : `More from ${person.country}`}
+                </h2>
+                <ul className="flex flex-col gap-3">
+                  {related.map((other) => (
+                    <li key={other.id}>
+                      <Link
+                        href={`/estimated/${other.id}`}
+                        className="flex items-center justify-between gap-2 text-sm hover:underline"
+                      >
+                        <span className="truncate">{other.name}</span>
+                        <span className="shrink-0 tabular-nums text-neutral-500 dark:text-neutral-400">
+                          {formatUsdCompact(other.netWorthUsd)}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                Explore More
+              </h2>
+              <ul className="flex flex-col gap-2 text-sm">
+                <li>
+                  <Link href={countryPagePath(person.country)} className="hover:underline">
+                    {person.country} Billionaires &rarr;
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/billionaire" className="hover:underline">
+                    The Full Billionaires List &rarr;
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </aside>
+        </div>
       </main>
       <SiteFooter />
       <script

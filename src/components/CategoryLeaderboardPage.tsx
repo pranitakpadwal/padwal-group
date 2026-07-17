@@ -28,7 +28,15 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
   const hero = getHero(category);
   const faqs = getFaqs(category, view.people[0]?.name);
   const methodology = getMethodology(category);
-  const totalCovered = category === "world" ? getCombinedRoster(leaderboard).length : null;
+  const combinedRoster = category === "world" ? getCombinedRoster(leaderboard) : null;
+  const coverageOverride = combinedRoster
+    ? {
+        peopleLabel: "People Covered",
+        peopleValue: String(combinedRoster.length),
+        combinedWealthUsd: combinedRoster.reduce((sum, entry) => sum + entry.netWorthUsd, 0),
+        topRichestName: combinedRoster[0].name,
+      }
+    : undefined;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -39,14 +47,12 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
           lede={hero.lede}
           people={view.people}
           topGainer={view.topGainers[0]}
-          peopleTrackedOverride={
-            totalCovered !== null ? { label: "People Covered", value: String(totalCovered) } : undefined
-          }
+          coverageOverride={coverageOverride}
         />
-        {totalCovered !== null && (
+        {combinedRoster && (
           <p className="-mt-4 text-sm text-[--muted]">
             {view.people.length} tracked live from public stock holdings, plus{" "}
-            {totalCovered - view.people.length} more from researched, sourced estimates.{" "}
+            {combinedRoster.length - view.people.length} more from researched, sourced estimates.{" "}
             <Link href="/billionaire" className="text-brand hover:underline">
               See the full list &rarr;
             </Link>
