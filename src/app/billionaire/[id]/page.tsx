@@ -9,6 +9,8 @@ import { getPersonQuotes } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { countryPagePath } from "@/lib/countries";
+import { listIndustries } from "@/lib/industries";
+import { listCities } from "@/lib/cities";
 import { getHolding, getTickerHolders } from "@/lib/holdings";
 import { explainMove } from "@/lib/explain-move";
 import { siteUrl } from "@/lib/site";
@@ -94,6 +96,15 @@ export default async function BillionaireProfile({
     : [];
   const history = getPersonHistory(id);
   const moveExplanation = explainMove(ranked);
+  const industryLinks = listIndustries().filter((i) => i.personIds.includes(id));
+  const cityLink = listCities().find((c) => c.personIds.includes(id));
+  const exploreLinks = [
+    { href: countryPagePath(ranked.country), label: `${ranked.country} Billionaires` },
+    ...(cityLink ? [{ href: `/city/${cityLink.slug}`, label: `${cityLink.city} Billionaires` }] : []),
+    ...industryLinks.map((i) => ({ href: `/industry/${i.slug}`, label: `${i.industry} Billionaires` })),
+    ...(ranked.ticker ? [{ href: `/stock/${ranked.ticker}`, label: `Who Else Owns ${ranked.ticker}?` }] : []),
+    { href: "/billionaire", label: "The Full Billionaires List" },
+  ];
   const today = todayDateString();
   const firstName = ranked.name.split(" ")[0];
 
@@ -443,6 +454,21 @@ export default async function BillionaireProfile({
                 </ul>
               </div>
             )}
+
+            <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                Explore More
+              </h2>
+              <ul className="flex flex-col gap-2 text-sm">
+                {exploreLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="hover:underline">
+                      {link.label} &rarr;
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </aside>
         </div>
 

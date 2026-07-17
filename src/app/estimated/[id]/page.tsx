@@ -63,7 +63,7 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-8">
-        <Breadcrumbs crumbs={[{ label: "Full Billionaires List", href: "/billionaires" }, { label: person.name }]} />
+        <Breadcrumbs crumbs={[{ label: "Full Billionaires List", href: "/billionaire" }, { label: person.name }]} />
 
         <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
           <PersonAvatar name={person.name} photoUrl={photoUrl} size={96} />
@@ -114,7 +114,7 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
           minute-to-minute, so this figure is a static, point-in-time
           estimate from {person.netWorthSourceName}, not derived from a
           live stock price like the rest of this site.{" "}
-          <Link href="/billionaires" className="text-brand hover:underline">
+          <Link href="/billionaire" className="text-brand hover:underline">
             See the full ranked list &rarr;
           </Link>
         </p>

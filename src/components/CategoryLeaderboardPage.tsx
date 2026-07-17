@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { getCategoryView, type Category } from "@/lib/categories";
+import { getCombinedRoster } from "@/lib/combined-roster";
 import { getHero, getFaqs, getMethodology } from "@/data/page-content";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -27,6 +28,7 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
   const hero = getHero(category);
   const faqs = getFaqs(category, view.people[0]?.name);
   const methodology = getMethodology(category);
+  const totalCovered = category === "world" ? getCombinedRoster(leaderboard).length : null;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -37,7 +39,19 @@ export default async function CategoryLeaderboardPage({ category }: { category: 
           lede={hero.lede}
           people={view.people}
           topGainer={view.topGainers[0]}
+          peopleTrackedOverride={
+            totalCovered !== null ? { label: "People Covered", value: String(totalCovered) } : undefined
+          }
         />
+        {totalCovered !== null && (
+          <p className="-mt-4 text-sm text-[--muted]">
+            {view.people.length} tracked live from public stock holdings, plus{" "}
+            {totalCovered - view.people.length} more from researched, sourced estimates.{" "}
+            <Link href="/billionaire" className="text-brand hover:underline">
+              See the full list &rarr;
+            </Link>
+          </p>
+        )}
 
         <div className="flex flex-col gap-6 lg:flex-row">
           <Leaderboard

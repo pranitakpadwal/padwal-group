@@ -13,7 +13,7 @@ export default async function ExploreHub() {
 
   const cards = [
     {
-      href: "/billionaires",
+      href: "/billionaire",
       title: "The Full List",
       description: "Every billionaire we cover, live-tracked and researched, ranked together.",
       teaser: null,

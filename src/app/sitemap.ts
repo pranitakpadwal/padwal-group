@@ -158,7 +158,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const estimatedBillionaireRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}/billionaires`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
+    { url: `${base}/billionaire`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
     ...listEstimatedBillionaires().map((e) => ({
       url: `${base}/estimated/${e.id}`,
       changeFrequency: "monthly" as const,
