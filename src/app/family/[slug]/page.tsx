@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { familyFromSlug, getFamilyView } from "@/lib/families";
+import { isGroupIndexable } from "@/lib/seo-thresholds";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -33,6 +34,7 @@ export async function generateMetadata({
     keywords: [`${family.name} net worth`, `${family.name} fortune`, `${family.name} billionaires`],
     alternates: { canonical: `${siteUrl()}/family/${family.slug}` },
     openGraph: { title, description, type: "website" },
+    robots: isGroupIndexable(family.personIds.length) ? undefined : { index: false, follow: true },
   };
 }
 

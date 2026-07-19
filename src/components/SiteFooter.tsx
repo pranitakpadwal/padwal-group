@@ -68,9 +68,14 @@ export default function SiteFooter() {
             estimates, not audited valuations. Share prices from Yahoo Finance;
             portraits from Wikipedia where available.
           </p>
-          <p className="mt-2">
-            © {new Date().getFullYear()} RealTimeBillionaire. All estimates
-            provided for informational purposes only.
+          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>
+              © {new Date().getFullYear()} RealTimeBillionaire. All estimates
+              provided for informational purposes only.
+            </span>
+            <Link href="/privacy" className="text-foreground/70 hover:text-brand hover:underline">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>

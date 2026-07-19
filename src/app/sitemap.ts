@@ -16,6 +16,7 @@ import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
 import { listQuotePeopleIds } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
+import { isGroupIndexable } from "@/lib/seo-thresholds";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -49,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators/inflation",
     "/calculators/wealth-race",
     "/about",
+    "/privacy",
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
 
   const profileRoutes: MetadataRoute.Sitemap = billionaires.map((person) => ({
@@ -78,15 +80,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const countryRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/countries`, changeFrequency: "weekly" as const, priority: 0.7 },
-    ...listRegions().map((r) => ({
-      url: `${base}/region/${r.slug}`,
-      lastModified: now,
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    })),
+    ...listRegions()
+      .filter((r) => isGroupIndexable(r.count))
+      .map((r) => ({
+        url: `${base}/region/${r.slug}`,
+        lastModified: now,
+        changeFrequency: "daily" as const,
+        priority: 0.7,
+      })),
     // India excluded: /country/india redirects to /india, the canonical page.
     ...listCountries()
-      .filter((c) => c.country !== "India")
+      .filter((c) => c.country !== "India" && isGroupIndexable(c.count))
       .map((c) => ({
         url: `${base}/country/${c.slug}`,
         lastModified: now,
@@ -108,38 +112,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const universityRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/universities`, changeFrequency: "weekly" as const, priority: 0.6 },
-    ...listUniversities().map((u) => ({
-      url: `${base}/university/${u.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    ...listUniversities()
+      .filter((u) => isGroupIndexable(u.personIds.length))
+      .map((u) => ({
+        url: `${base}/university/${u.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+      })),
   ];
 
   const cityRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/cities`, changeFrequency: "weekly" as const, priority: 0.6 },
-    ...listCities().map((c) => ({
-      url: `${base}/city/${c.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    ...listCities()
+      .filter((c) => isGroupIndexable(c.personIds.length))
+      .map((c) => ({
+        url: `${base}/city/${c.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+      })),
   ];
 
   const industryRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/industries`, changeFrequency: "weekly" as const, priority: 0.6 },
-    ...listIndustries().map((i) => ({
-      url: `${base}/industry/${i.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    ...listIndustries()
+      .filter((i) => isGroupIndexable(i.personIds.length))
+      .map((i) => ({
+        url: `${base}/industry/${i.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+      })),
   ];
 
   const familyRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/families`, changeFrequency: "weekly" as const, priority: 0.6 },
-    ...listFamilies().map((f) => ({
-      url: `${base}/family/${f.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    ...listFamilies()
+      .filter((f) => isGroupIndexable(f.personIds.length))
+      .map((f) => ({
+        url: `${base}/family/${f.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.5,
+      })),
   ];
 
   const expensiveRoutes: MetadataRoute.Sitemap = [

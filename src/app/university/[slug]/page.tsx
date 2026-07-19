@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { universityFromSlug, getUniversityView } from "@/lib/universities";
+import { isGroupIndexable } from "@/lib/seo-thresholds";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -38,6 +39,7 @@ export async function generateMetadata({
     ],
     alternates: { canonical: `${siteUrl()}/university/${info.slug}` },
     openGraph: { title, description, type: "website" },
+    robots: isGroupIndexable(info.personIds.length) ? undefined : { index: false, follow: true },
   };
 }
 

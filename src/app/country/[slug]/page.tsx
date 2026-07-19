@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
-import { countryFromSlug, getCountryView, demonym, countrySlug } from "@/lib/countries";
+import { countryFromSlug, getCountryView, demonym, countrySlug, listCountries } from "@/lib/countries";
+import { isGroupIndexable } from "@/lib/seo-thresholds";
 import { siteUrl } from "@/lib/site";
 import { formatUsdCompact } from "@/lib/format";
 import SiteHeader from "@/components/SiteHeader";
@@ -40,6 +41,11 @@ export async function generateMetadata({
     ],
     alternates: { canonical: `${siteUrl()}/country/${countrySlug(country)}` },
     openGraph: { title, description, type: "website" },
+    robots: isGroupIndexable(
+      listCountries().find((c) => c.country === country)?.count ?? 0,
+    )
+      ? undefined
+      : { index: false, follow: true },
   };
 }
 
