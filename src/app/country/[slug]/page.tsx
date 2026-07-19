@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
-import { countryFromSlug, getCountryView, demonym, countrySlug, listCountries } from "@/lib/countries";
-import { isGroupIndexable } from "@/lib/seo-thresholds";
+import { countryFromSlug, getCountryView, demonym, countrySlug } from "@/lib/countries";
+import { getRelatedCoverage } from "@/lib/related-coverage";
 import { siteUrl } from "@/lib/site";
 import { formatUsdCompact } from "@/lib/format";
 import SiteHeader from "@/components/SiteHeader";
@@ -11,6 +11,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import FaqBlock from "@/components/FaqBlock";
+import RelatedCoverage from "@/components/RelatedCoverage";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
@@ -41,11 +42,6 @@ export async function generateMetadata({
     ],
     alternates: { canonical: `${siteUrl()}/country/${countrySlug(country)}` },
     openGraph: { title, description, type: "website" },
-    robots: isGroupIndexable(
-      listCountries().find((c) => c.country === country)?.count ?? 0,
-    )
-      ? undefined
-      : { index: false, follow: true },
   };
 }
 
@@ -136,6 +132,8 @@ export default async function CountryPage({ params }: { params: Promise<RoutePar
         </section>
 
         <FaqBlock faqs={faqs} />
+
+        <RelatedCoverage links={getRelatedCoverage(view.people)} />
 
         <p className="text-xs text-[--muted]">
           Estimates only, updated from public market data; not affiliated with

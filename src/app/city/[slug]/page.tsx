@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { cityFromSlug, getCityView } from "@/lib/cities";
 import { countryPagePath } from "@/lib/countries";
-import { isGroupIndexable } from "@/lib/seo-thresholds";
+import { getRelatedCoverage } from "@/lib/related-coverage";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import FaqBlock from "@/components/FaqBlock";
+import RelatedCoverage from "@/components/RelatedCoverage";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
@@ -41,7 +42,6 @@ export async function generateMetadata({
     ],
     alternates: { canonical: `${siteUrl()}/city/${info.slug}` },
     openGraph: { title, description, type: "website" },
-    robots: isGroupIndexable(info.personIds.length) ? undefined : { index: false, follow: true },
   };
 }
 
@@ -144,6 +144,8 @@ export default async function CityPage({ params }: { params: Promise<RouteParams
         </section>
 
         <FaqBlock faqs={faqs} />
+
+        <RelatedCoverage links={getRelatedCoverage(view.people)} />
 
         <p className="text-xs text-[--muted]">
           <Link href="/cities" className="text-brand hover:underline">

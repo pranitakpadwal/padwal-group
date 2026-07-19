@@ -3,11 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { familyFromSlug, getFamilyView } from "@/lib/families";
-import { isGroupIndexable } from "@/lib/seo-thresholds";
+import { getRelatedCoverage } from "@/lib/related-coverage";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import LeaderboardTable from "@/components/LeaderboardTable";
+import FaqBlock from "@/components/FaqBlock";
+import RelatedCoverage from "@/components/RelatedCoverage";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
@@ -34,7 +36,6 @@ export async function generateMetadata({
     keywords: [`${family.name} net worth`, `${family.name} fortune`, `${family.name} billionaires`],
     alternates: { canonical: `${siteUrl()}/family/${family.slug}` },
     openGraph: { title, description, type: "website" },
-    robots: isGroupIndexable(family.personIds.length) ? undefined : { index: false, follow: true },
   };
 }
 
@@ -53,6 +54,35 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
 
   const total = view.people.reduce((sum, p) => sum + p.netWorthUsd, 0);
   const leader = view.people[0];
+
+  const faqs = [
+    {
+      question: `What is the ${family.name}'s combined net worth?`,
+      answer: `We track ${view.people.length} members of the ${family.name} with a combined estimated net worth of ${formatUsdCompact(total)}. This adds each tracked member's individual estimate — it isn't a single figure the family itself reports.`,
+    },
+    {
+      question: `Who is the richest member of the ${family.name}?`,
+      answer: `${leader.name} is the richest tracked member of the ${family.name}, with an estimated net worth of ${formatUsdCompact(leader.netWorthUsd)}.`,
+    },
+    {
+      question: `Where does the ${family.name}'s fortune come from?`,
+      answer: family.description,
+    },
+  ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${family.name} Net Worth`,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    numberOfItems: view.people.length,
+    itemListElement: view.people.map((p) => ({
+      "@type": "ListItem",
+      position: p.rank,
+      url: `${siteUrl()}/billionaire/${p.id}`,
+      name: p.name,
+    })),
+  };
 
   return (
     <div className="flex flex-1 flex-col">
@@ -87,6 +117,28 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
 
         <LeaderboardTable people={view.people} />
 
+        <section className="rounded-2xl border border-line bg-surface p-6 text-sm leading-relaxed text-foreground/70 sm:p-8">
+          <h2 className="font-display text-2xl font-semibold text-foreground">
+            The tracked {family.name}
+          </h2>
+          <ul className="mt-4 flex flex-col gap-2">
+            {view.people.map((person) => (
+              <li key={person.id} className="flex flex-wrap items-baseline justify-between gap-x-3 border-t border-line pt-2 first:border-t-0 first:pt-0">
+                <Link href={`/billionaire/${person.id}`} className="font-medium text-foreground hover:text-brand hover:underline">
+                  {person.name}
+                </Link>
+                <span className="text-xs text-[--muted]">
+                  {formatUsdCompact(person.netWorthUsd)} &middot; {person.primarySource}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <FaqBlock faqs={faqs} />
+
+        <RelatedCoverage links={getRelatedCoverage(view.people)} />
+
         <p className="text-xs text-[--muted]">
           Combined net worth simply adds each tracked member&apos;s
           individual estimate — it isn&apos;t a single shared figure the
@@ -98,6 +150,7 @@ export default async function FamilyPage({ params }: { params: Promise<RoutePara
         </p>
       </main>
       <SiteFooter />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <LiveWebPageJsonLd
         url={`${siteUrl()}/family/${family.slug}`}
         name={family.name}

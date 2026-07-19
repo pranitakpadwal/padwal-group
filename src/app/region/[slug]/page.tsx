@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
-import { regionFromSlug, getRegionView, regionSlug, listRegions } from "@/lib/countries";
-import { isGroupIndexable } from "@/lib/seo-thresholds";
+import { regionFromSlug, getRegionView, regionSlug } from "@/lib/countries";
+import { getRelatedCoverage } from "@/lib/related-coverage";
 import { siteUrl } from "@/lib/site";
 import { formatUsdCompact } from "@/lib/format";
 import SiteHeader from "@/components/SiteHeader";
@@ -11,6 +11,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import LeaderboardTable from "@/components/LeaderboardTable";
 import FaqBlock from "@/components/FaqBlock";
+import RelatedCoverage from "@/components/RelatedCoverage";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
 
 export const dynamic = "force-dynamic";
@@ -45,11 +46,6 @@ export async function generateMetadata({
     ],
     alternates: { canonical: `${siteUrl()}/region/${regionSlug(region)}` },
     openGraph: { title, description, type: "website" },
-    robots: isGroupIndexable(
-      listRegions().find((r) => r.region === region)?.count ?? 0,
-    )
-      ? undefined
-      : { index: false, follow: true },
   };
 }
 
@@ -128,6 +124,8 @@ export default async function RegionPage({ params }: { params: Promise<RoutePara
         </section>
 
         <FaqBlock faqs={faqs} />
+
+        <RelatedCoverage links={getRelatedCoverage(view.people)} />
 
         <p className="text-xs text-[--muted]">
           <Link href="/countries" className="text-brand hover:underline">
