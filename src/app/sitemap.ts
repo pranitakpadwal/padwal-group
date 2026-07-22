@@ -16,6 +16,7 @@ import { listNews } from "@/lib/news";
 import { listQuoteOfDay } from "@/lib/quote-of-day";
 import { listQuotePeopleIds } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
+import { CALCULATOR_ARTICLE_INDEX } from "@/lib/calculator-articles";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -50,7 +51,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators/wealth-race",
     "/about",
     "/privacy",
+    "/calculators/articles",
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
+
+  const calculatorArticleRoutes: MetadataRoute.Sitemap = CALCULATOR_ARTICLE_INDEX.map((article) => ({
+    url: `${base}/calculators/articles/${article.slug}`,
+    lastModified: now,
+    changeFrequency: "daily" as const,
+    priority: 0.5,
+  }));
 
   const profileRoutes: MetadataRoute.Sitemap = billionaires.map((person) => ({
     url: `${base}/billionaire/${person.id}`,
@@ -243,6 +252,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticCategoryRoutes,
     ...countryRoutes,
     ...calculatorRoutes,
+    ...calculatorArticleRoutes,
     ...profileRoutes,
     ...profileSubpageRoutes,
     ...stockRoutes,

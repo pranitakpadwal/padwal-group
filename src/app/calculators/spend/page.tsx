@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { siteUrl } from "@/lib/site";
 import SpendBillionaireMoney, { type SpendBudget } from "@/components/SpendBillionaireMoney";
@@ -43,6 +44,12 @@ export default async function SpendPage() {
             teams, paintings, and social networks — and watch how little of a
             dent you make.
           </p>
+          <Link
+            href="/calculators/articles/how-far-the-richest-persons-fortune-goes-on-real-billionaire-purchases"
+            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
+          >
+            Read: We tried to spend the world&apos;s richest fortune on real billionaire purchases &rarr;
+          </Link>
         </header>
         <SpendBillionaireMoney budgets={budgets} />
       </main>

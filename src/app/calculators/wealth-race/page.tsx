@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { getPersonHistory, type HistoryPoint } from "@/lib/snapshots";
 import { siteUrl } from "@/lib/site";
@@ -48,6 +49,12 @@ export default async function WealthRacePage() {
             time — live current numbers, plus how the gap has moved day by
             day.
           </p>
+          <Link
+            href="/calculators/articles/how-often-is-the-worlds-richest-person-actually-in-first"
+            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
+          >
+            Read: How often is the world&apos;s richest person actually in first place? &rarr;
+          </Link>
         </header>
         <WealthRaceCalculator roster={roster} history={history} />
       </main>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { siteUrl } from "@/lib/site";
 import BirthdayCalculator from "@/components/BirthdayCalculator";
@@ -39,6 +40,12 @@ export default async function BirthdayPage() {
             your birth year and watch the crown change hands across your
             lifetime.
           </p>
+          <Link
+            href="/calculators/articles/everyone-whos-been-the-worlds-richest-person-since-1987"
+            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
+          >
+            Read: Everyone who&apos;s been the world&apos;s richest person since 1987 &rarr;
+          </Link>
         </header>
         <BirthdayCalculator
           todayName={top.name}

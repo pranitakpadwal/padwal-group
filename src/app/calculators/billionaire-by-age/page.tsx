@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getLeaderboard } from "@/lib/net-worth";
 import { billionaires } from "@/data/billionaires";
 import { personProfiles } from "@/data/profiles";
@@ -60,6 +61,12 @@ export default async function BillionaireByAgePage() {
             — and hadn&apos;t — done by then. Spoiler: several of them had
             done nothing remarkable yet.
           </p>
+          <Link
+            href="/calculators/articles/what-the-richest-people-had-done-by-age-30"
+            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
+          >
+            Read: What the world&apos;s richest people had actually done by age 30 &rarr;
+          </Link>
         </header>
         <BillionaireByAge people={people} />
         <p className="text-xs text-neutral-400">

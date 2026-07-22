@@ -36,7 +36,7 @@ function moverMechanism(mover: MoverFact): string | null {
   return `The move traces to ${company} (${mover.ticker}), which ${verb} ${formatPercentMagnitude(mover.stockChangePercent)} on the day — most of a billionaire's daily swing simply follows their main stock's share price.`;
 }
 
-function nameList(people: { name: string }[]): string {
+export function nameList(people: { name: string }[]): string {
   const names = people.map((p) => p.name);
   if (names.length <= 1) return names.join("");
   if (names.length === 2) return `${names[0]} and ${names[1]}`;
