@@ -1,4 +1,4 @@
-import type { ArticleFacts } from "@/lib/article-facts";
+import type { ArticleFacts, MoverFact } from "@/lib/article-facts";
 import { categoryArticleTitle, categoryRichestPhrase, type Category } from "@/lib/categories";
 import { formatDateLong } from "@/lib/dates";
 import { formatPercentMagnitude, formatUsdCompact } from "@/lib/format";
@@ -11,6 +11,8 @@ export interface Faq {
 export interface ArticleText {
   title: string;
   summary: string;
+  /** Substantive prose paragraphs for the article body — not just a data table caption. */
+  narrative: string[];
   faqs: Faq[];
 }
 
@@ -24,15 +26,36 @@ function theListPhrase(category: Category): string {
   return title.startsWith("The ") ? `${title} list` : `the ${title} list`;
 }
 
+/** Mechanical explanation of a mover's swing, using the same honesty rule as explainMove: we can only cite the stock move itself, never a reason behind it. */
+function moverMechanism(mover: MoverFact): string | null {
+  if (!mover.ticker || mover.stockChangePercent === null || mover.stockChangePercent === undefined) {
+    return null;
+  }
+  const verb = mover.stockChangePercent >= 0 ? "climbed" : "fell";
+  const company = mover.primarySource ? mover.primarySource.split(",")[0].trim() : mover.ticker;
+  return `The move traces to ${company} (${mover.ticker}), which ${verb} ${formatPercentMagnitude(mover.stockChangePercent)} on the day — most of a billionaire's daily swing simply follows their main stock's share price.`;
+}
+
+function nameList(people: { name: string }[]): string {
+  const names = people.map((p) => p.name);
+  if (names.length <= 1) return names.join("");
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+}
+
 /**
  * Deterministic, template-based article text generated purely from
  * computed facts — no AI writing involved. Every sentence below maps to a
  * real number from the day's snapshot, which is what keeps this useful
- * (and non-spammy) rather than generic filler.
+ * (and non-spammy) rather than generic filler. The narrative paragraphs
+ * vary in structure depending on which facts are actually available
+ * (comparison data, tickers, rank moves) rather than following one fixed
+ * template every time.
  */
 export function buildArticleText(date: string, category: Category, facts: ArticleFacts): ArticleText {
   const dateLabel = formatDateLong(date);
   const leader = facts.topByNetWorth[0] ?? null;
+  const runnersUp = facts.topByNetWorth.slice(1, 3);
   const topGainer = facts.gainers[0] ?? null;
   const topLoser = facts.losers[0] ?? null;
 
@@ -63,6 +86,66 @@ export function buildArticleText(date: string, category: Category, facts: Articl
   }
   const summary = summaryParts.join(" ");
 
+  // --- Narrative paragraphs: real prose, not a data-table caption ---
+  const narrative: string[] = [];
+
+  if (leader) {
+    const openingSentences = [
+      `${leader.name} closed out ${dateLabel} atop ${theListPhrase(category)}, an estimated ${formatUsdCompact(leader.netWorthUsd)}${leader.primarySource ? `, built primarily on ${leader.primarySource}` : ""}.`,
+    ];
+    if (runnersUp.length > 0) {
+      openingSentences.push(
+        `Right behind: ${nameList(runnersUp)}${runnersUp.length === 1 ? " sits" : " follow"} in the next spots, at ${runnersUp.map((p) => formatUsdCompact(p.netWorthUsd)).join(" and ")} respectively.`,
+      );
+    }
+    if (facts.totalNetWorthDeltaUsd !== null) {
+      const totalUp = facts.totalNetWorthDeltaUsd >= 0;
+      openingSentences.push(
+        `Combined, the ${facts.personCount} people we track here are worth ${formatUsdCompact(facts.totalNetWorthUsd)}, ${totalUp ? "up" : "down"} ${formatUsdCompact(Math.abs(facts.totalNetWorthDeltaUsd))} from the prior session.`,
+      );
+    }
+    narrative.push(openingSentences.join(" "));
+  } else {
+    narrative.push(
+      `We track ${facts.personCount} billionaires in ${theListPhrase(category)}, worth a combined estimated ${formatUsdCompact(facts.totalNetWorthUsd)} as of ${dateLabel}.`,
+    );
+  }
+
+  if (topGainer) {
+    const mechanism = moverMechanism(topGainer);
+    narrative.push(
+      `${topGainer.name} posted the day's biggest gain, adding ${magnitude(topGainer.deltaUsd, topGainer.deltaPercent)} to reach ${formatUsdCompact(topGainer.netWorthUsd)} (#${topGainer.rank}).${mechanism ? ` ${mechanism}` : ""}`,
+    );
+  }
+
+  if (topLoser && topLoser.id !== topGainer?.id) {
+    const mechanism = moverMechanism(topLoser);
+    narrative.push(
+      `On the other side, ${topLoser.name} took the day's steepest loss, down ${magnitude(topLoser.deltaUsd, topLoser.deltaPercent)} to ${formatUsdCompact(topLoser.netWorthUsd)} (#${topLoser.rank}).${mechanism ? ` ${mechanism}` : ""}`,
+    );
+  }
+
+  if (facts.risers.length > 0 || facts.fallers.length > 0) {
+    const moveSentences: string[] = [];
+    if (facts.risers.length > 0) {
+      const top = facts.risers[0];
+      moveSentences.push(
+        `${top.name} made the biggest rank jump, climbing from #${top.fromRank} to #${top.toRank}${facts.risers.length > 1 ? `, with ${nameList(facts.risers.slice(1))} also moving up` : ""}.`,
+      );
+    }
+    if (facts.fallers.length > 0) {
+      const top = facts.fallers[0];
+      moveSentences.push(
+        `${top.name} slipped the furthest, from #${top.fromRank} to #${top.toRank}${facts.fallers.length > 1 ? `, alongside ${nameList(facts.fallers.slice(1))}` : ""}.`,
+      );
+    }
+    narrative.push(moveSentences.join(" "));
+  } else if (!facts.hasComparison) {
+    narrative.push(
+      "This is the first snapshot we have for this list, so there's no prior day to compare against yet — gainers, losers, and rank moves will start appearing once tomorrow's numbers come in.",
+    );
+  }
+
   const faqs: Faq[] = [];
   if (leader) {
     faqs.push({
@@ -87,5 +170,5 @@ export function buildArticleText(date: string, category: Category, facts: Articl
     answer: `${facts.personCount}, with a combined estimated net worth of ${formatUsdCompact(facts.totalNetWorthUsd)} as of ${dateLabel}.`,
   });
 
-  return { title, summary, faqs };
+  return { title, summary, narrative, faqs };
 }

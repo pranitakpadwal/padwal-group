@@ -1,4 +1,3 @@
-import type { RankedBillionaire } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import { getPersonQuotes } from "@/data/quotes";
 import { listNews } from "@/lib/news";
@@ -9,14 +8,20 @@ export interface CoverageLink {
   label: string;
 }
 
+/** Minimal shape needed to build coverage links — accepts a full RankedBillionaire or just {id, name}. */
+export interface CoveragePerson {
+  id: string;
+  name: string;
+}
+
 /**
  * Real, working links into a person's other content on the site — their
  * net-worth explainer, career story, verified quotes, and any news
  * articles about them. Used to give grouping pages (city/university/
- * industry/family/country/region) genuine substance beyond a leaderboard
- * table, especially where the roster behind that group is still small.
+ * industry/family/country/region) and daily recap articles genuine
+ * substance beyond a leaderboard table or data widget.
  */
-export function getRelatedCoverage(people: RankedBillionaire[], limitPerPerson = 3): CoverageLink[] {
+export function getRelatedCoverage(people: CoveragePerson[], limitPerPerson = 3): CoverageLink[] {
   const year = new Date().getFullYear();
   const links: CoverageLink[] = [];
 

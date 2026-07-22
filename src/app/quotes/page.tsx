@@ -7,6 +7,7 @@ import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import FaqBlock from "@/components/FaqBlock";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -47,6 +48,24 @@ export default async function QuotesHub() {
     })
     .filter((entry) => entry !== null)
     .sort((a, b) => (b.netWorthUsd ?? 0) - (a.netWorthUsd ?? 0));
+
+  const totalQuotes = people.reduce((sum, p) => sum + p.quoteCount, 0);
+  const faqs = [
+    {
+      question: "How do you verify these billionaire quotes are real?",
+      answer:
+        "Every quote is checked against a named, public source — a shareholder letter, filmed interview, signed op-ed, or speech — before it's added. If we can't trace a quote to a real source, we leave it out, even if it's widely shared online.",
+    },
+    {
+      question: "How many verified quotes do you have?",
+      answer: `We currently have ${totalQuotes} verified quotes across ${people.length} billionaires, and add more as we source them.`,
+    },
+    {
+      question: "What's the difference between this and Quote of the Day?",
+      answer:
+        "This hub is the full, browsable archive of every verified quote by person. Quote of the Day is a single dated pick, refreshed daily, drawn from the same verified bank.",
+    },
+  ];
 
   return (
     <div className="flex flex-1 flex-col">
@@ -104,6 +123,8 @@ export default async function QuotesHub() {
             </Link>
           ))}
         </div>
+
+        <FaqBlock faqs={faqs} />
 
         <p className="text-xs text-neutral-400">
           A short page of real quotes beats a long page of fake ones. We add

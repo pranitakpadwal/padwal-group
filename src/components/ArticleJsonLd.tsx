@@ -26,7 +26,7 @@ export default function ArticleJsonLd({
     "@type": "NewsArticle",
     headline: title,
     description: summary,
-    image: [`${siteUrl()}/opengraph-image`],
+    image: [`${url}/opengraph-image`],
     datePublished: publishedAt,
     dateModified: publishedAt,
     url,

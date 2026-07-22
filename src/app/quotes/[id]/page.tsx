@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPersonQuotes } from "@/data/quotes";
 import { getPersonProfile } from "@/data/profiles";
+import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
@@ -11,6 +12,7 @@ import { listQuotePeopleIds } from "@/data/quotes";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import QuoteShare from "@/components/QuoteShare";
 import ShareBar from "@/components/ShareBar";
+import FaqBlock from "@/components/FaqBlock";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -70,6 +72,25 @@ export default async function PersonQuotesPage({ params }: { params: Promise<Rou
     .filter((otherId) => otherId !== id)
     .map((otherId) => findBillionaireById(otherId))
     .filter((other) => other !== undefined);
+  const sourceNames = Array.from(new Set(quotes.map((q) => q.source)));
+  const faqs = [
+    {
+      question: `What are ${person.name}'s most well-known verified quotes?`,
+      answer: `We've verified ${quotes.length} ${quotes.length === 1 ? "quote" : "quotes"} from ${person.name}, each traced to a named source${sourceNames.length > 0 ? ` — including ${sourceNames.slice(0, 3).join(", ")}` : ""}. See the full list above, each with its original source.`,
+    },
+    {
+      question: `Are these quotes really from ${person.name}?`,
+      answer: `Yes. Every quote on this page is checked against a real, named source — a shareholder letter, filmed interview, signed op-ed, or speech — before it's published. We don't include quotes we can't verify, unlike many "inspirational quotes" sites that copy unattributed text.`,
+    },
+    ...(ranked
+      ? [
+          {
+            question: `What is ${person.name}'s net worth right now?`,
+            answer: `${person.name} is worth an estimated ${formatUsdCompact(ranked.netWorthUsd)} (#${ranked.rank} in the world), tracked live from public stock holdings.`,
+          },
+        ]
+      : []),
+  ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -143,10 +164,19 @@ export default async function PersonQuotesPage({ params }: { params: Promise<Rou
           ))}
         </div>
 
+        <FaqBlock faqs={faqs} heading={`${firstName}'s Quotes: FAQ`} />
+
         <div className="rounded-2xl border border-line bg-brand-soft/40 p-5 text-sm">
           <span className="text-foreground/70">Keep going: </span>
           <Link href={`/billionaire/${person.id}`} className="font-medium text-brand hover:underline">
             {firstName}&apos;s live net worth
+          </Link>
+          <span className="text-foreground/70"> · </span>
+          <Link
+            href={netWorthUrl(person.id, person.name, new Date().getFullYear())}
+            className="font-medium text-brand hover:underline"
+          >
+            {firstName}&apos;s net worth explained
           </Link>
           {profile?.careerTimeline && profile.careerTimeline.length > 0 && (
             <>

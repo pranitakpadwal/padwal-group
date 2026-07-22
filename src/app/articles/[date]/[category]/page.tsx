@@ -5,13 +5,16 @@ import { ensureArticle } from "@/lib/generate-article";
 import { isCategory, categoryArticleTitle } from "@/lib/categories";
 import { isValidDateString, formatDateLong } from "@/lib/dates";
 import { formatClock } from "@/lib/format";
+import { getRelatedCoverage } from "@/lib/related-coverage";
 import { siteUrl } from "@/lib/site";
+import { SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ArticleBody from "@/components/ArticleBody";
 import FaqSection from "@/components/FaqSection";
+import RelatedCoverage from "@/components/RelatedCoverage";
 import ArticleJsonLd from "@/components/ArticleJsonLd";
 import { buildArticleText } from "@/lib/article-template";
 
@@ -53,8 +56,16 @@ export async function generateMetadata({
       ...(leader ? [`richest person ${article.date}`, `${leader} net worth today`] : []),
     ],
     alternates: { canonical: url },
-    openGraph: { title, description: summary, type: "article", url },
-    twitter: { card: "summary", title, description: summary },
+    openGraph: {
+      title,
+      description: summary,
+      type: "article",
+      url,
+      publishedTime: article.generatedAt,
+      modifiedTime: article.generatedAt,
+      siteName: SITE_NAME,
+    },
+    twitter: { card: "summary_large_image", title, description: summary },
   };
 }
 
@@ -66,7 +77,9 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
     notFound();
   }
 
-  const { title, summary, faqs } = buildArticleText(article.date, article.category, article.facts);
+  const { title, summary, narrative, faqs } = buildArticleText(article.date, article.category, article.facts);
+  const imagePath = `/articles/${article.date}/${article.category}/opengraph-image`;
+  const coveragePeople = article.facts.topByNetWorth.slice(0, 5);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -85,13 +98,30 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
           </h1>
           <p className="mt-2 text-xs text-[--muted]">
             Published <time dateTime={article.generatedAt}>{formatDateLong(article.date)}, {formatClock(article.generatedAt)}</time>{" "}
-            · By RealTimeBillionaire Data Desk
+            · By {SITE_NAME} Data Desk
           </p>
-          <p className="mt-4 text-base text-foreground/80">{summary}</p>
         </header>
+
+        {/* Visible hero — same generated card used for shares/Discover. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imagePath}
+          alt={title}
+          width={1200}
+          height={630}
+          className="w-full rounded-2xl border border-line"
+        />
+
+        <div className="flex flex-col gap-4 text-[15px] leading-relaxed text-foreground/85">
+          {narrative.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </div>
 
         <ArticleBody facts={article.facts} />
         <FaqSection faqs={faqs} />
+
+        <RelatedCoverage links={getRelatedCoverage(coveragePeople)} />
 
         <section className="rounded-2xl border border-line bg-brand-soft/40 p-5 text-sm">
           <span className="text-foreground/70">Keep going: </span>

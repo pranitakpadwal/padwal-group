@@ -6,11 +6,15 @@ export interface RankedFact {
   name: string;
   netWorthUsd: number;
   rank: number;
+  /** Optional so older stored articles (generated before this field existed) still parse. */
+  primarySource?: string;
 }
 
 export interface MoverFact extends RankedFact {
   deltaUsd: number;
   deltaPercent: number;
+  ticker?: string | null;
+  stockChangePercent?: number | null;
 }
 
 export interface RankJumpFact {
@@ -38,7 +42,13 @@ const MOVERS_N = 5;
 const RANK_JUMPS_N = 3;
 
 function toRankedFact(person: RankedBillionaire): RankedFact {
-  return { id: person.id, name: person.name, netWorthUsd: person.netWorthUsd, rank: person.rank };
+  return {
+    id: person.id,
+    name: person.name,
+    netWorthUsd: person.netWorthUsd,
+    rank: person.rank,
+    primarySource: person.primarySource,
+  };
 }
 
 export function computeArticleFacts(
@@ -80,6 +90,8 @@ export function computeArticleFacts(
         ...toRankedFact(person),
         deltaUsd,
         deltaPercent: previous.netWorthUsd > 0 ? (deltaUsd / previous.netWorthUsd) * 100 : 0,
+        ticker: person.ticker,
+        stockChangePercent: person.stockChangePercent,
       });
     }
 
