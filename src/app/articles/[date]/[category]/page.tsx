@@ -98,7 +98,8 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
           </h1>
           <p className="mt-2 text-xs text-[--muted]">
             Published <time dateTime={article.generatedAt}>{formatDateLong(article.date)}, {formatClock(article.generatedAt)}</time>{" "}
-            · By {SITE_NAME} Data Desk
+            · By <Link href="/author/news-desk" className="hover:text-brand hover:underline">News Desk</Link>{" "}
+            (automated, compiled from live market data)
           </p>
         </header>
 

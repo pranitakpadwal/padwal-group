@@ -3,11 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
+import { getAuthor } from "@/data/authors";
 import { getHolding } from "@/lib/holdings";
 import { countryPagePath } from "@/lib/countries";
 import { netWorthHeadline, netWorthUrl, personIdFromNetWorthSlug } from "@/lib/net-worth-explainer";
 import { formatUsdCompact, formatUsdChange, formatPercentChange } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
+import { publisherJsonLd, personImageUrl, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PersonAvatar from "@/components/PersonAvatar";
 import ShareBar from "@/components/ShareBar";
@@ -65,6 +67,7 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
 
   const profile = getPersonProfile(person.id);
   const hook = profile?.netWorthHook;
+  const author = profile?.deepDiveAuthor ? getAuthor(profile.deepDiveAuthor) : undefined;
   const holding = getHolding(ranked);
   const firstName = ranked.name.split(" ")[0];
   const pronounCap = ranked.gender === "female" ? "She" : "He";
@@ -110,6 +113,22 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
     nationality: person.country,
   };
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: netWorthHeadline(person.id, person.name, year),
+    image: [personImageUrl(person.id)],
+    author: author
+      ? { "@type": "Person", name: author.name, url: `${siteUrl()}/author/${author.id}` }
+      : { "@type": "Organization", name: SITE_NAME, url: siteUrl() },
+    publisher: publisherJsonLd(),
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    url,
+    dateModified: leaderboard.asOf,
+    inLanguage: "en",
+    isAccessibleForFree: true,
+  };
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader activeCategory="world" />
@@ -126,6 +145,14 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
             <p className="mt-1 text-sm text-[--muted]">
               #{ranked.rank} in the World &middot; {ranked.primarySource}
             </p>
+            {author && (
+              <p className="mt-1 text-xs text-[--muted]">
+                By{" "}
+                <Link href={`/author/${author.id}`} className="font-medium hover:text-brand hover:underline">
+                  {author.name}
+                </Link>
+              </p>
+            )}
           </div>
           <div className="sm:text-right">
             <div className="text-xs uppercase tracking-wide text-[--muted]">
@@ -288,6 +315,7 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
       </main>
       <SiteFooter />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <LiveWebPageJsonLd
         url={url}
         name={`${person.name} Net Worth in ${year}`}

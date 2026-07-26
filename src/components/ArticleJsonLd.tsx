@@ -31,7 +31,7 @@ export default function ArticleJsonLd({
     dateModified: publishedAt,
     url,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
-    author: { "@type": "Organization", name: SITE_NAME, url: siteUrl() },
+    author: { "@type": "Person", name: "News Desk", url: `${siteUrl()}/author/news-desk` },
     publisher: publisherJsonLd(),
     articleSection: "Daily Recaps",
     inLanguage: "en",

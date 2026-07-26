@@ -105,6 +105,8 @@ export interface PersonProfile {
   netWorthHook?: NetWorthHook;
   /** Longer-form, individually-sourced sections for the /net-worth page. */
   deepDive?: DeepDiveSection[];
+  /** Author id (see src/data/authors.ts) credited for the deepDive research/writing. */
+  deepDiveAuthor?: string;
 }
 
 export const personProfiles: Record<string, PersonProfile> = {
@@ -208,6 +210,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "CNN Business",
       sourceUrl: "https://www.cnn.com/2026/06/06/business/musk-trillionaire-how-much-is-one-trillion-dollars",
     },
+    deepDiveAuthor: "pooja-k",
     deepDive: [
       {
         heading: "The First Trillionaire in History",
@@ -305,6 +308,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Britannica Money",
       sourceUrl: "https://www.britannica.com/money/Jeff-Bezos",
     },
+    deepDiveAuthor: "jahnavai-v",
     deepDive: [
       {
         heading: "Funding Blue Origin, a Billion Dollars a Year",
@@ -395,6 +399,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Wikipedia",
       sourceUrl: "https://en.wikipedia.org/wiki/Wedding_of_Anant_Ambani_and_Radhika_Merchant",
     },
+    deepDiveAuthor: "uma-k",
     deepDive: [
       {
         heading: "Asia's Richest Man, Built on Reliance and Jio",
@@ -471,6 +476,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Fortune",
       sourceUrl: "https://fortune.com/2025/10/16/lvmh-ceo-bernard-arnault-billionaires-list-19-billion-overnight-wealth-surge-luxury-market-slowdown-after-months-of-bleeding-billions/",
     },
+    deepDiveAuthor: "jai-simha",
     deepDive: [
       {
         heading: "A Three-Year Slide in Chinese Luxury Demand",
@@ -548,6 +554,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Fortune",
       sourceUrl: "https://fortune.com/2026/04/29/meta-zuckerberg-145-billion-ai-spending-roi/",
     },
+    deepDiveAuthor: "pooja-k",
     deepDive: [
       {
         heading: "Meta's AI Spending Spree",
@@ -632,6 +639,25 @@ export const personProfiles: Record<string, PersonProfile> = {
       spouseName: "Jolin Zhu",
       note: "Reported to be his sixth marriage, following five divorces.",
     },
+    deepDiveAuthor: "jahnavai-v",
+    deepDive: [
+      {
+        heading: "The Day He Briefly Passed Elon Musk",
+        paragraphs: [
+          "On September 10, 2025, Ellison's net worth jumped roughly $101 billion in a single day — the largest one-day gain the Bloomberg Billionaires Index had ever recorded — after Oracle shares surged more than 39% on a bullish cloud-business earnings report. It briefly made him the world's richest person, ahead of Elon Musk, before his ranking settled back down in the days that followed.",
+        ],
+        sourceName: "Bloomberg",
+        sourceUrl: "https://www.bloomberg.com/news/articles/2025-09-10/oracle-co-founder-larry-ellison-closes-in-on-elon-musk-as-world-s-richest-man",
+      },
+      {
+        heading: "Why Oracle's Stock Moves His Fortune So Much",
+        paragraphs: [
+          "Ellison owns roughly 1.16 billion shares of Oracle — a stake large enough that a single strong or weak earnings report can swing his net worth by tens of billions of dollars in a matter of hours, exactly what happened during the September 2025 cloud-earnings rally.",
+        ],
+        sourceName: "Yahoo Finance",
+        sourceUrl: "https://finance.yahoo.com/news/larry-ellison-net-worth-topping-203114110.html",
+      },
+    ],
   },
 
   "larry-page": {
@@ -653,6 +679,25 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "2004", title: "Google IPO", description: "Took Google public." },
       { year: "2015", title: "Became Alphabet CEO", description: "Took the chief executive role of newly formed parent company Alphabet." },
       { year: "2019", title: "Stepped back from Alphabet", description: "Left the CEO role to Sundar Pichai, remaining a controlling shareholder." },
+    ],
+    deepDiveAuthor: "uma-k",
+    deepDive: [
+      {
+        heading: "Crossing $300 Billion for the First Time",
+        paragraphs: [
+          "Page's net worth passed $300 billion for the first time in late April 2026, as an Alphabet earnings rally lifted the stock. He's stayed in that territory into July 2026, making him the world's second-wealthiest person even though he hasn't run Alphabet day-to-day since 2019.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/04/30/larry-pages-worth-over-300-billion-for-first-time-amid-alphabet-earnings-rally/",
+      },
+      {
+        heading: "Riding a $190 Billion AI Bet",
+        paragraphs: [
+          "Alphabet raised its 2026 capital-spending guidance to as much as $190 billion to fund AI infrastructure, and moved to raise $80 billion through a stock offering — $10 billion of which Berkshire Hathaway bought — to help pay for it. As Alphabet's largest individual shareholder, Page's fortune rises and falls with how well that AI spending pays off.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/07/15/larry-pages-fortune-rises-above-300-billion-amid-alphabet-rally-after-buffett-takes-credit-for-berkshire-hathaway-bet/",
+      },
     ],
   },
 
@@ -685,6 +730,25 @@ export const personProfiles: Record<string, PersonProfile> = {
         sourceUrl: "https://www.forbes.com/sites/billspringer/2024/12/13/just-how-big-is-google-co-founder-sergey-brins-new-superyacht/",
       },
     ],
+    deepDiveAuthor: "jai-simha",
+    deepDive: [
+      {
+        heading: "Back in the Lab, Not Just on the Cap Table",
+        paragraphs: [
+          "Brin gave up his formal Alphabet role in 2019, but he's since returned to hands-on work on the company's AI push. He isn't CEO, yet he holds major voting power and deep technical credibility — and as Google leans on its Gemini AI to defend search against competitors, his fortune is directly tied to whether that bet works.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/maryroeloffs/2026/07/23/sergey-brin-falls-to-5th-richest-while-jeff-bezos-michael-dell-rise/",
+      },
+      {
+        heading: "Giving Away $700 Million in Alphabet Stock",
+        paragraphs: [
+          "In 2025, Brin gave away Alphabet shares worth roughly $700 million, a reminder that even as his paper fortune swings by tens of billions with Alphabet's stock price, a meaningful slice of it has already been moved into philanthropy.",
+        ],
+        sourceName: "Business Standard",
+        sourceUrl: "https://www.business-standard.com/amp/world-news/google-co-founder-sergey-brin-gives-away-shares-worth-700-million-as-gift-125052200098_1.html",
+      },
+    ],
   },
 
   "steve-ballmer": {
@@ -705,6 +769,25 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "2000", title: "Became CEO", description: "Succeeded Bill Gates as Microsoft's chief executive." },
       { year: "2014", title: "Stepped down as CEO", description: "Retired as Microsoft CEO, succeeded by Satya Nadella." },
       { year: "2014", title: "Bought the LA Clippers", description: "Purchased the NBA's Los Angeles Clippers for $2 billion." },
+    ],
+    deepDiveAuthor: "pooja-k",
+    deepDive: [
+      {
+        heading: "A $2 Billion Arena Built Around One Complaint",
+        paragraphs: [
+          "The Clippers' Intuit Dome, which Ballmer personally funded at a reported cost of about $2 billion, opened in August 2024 in Inglewood, California. Ballmer has said the design was built to fix things he found frustrating as a fan — down to cutting how long people wait in line — rather than just adding luxury suites.",
+        ],
+        sourceName: "Benzinga",
+        sourceUrl: "https://www.benzinga.com/news/24/10/41324552/ex-microsoft-ceo-steve-ballmers-2b-intuit-dome-home-of-la-clippers-aims-to-resolve-this-hurdle-in-de",
+      },
+      {
+        heading: "The Clippers Are the Smaller Part of His Fortune",
+        paragraphs: [
+          "As eye-catching as the Intuit Dome and the Clippers' rising valuation are, most of Ballmer's wealth still comes from the roughly 4% of Microsoft he's held onto since retiring as CEO in 2014 — which is also why his net worth estimate has swung by tens of billions of dollars within 2026 as Microsoft's stock has moved.",
+        ],
+        sourceName: "Sportico",
+        sourceUrl: "https://www.sportico.com/personalities/owners/2026/steve-ballmer-net-worth-microsoft-1234882899/",
+      },
     ],
   },
 
@@ -729,6 +812,25 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "1988", title: "Bought into Coca-Cola", description: "Began accumulating a signature long-term stake in Coca-Cola." },
       { year: "2006", title: "The Giving Pledge era", description: "Pledged to give away the bulk of his fortune, largely through the Gates Foundation." },
     ],
+    deepDiveAuthor: "jahnavai-v",
+    deepDive: [
+      {
+        heading: "The End of a 60-Year Run as CEO",
+        paragraphs: [
+          "Buffett officially stepped down as Berkshire Hathaway's CEO on January 1, 2026, handing the role to Greg Abel after announcing the succession plan at that May's annual shareholder meeting. At 95, he closed out 60 years running the company, transforming it from a failing textile mill into one of the world's largest conglomerates.",
+        ],
+        sourceName: "NPR",
+        sourceUrl: "https://www.npr.org/2026/01/01/nx-s1-5661491/warren-buffett-retires-berkshire-hathaway-ceo",
+      },
+      {
+        heading: "Chairman, Not Gone",
+        paragraphs: [
+          "Buffett didn't leave Berkshire entirely — he remains chairman, though he's said he'll be \"going quiet... sort of\" and will leave operating decisions to Abel. Berkshire's Class A shares dipped 1.4% on Abel's first day as CEO, a small but symbolic market reaction to the end of one of the most-watched leadership tenures in corporate history.",
+        ],
+        sourceName: "CNBC",
+        sourceUrl: "https://www.cnbc.com/2026/01/02/berkshire-hathaway-shares-dip-as-warren-buffett-exits-and-greg-abel-era-begins.html",
+      },
+    ],
   },
 
   "jensen-huang": {
@@ -749,6 +851,25 @@ export const personProfiles: Record<string, PersonProfile> = {
       { year: "1999", title: "Nvidia IPO", description: "Took Nvidia public and shipped the GeForce 256, marketed as the first GPU." },
       { year: "2006", title: "Launched CUDA", description: "Introduced Nvidia's CUDA computing platform, which later became central to AI workloads." },
       { year: "2023", title: "AI boom", description: "Nvidia's chips became the backbone of the generative-AI buildout, propelling the company's market value past $1 trillion." },
+    ],
+    deepDiveAuthor: "uma-k",
+    deepDive: [
+      {
+        heading: "Joining the $200 Billion Club",
+        paragraphs: [
+          "Huang's net worth crossed $200 billion for the first time in mid-May 2026, as Nvidia shares rallied on reports of potential AI-chip deals with China — a milestone that underscores how tightly his fortune tracks Nvidia's stock, since he holds no major outside business the way some peers do.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/zacharyfolk/2026/05/14/jensen-huang-joins-200-billion-club-as-nvidia-soars-over-potential-china-deals/",
+      },
+      {
+        heading: "Passing Peers as Nvidia Ran Higher",
+        paragraphs: [
+          "Just days before crossing $200 billion, Huang overtook Michael Dell to become the world's seventh-richest person, part of a run in which Nvidia briefly touched a record market capitalization above $5 trillion before pulling back — a reminder of how quickly rankings among the ultra-wealthy reshuffle when one AI-linked stock moves.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/05/11/nvidias-jensen-huang-nears-200-billion-club-overtakes-michael-dell-as-7th-richest/",
+      },
     ],
   },
 
@@ -778,6 +899,75 @@ export const personProfiles: Record<string, PersonProfile> = {
         description: "A 33,000 sq ft home on 119 acres overlooking Lake Austin, built in 1997 with a tennis court and both indoor and outdoor pools.",
         sourceName: "The Real Deal",
         sourceUrl: "https://therealdeal.com/texas/2022/06/23/heres-where-michael-dell-hangs-up-his-many-hats/",
+      },
+    ],
+    deepDiveAuthor: "jai-simha",
+    deepDive: [
+      {
+        heading: "A $35 Billion Single-Day Jump",
+        paragraphs: [
+          "On May 29, 2026, Dell Technologies had what was described as its best trading day ever, adding roughly $35 billion to Michael Dell's net worth in a single session and pushing him past Mark Zuckerberg to become the world's sixth-richest person — a scale of single-day wealth swing that was rare even by 2026's AI-fueled standards.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/05/29/michael-dell-earns-35-billion-from-dells-best-day-ever-passing-zuckerberg-as-6th-richest/",
+      },
+      {
+        heading: "The AI Server Business Behind the Surge",
+        paragraphs: [
+          "The rally is rooted in real revenue: Dell Technologies' AI-optimized server sales rose 757% year over year to more than $16 billion in a single quarter, and hit $24.7 billion for the full 2026 fiscal year, up 166%. The stock nearly tripled over the year as investors bet on the company's role supplying hardware for AI data centers — though Fortune has also flagged that the growth is coming with a real hit to Dell's profit margins, not just a headline win.",
+        ],
+        sourceName: "Fortune",
+        sourceUrl: "https://fortune.com/2026/06/30/dells-ai-boom-real-but-so-is-profit-margin-hit/",
+      },
+    ],
+  },
+
+  "carlos-slim": {
+    residenceCity: "Mexico City",
+    citizenship: "Mexico",
+    education: "Universidad Nacional Autónoma de México (civil engineering)",
+    wealthOrigin: "Self-made",
+    longBio: [
+      "Carlos Slim was born in Mexico City in 1940 to Lebanese immigrant parents and trained as a civil engineer before moving into business and investing in the 1960s. He built the conglomerate Grupo Carso through the 1980s, buying into candy, tires, mining, construction, retail, and banking while foreign investors were pulling money out of Mexico's troubled economy.",
+      "His defining move came in 1990, when he led a consortium with SBC and France Télécom that bought the newly privatized national phone company Telmex for $1.76 billion. He later won management control of Telmex outright, and in 2000 relaunched its mobile arm as América Móvil, which grew into the largest mobile-phone operator in Latin America.",
+    ],
+    keyFacts: [
+      "Born in Mexico City in 1940 to Lebanese immigrant parents.",
+      "Led the 1990 consortium that bought the privatized Telmex for $1.76 billion.",
+      "Controls América Móvil, Latin America's largest mobile operator.",
+      "Long Mexico's richest person, and consistently one of the world's wealthiest.",
+    ],
+    careerTimeline: [
+      { year: "1965", title: "Began investing", description: "Started building a personal investment portfolio in Mexican businesses in his mid-20s." },
+      { year: "1980s", title: "Built Grupo Carso", description: "Assembled the holding company Grupo Carso by buying into Mexican businesses across candy, tires, mining, construction, and retail." },
+      { year: "1990", title: "Bought Telmex", description: "Led a consortium with SBC and France Télécom that purchased Mexico's newly privatized national phone company for $1.76 billion, later winning management control." },
+      { year: "2000", title: "Launched América Móvil", description: "Relaunched Telmex's mobile arm, Telcel, as América Móvil, expanding telecom operations across Latin America and the Caribbean." },
+    ],
+    deepDiveAuthor: "uma-k",
+    deepDive: [
+      {
+        heading: "Betting on Mexico When No One Else Would",
+        paragraphs: [
+          "Slim built the core of his fortune in 1982, when foreign investors were fleeing Mexico's debt crisis — he went the other way, buying up struggling Mexican businesses across candy, tires, mining, construction, and retail under the Grupo Carso umbrella, a bet on the country's eventual recovery that paid off over the following decades.",
+        ],
+        sourceName: "EBSCO Research Starters",
+        sourceUrl: "https://www.ebsco.com/research-starters/biography/carlos-slim",
+      },
+      {
+        heading: "Winning Control of a National Phone Monopoly",
+        paragraphs: [
+          "When Mexico privatized its national phone company Telmex in 1990, Slim led a consortium with SBC and France Télécom that paid $1.76 billion for it. He went on to win management control of the company outright — and for more than a decade, that near-monopoly on Mexican telecom was the anchor of his fortune, before he expanded it into América Móvil, now Latin America's largest mobile carrier.",
+        ],
+        sourceName: "Britannica Money",
+        sourceUrl: "https://www.britannica.com/money/Carlos-Slim-Helu",
+      },
+      {
+        heading: "Still #1 in Mexico",
+        paragraphs: [
+          "As of early July 2026, Slim's net worth is estimated at roughly $124.6 billion, ranking him around #15 among the world's billionaires and still comfortably Mexico's richest person — built on his controlling stakes in América Móvil, holding company Grupo Carso, and banking group Grupo Financiero Inbursa.",
+        ],
+        sourceName: "Forbes",
+        sourceUrl: "https://www.forbes.com/profile/carlos-slim-helu/",
       },
     ],
   },
@@ -866,6 +1056,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Fortune",
       sourceUrl: "https://fortune.com/2026/06/25/mackenzie-scott-largest-megadonor-2025-7-billion-donations-giving-usa-iu-report/",
     },
+    deepDiveAuthor: "uma-k",
     deepDive: [
       {
         heading: "The Divorce That Created the Fortune",
@@ -1069,6 +1260,7 @@ export const personProfiles: Record<string, PersonProfile> = {
       sourceName: "Forbes",
       sourceUrl: "https://www.forbes.com/sites/tylerroush/2026/06/05/gautam-adanis-net-worth-swells-by-2-billion-becomes-asias-richest-person/",
     },
+    deepDiveAuthor: "jai-simha",
     deepDive: [
       {
         heading: "The Hindenburg Report and Its Aftermath",

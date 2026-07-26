@@ -17,6 +17,7 @@ import { listQuoteOfDay } from "@/lib/quote-of-day";
 import { listQuotePeopleIds } from "@/data/quotes";
 import { isSpotlightEligible } from "@/lib/spotlight";
 import { CALCULATOR_ARTICLE_INDEX } from "@/lib/calculator-articles";
+import { listAuthors } from "@/data/authors";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -60,6 +61,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "daily" as const,
     priority: 0.5,
   }));
+
+  const authorRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/author`, changeFrequency: "monthly" as const, priority: 0.4 },
+    ...listAuthors().map((author) => ({
+      url: `${base}/author/${author.id}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.4,
+    })),
+  ];
 
   const profileRoutes: MetadataRoute.Sitemap = billionaires.map((person) => ({
     url: `${base}/billionaire/${person.id}`,
@@ -253,6 +263,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...countryRoutes,
     ...calculatorRoutes,
     ...calculatorArticleRoutes,
+    ...authorRoutes,
     ...profileRoutes,
     ...profileSubpageRoutes,
     ...stockRoutes,
