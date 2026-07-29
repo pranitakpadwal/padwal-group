@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEstimatedBillionaire, listEstimatedBillionaires } from "@/data/estimated-billionaires";
-import { countryPagePath } from "@/lib/countries";
+import { countryPagePath, listCountries } from "@/lib/countries";
 import { getPhotoUrl } from "@/lib/photos";
 import { formatUsdCompact } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
@@ -49,6 +49,10 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
   }
 
   const photoUrl = await getPhotoUrl(person.wikipediaTitle);
+
+  // /country/[slug] only covers countries with a live-tracked billionaire — linking there for an
+  // estimated-only country would 404, so fall back to the /countries hub instead.
+  const hasCountryPage = listCountries().some((c) => c.country === person.country);
 
   const others = listEstimatedBillionaires().filter((p) => p.id !== person.id);
   const sameIndustry = others.filter((p) => p.industry === person.industry);
@@ -191,7 +195,10 @@ export default async function EstimatedBillionairePage({ params }: { params: Pro
               </h2>
               <ul className="flex flex-col gap-2 text-sm">
                 <li>
-                  <Link href={countryPagePath(person.country)} className="hover:underline">
+                  <Link
+                    href={hasCountryPage ? countryPagePath(person.country) : "/countries"}
+                    className="hover:underline"
+                  >
                     {person.country} Billionaires &rarr;
                   </Link>
                 </li>
