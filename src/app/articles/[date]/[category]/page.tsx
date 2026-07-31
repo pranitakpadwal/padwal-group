@@ -133,10 +133,6 @@ export default async function ArticlePage({ params }: { params: Promise<RoutePar
           <Link href="/" className="font-medium text-brand hover:underline">
             the live leaderboard
           </Link>
-          <span className="text-foreground/70"> · </span>
-          <Link href="/quotes" className="font-medium text-brand hover:underline">
-            verified billionaire quotes
-          </Link>
         </section>
 
         <ShareBar text={`${title} — the daily numbers:`} />

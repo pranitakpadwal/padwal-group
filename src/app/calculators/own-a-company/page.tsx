@@ -77,12 +77,6 @@ export default async function OwnACompanyPage() {
             among billionaires, how it could grow, and what a cash-out would
             cost in tax.
           </p>
-          <Link
-            href="/calculators/articles/what-the-worlds-richest-persons-fortune-could-buy-outright"
-            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
-          >
-            Read: What the world&apos;s richest person&apos;s fortune could buy outright &rarr;
-          </Link>
         </header>
 
         <OwnACompanyCalculator companies={companies} roster={roster} rates={rates} />

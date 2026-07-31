@@ -22,49 +22,42 @@ export const metadata: Metadata = {
 const CALCULATORS = [
   {
     href: "/calculators/wealth-race",
-    articleHref: "/calculators/articles/how-often-is-the-worlds-richest-person-actually-in-first",
     title: "Wealth Race",
     description:
       "Elon vs Zuckerberg, or anyone vs anyone — pick two billionaires and race their net worth over time, live.",
   },
   {
     href: "/calculators/spend",
-    articleHref: "/calculators/articles/how-far-the-richest-persons-fortune-goes-on-real-billionaire-purchases",
     title: "Spend a Billionaire's Fortune",
     description:
       "Their live net worth is your budget. Buy superyachts, NFL teams, islands — even Twitter — and see how hard it is to run out.",
   },
   {
     href: "/calculators/birthday",
-    articleHref: "/calculators/articles/everyone-whos-been-the-worlds-richest-person-since-1987",
     title: "Richest Person When You Were Born",
     description:
       "Enter your birth year and see who wore the crown when you arrived, when you turned 18 and 30 — and who holds it right now.",
   },
   {
     href: "/calculators/billionaire-by-age",
-    articleHref: "/calculators/articles/what-the-richest-people-had-done-by-age-30",
     title: "When They Were Your Age...",
     description:
       "Pick a billionaire and an age. See exactly what they'd achieved by then — and how much runway you still have.",
   },
   {
     href: "/calculators/inflation",
-    articleHref: "/calculators/articles/what-old-billionaire-fortunes-are-worth-in-todays-dollars",
     title: "Wealth Inflation Calculator",
     description:
       "What does $100M in 1980 — or Rockefeller's first billion — equal in today's dollars? Convert any historical fortune.",
   },
   {
     href: "/calculators/own-a-company",
-    articleHref: "/calculators/articles/what-the-worlds-richest-persons-fortune-could-buy-outright",
     title: "If You Owned a Piece of a Company",
     description:
       "Pick a company and a percentage — see what that stake is worth at today's price, and where it would rank you among billionaires.",
   },
   {
     href: "/calculators/net-worth-rank",
-    articleHref: "/calculators/articles/net-worth-it-takes-to-crack-the-top-10-billionaires",
     title: "Where Would Your Net Worth Rank?",
     description:
       "Enter a net worth and find out where you'd sit on the real-time billionaires list — and who you'd need to pass next.",
@@ -98,18 +91,9 @@ export default function CalculatorsIndex() {
                 <p className="text-sm text-foreground/70">{calc.description}</p>
                 <span className="mt-1 text-sm font-medium text-brand">Try it &rarr;</span>
               </Link>
-              <Link href={calc.articleHref} className="text-xs font-medium text-foreground/60 hover:text-brand hover:underline">
-                Read the article &rarr;
-              </Link>
             </div>
           ))}
         </div>
-
-        <p className="text-sm">
-          <Link href="/calculators/articles" className="font-medium text-brand hover:underline">
-            See all calculator articles &rarr;
-          </Link>
-        </p>
       </main>
       <SiteFooter />
     </div>

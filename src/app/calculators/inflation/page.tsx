@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { siteUrl } from "@/lib/site";
 import InflationCalculator from "@/components/InflationCalculator";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -34,12 +33,6 @@ export default function InflationPage() {
             historical amount into today&apos;s dollars and see how the old
             money really stacks up.
           </p>
-          <Link
-            href="/calculators/articles/what-old-billionaire-fortunes-are-worth-in-todays-dollars"
-            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
-          >
-            Read: What Rockefeller&apos;s first billion is worth in today&apos;s dollars &rarr;
-          </Link>
         </header>
         <InflationCalculator />
       </main>

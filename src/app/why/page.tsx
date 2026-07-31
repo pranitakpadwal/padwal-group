@@ -45,11 +45,8 @@ function MoverRow({ person, isGain }: { person: RankedBillionaire; isGain: boole
         </Link>
         <p className="mt-0.5 text-sm text-foreground/70">
           {headline}{" "}
-          {person.ticker && (
-            <Link href={`/stock/${person.ticker}`} className="text-brand hover:underline">
-              {person.ticker}
-            </Link>
-          )}
+          {/* ticker no longer links to /stock/[ticker] — that page is noindexed */}
+          {person.ticker && <span className="text-foreground/60">{person.ticker}</span>}
         </p>
       </div>
       <div

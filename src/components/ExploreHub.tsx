@@ -61,12 +61,6 @@ export default async function ExploreHub() {
       teaser: "7 interactive tools",
     },
     {
-      href: "/companies",
-      title: "By Company",
-      description: "Tesla, Reliance, Adani, Tencent — who owns what.",
-      teaser: null,
-    },
-    {
       href: "/universities",
       title: "By University",
       description: "Where the world's richest studied — or dropped out.",
@@ -88,12 +82,6 @@ export default async function ExploreHub() {
       href: "/families",
       title: "By Family",
       description: "The Waltons, the Sawiris brothers, and more.",
-      teaser: null,
-    },
-    {
-      href: "/expensive",
-      title: "What They Own",
-      description: "Yachts, jets, mansions, islands, and cars — sourced.",
       teaser: null,
     },
   ];

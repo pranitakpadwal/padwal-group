@@ -1,5 +1,3 @@
-import { getPersonProfile } from "@/data/profiles";
-import { getPersonQuotes } from "@/data/quotes";
 import { listNews } from "@/lib/news";
 import { netWorthUrl } from "@/lib/net-worth-explainer";
 
@@ -16,8 +14,7 @@ export interface CoveragePerson {
 
 /**
  * Real, working links into a person's other content on the site — their
- * net-worth explainer, career story, verified quotes, and any news
- * articles about them. Used to give grouping pages (city/university/
+ * net-worth explainer, live profile, and any news articles about them. Used to give grouping pages (city/university/
  * industry/family/country/region) and daily recap articles genuine
  * substance beyond a leaderboard table or data widget.
  */
@@ -26,17 +23,14 @@ export function getRelatedCoverage(people: CoveragePerson[], limitPerPerson = 3)
   const links: CoverageLink[] = [];
 
   for (const person of people) {
-    const profile = getPersonProfile(person.id);
     const perPerson: CoverageLink[] = [
       { href: netWorthUrl(person.id, person.name, year), label: `${person.name}'s net worth explained` },
     ];
 
-    if (profile?.careerTimeline && profile.careerTimeline.length > 0) {
-      perPerson.push({ href: `/story/${person.id}`, label: `How ${person.name} built the fortune` });
-    }
-    if (getPersonQuotes(person.id).length > 0) {
-      perPerson.push({ href: `/quotes/${person.id}`, label: `${person.name}'s verified quotes` });
-    }
+    // /story and /quotes links removed: both are noindexed, and this helper runs
+    // on the indexed grouping pages (city/country/region/industry/university/
+    // family) plus daily recaps, so it was the widest crawl path into them.
+    perPerson.push({ href: `/billionaire/${person.id}`, label: `${person.name}'s live net worth` });
     for (const article of listNews({ personId: person.id, limit: 2 })) {
       perPerson.push({ href: `/news/${article.slug}`, label: article.title });
     }

@@ -306,13 +306,6 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
                     {ranked.country} Billionaires &rarr;
                   </Link>
                 </li>
-                {ranked.ticker && (
-                  <li>
-                    <Link href={`/stock/${ranked.ticker}`} className="hover:underline">
-                      Who Else Owns {ranked.ticker}? &rarr;
-                    </Link>
-                  </li>
-                )}
                 <li>
                   <Link href="/net-worth" className="hover:underline">
                     Net Worth Explainers, A-Z &rarr;

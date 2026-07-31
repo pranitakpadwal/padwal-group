@@ -5,8 +5,6 @@ import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPriceHistory } from "@/lib/price-history";
 import { getPersonHistory } from "@/lib/snapshots";
 import { getPersonProfile } from "@/data/profiles";
-import { getPersonQuotes } from "@/data/quotes";
-import { isSpotlightEligible } from "@/lib/spotlight";
 import { getListAppearances, getRelatedPeople } from "@/lib/person-context";
 import { countryPagePath } from "@/lib/countries";
 import { listIndustries } from "@/lib/industries";
@@ -110,7 +108,7 @@ export default async function BillionaireProfile({
     { href: countryPagePath(ranked.country), label: `${ranked.country} Billionaires` },
     ...(cityLink ? [{ href: `/city/${cityLink.slug}`, label: `${cityLink.city} Billionaires` }] : []),
     ...industryLinks.map((i) => ({ href: `/industry/${i.slug}`, label: `${i.industry} Billionaires` })),
-    ...(ranked.ticker ? [{ href: `/stock/${ranked.ticker}`, label: `Who Else Owns ${ranked.ticker}?` }] : []),
+    // /stock/[ticker] is noindexed — omitted so this page stops feeding it.
     { href: "/billionaire", label: "The Full Billionaires List" },
   ];
   const today = todayDateString();
@@ -137,23 +135,13 @@ export default async function BillionaireProfile({
         ]
       : null;
 
+  // Only the net-worth explainer remains: /story, /quotes, /good-news and the
+  // journey/ventures/lifestyle/family sub-pages are all noindexed, and this is
+  // the site's biggest impression pool (8,596), so it was the main crawl path
+  // feeding every one of them. The content itself still lives on this page.
   const subpageLinks = [
     { href: netWorthUrl(id, ranked.name, new Date().getFullYear()), label: "Net Worth Explainer" },
-    profile?.careerTimeline && profile.careerTimeline.length > 0
-      ? { href: `/story/${id}`, label: "The Full Story" }
-      : null,
-    getPersonQuotes(id).length > 0
-      ? { href: `/quotes/${id}`, label: "Quotes (Verified)" }
-      : null,
-    isSpotlightEligible(profile) ? { href: `/good-news/${id}`, label: "Good News" } : null,
-    profile?.ventures && profile.ventures.length > 0
-      ? { href: `/billionaire/${id}/ventures`, label: "Ventures & Investments" }
-      : null,
-    profile?.notableAssets && profile.notableAssets.length > 0
-      ? { href: `/billionaire/${id}/lifestyle`, label: "Homes, Jets & Notable Assets" }
-      : null,
-    profile?.family ? { href: `/billionaire/${id}/family`, label: "Family" } : null,
-  ].filter((link) => link !== null);
+  ];
 
   const personJsonLd = {
     "@context": "https://schema.org",
@@ -309,12 +297,6 @@ export default async function BillionaireProfile({
                     <span className="font-semibold">
                       {ranked.primarySource} ({holding.ticker})
                     </span>
-                    <Link
-                      href={`/stock/${holding.ticker}`}
-                      className="text-sm text-neutral-500 hover:underline dark:text-neutral-400"
-                    >
-                      Who else owns {holding.ticker}? &rarr;
-                    </Link>
                   </div>
                   <dl className="mt-3 grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
                     <div>

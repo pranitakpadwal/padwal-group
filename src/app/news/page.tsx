@@ -41,16 +41,6 @@ export default async function NewsIndex() {
           </p>
         </header>
 
-        <Link
-          href="/good-news"
-          className="flex items-center justify-between gap-3 rounded-2xl border border-brand/40 bg-brand-soft/50 p-4 transition-colors hover:border-brand"
-        >
-          <span className="text-sm text-foreground">
-            <span className="font-semibold text-brand-dark">Prefer good news?</span> Business
-            wins, milestones, and giving-back stories for each billionaire.
-          </span>
-          <span className="shrink-0 text-sm font-medium text-brand">See Good News &rarr;</span>
-        </Link>
 
         <Link
           href="/net-worth"

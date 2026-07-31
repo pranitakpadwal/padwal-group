@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNewsArticle, listNews, buildNewsBody } from "@/lib/news";
-import { getPersonProfile } from "@/data/profiles";
-import { getPersonQuotes } from "@/data/quotes";
 import { formatDateLong } from "@/lib/dates";
 import { formatUsdCompact, formatClock } from "@/lib/format";
 import { countryPagePath } from "@/lib/countries";
@@ -75,8 +73,6 @@ export default async function NewsArticlePage({ params }: { params: Promise<Rout
   const body = buildNewsBody(facts);
   const url = `${siteUrl()}/news/${article.slug}`;
   const imageUrl = `${siteUrl()}/news/${article.slug}/opengraph-image`;
-  const profile = getPersonProfile(article.personId);
-  const quotes = getPersonQuotes(article.personId);
   const personNews = listNews({ personId: article.personId, limit: 4 }).filter(
     (item) => item.slug !== slug,
   );
@@ -93,21 +89,13 @@ export default async function NewsArticlePage({ params }: { params: Promise<Rout
       href: netWorthUrl(article.personId, facts.name, new Date().getFullYear()),
       label: `${facts.name}'s net worth explained`,
     },
-    profile?.careerTimeline && profile.careerTimeline.length > 0
-      ? { href: `/story/${article.personId}`, label: `How ${facts.name} built the fortune` }
-      : null,
-    quotes.length > 0
-      ? { href: `/quotes/${article.personId}`, label: `${facts.name}'s verified quotes` }
-      : null,
-    facts.ticker
-      ? { href: `/stock/${facts.ticker}`, label: `Who owns ${facts.ticker}?` }
-      : null,
+    // /story, /quotes and /stock links dropped — all three are noindexed.
     {
       href: countryPagePath(facts.country),
       label: `Richest people in ${facts.country}`,
     },
     { href: `/articles/${article.date}/world`, label: `Full recap for ${formatDateLong(article.date)}` },
-  ].filter((link) => link !== null);
+  ];
 
   const newsJsonLd = {
     "@context": "https://schema.org",

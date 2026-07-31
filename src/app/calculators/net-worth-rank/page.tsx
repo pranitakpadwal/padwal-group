@@ -63,12 +63,6 @@ export default async function NetWorthRankPage() {
             Enter a net worth in any currency to see exactly where it would land
             on our real-time billionaires list, and who&apos;s next above you.
           </p>
-          <Link
-            href="/calculators/articles/net-worth-it-takes-to-crack-the-top-10-billionaires"
-            className="mt-2 inline-block text-sm font-medium text-brand hover:underline"
-          >
-            Read: How much net worth it takes to crack the top 10 billionaires &rarr;
-          </Link>
         </header>
 
         <NetWorthRankCalculator roster={roster} rates={rates} />

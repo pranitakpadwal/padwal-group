@@ -3,9 +3,11 @@ import Logo from "@/components/Logo";
 import CategoryTabs, { type NavSection } from "@/components/CategoryTabs";
 import MobileMenu from "@/components/MobileMenu";
 
+// Only indexable destinations belong in sitewide nav. /quotes is noindexed
+// (see src/lib/site.ts) and linking it from every page on the site would keep
+// feeding crawl paths to a page we're trying to get dropped from the index.
 const NAV_LINKS = [
   { href: "/news", label: "News" },
-  { href: "/quotes", label: "Quotes" },
   { href: "/calculators", label: "Calculators" },
   { href: "/articles", label: "Daily Recaps" },
 ];
