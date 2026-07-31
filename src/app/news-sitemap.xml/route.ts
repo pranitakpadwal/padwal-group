@@ -1,5 +1,6 @@
 import { listNews } from "@/lib/news";
 import { listArticles } from "@/lib/articles";
+import { DAILY_CATEGORY } from "@/lib/generate-article";
 import { siteUrl } from "@/lib/site";
 import { SITE_NAME } from "@/lib/schema";
 
@@ -31,6 +32,7 @@ export async function GET() {
     }));
 
   const recapItems = listArticles({ limit: 20 })
+    .filter((article) => article.category === DAILY_CATEGORY)
     .filter((article) => new Date(article.generatedAt).getTime() >= cutoff)
     .map((article) => ({
       url: `${base}/articles/${article.date}/${article.category}`,

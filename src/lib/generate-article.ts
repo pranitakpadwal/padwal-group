@@ -1,54 +1,79 @@
 import { getLeaderboard, type Leaderboard } from "@/lib/net-worth";
-import { CATEGORIES, getCategoryView, type Category } from "@/lib/categories";
+import { getCategoryView, type Category } from "@/lib/categories";
 import { hydrateHistoricalCategoryView, saveSnapshot } from "@/lib/snapshots";
-import { computeArticleFacts } from "@/lib/article-facts";
+import { computeArticleFacts, type SegmentHighlight } from "@/lib/article-facts";
 import { buildArticleText } from "@/lib/article-template";
 import { getArticle, saveArticle, type StoredArticle } from "@/lib/articles";
-import { generateBigMoverNews, listNews, type NewsArticle } from "@/lib/news";
-import { ensureQuoteOfDay } from "@/lib/quote-of-day";
+import { listNews, type NewsArticle } from "@/lib/news";
 import { previousDateString, todayDateString } from "@/lib/dates";
+
+/** The one category we still publish daily; the rest are summarised inside it. */
+export const DAILY_CATEGORY: Category = "world";
+
+/** Slices folded into the daily article instead of getting their own dated URLs. */
+// Labels are written to read naturally mid-sentence ("the 11 women we track"),
+// since they're dropped straight into the article prose.
+const SEGMENTS: { category: Category; label: string }[] = [
+  { category: "india", label: "Indian billionaires" },
+  { category: "women", label: "women" },
+  { category: "young", label: "billionaires under 45" },
+];
+
+function buildSegments(date: string, leaderboard: Leaderboard): SegmentHighlight[] {
+  return SEGMENTS.map(({ category, label }) => {
+    const view = getCategoryView(leaderboard, category);
+    const prior = hydrateHistoricalCategoryView(previousDateString(date), category);
+    const facts = computeArticleFacts(view, prior);
+    const gain = facts.gainers[0] ?? null;
+    const loss = facts.losers[0] ?? null;
+    // Whichever moved further in absolute terms is the day's story for this slice.
+    const topMover =
+      gain && loss ? (Math.abs(gain.deltaUsd) >= Math.abs(loss.deltaUsd) ? gain : loss) : (gain ?? loss);
+    return {
+      label,
+      leader: facts.topByNetWorth[0] ?? null,
+      topMover,
+      personCount: facts.personCount,
+    };
+  }).filter((segment) => segment.personCount > 0);
+}
 
 function generateOne(date: string, category: Category, leaderboard: Leaderboard): StoredArticle {
   const today = getCategoryView(leaderboard, category);
   const yesterdayView = hydrateHistoricalCategoryView(previousDateString(date), category);
   const facts = computeArticleFacts(today, yesterdayView);
-  const text = buildArticleText(date, category, facts);
-  return saveArticle(date, category, text, facts);
+  const withSegments =
+    category === DAILY_CATEGORY ? { ...facts, segments: buildSegments(date, leaderboard) } : facts;
+  const text = buildArticleText(date, category, withSegments);
+  return saveArticle(date, category, text, withSegments);
 }
 
 /**
- * Snapshots today's leaderboard and (re)generates all four category
- * articles for today, overwriting any earlier same-day draft. This is
- * what the daily cron job calls, ideally once near market close so the
- * numbers represent a consistent end-of-day figure.
+ * Snapshots today's leaderboard and (re)generates today's single daily
+ * article, overwriting any earlier same-day draft. Called by the daily cron,
+ * ideally near market close so the numbers are a consistent end-of-day figure.
+ *
+ * This used to publish four dated category recaps plus one news article per
+ * big mover — roughly 5-8 new URLs every day. Over three months that produced
+ * 104 URLs earning 13 clicks between them, so it now writes exactly one
+ * article a day that covers the whole day, with the India/women/under-45
+ * standouts reported inside it.
  */
 export async function generateAllTodayArticles(): Promise<StoredArticle[]> {
   const date = todayDateString();
   const leaderboard = await getLeaderboard();
   saveSnapshot(date, leaderboard.people);
 
-  // Event-driven news: one article per person whose net worth moved big today.
-  generateBigMoverNews(leaderboard, date);
-
-  // Daily "Quote of the Day" — one fresh, dated, postable article per day.
-  ensureQuoteOfDay(date);
-
-  return CATEGORIES.map((category) => generateOne(date, category, leaderboard));
+  return [generateOne(date, DAILY_CATEGORY, leaderboard)];
 }
 
 /**
- * Makes sure today's big-mover news exists (used by the /news index so
- * the section works even before the daily cron fires), then returns the
- * latest stories. Regenerates today's stories at most once per visit
- * wave — saveNewsArticle upserts, so repeats are harmless.
+ * The existing per-person news archive. No longer generates anything: writing
+ * one article per big mover per day created 66 URLs for 5 clicks, and those
+ * moves are now covered inside the single daily article instead. Previously
+ * published stories stay live and indexed; this just stops adding to them.
  */
-export async function ensureTodayNews(): Promise<NewsArticle[]> {
-  const date = todayDateString();
-  const existingToday = listNews({ limit: 1 }).filter((n) => n.date === date);
-  if (existingToday.length === 0) {
-    const leaderboard = await getLeaderboard();
-    generateBigMoverNews(leaderboard, date);
-  }
+export function listRecentNews(): NewsArticle[] {
   return listNews({ limit: 30 });
 }
 

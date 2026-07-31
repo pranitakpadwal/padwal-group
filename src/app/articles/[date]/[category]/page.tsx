@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ensureArticle } from "@/lib/generate-article";
+import { notFound, permanentRedirect } from "next/navigation";
+import { ensureArticle, DAILY_CATEGORY } from "@/lib/generate-article";
 import { isCategory, categoryArticleTitle } from "@/lib/categories";
 import { isValidDateString, formatDateLong } from "@/lib/dates";
 import { formatClock } from "@/lib/format";
@@ -71,6 +71,17 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: { params: Promise<RouteParams> }) {
   const resolved = await params;
+
+  // We now publish one article per day instead of four dated category recaps.
+  // The india/women/young URLs already in Google's index are redirected into
+  // that day's single article — which now reports those segments inside it —
+  // so their signal consolidates instead of 404ing.
+  if (isValidDateString(resolved.date) && resolved.category !== DAILY_CATEGORY && isCategory(resolved.category)) {
+    // 308, not 307 — these URLs are never coming back, so the ranking signal
+    // should transfer permanently to the day's single article.
+    permanentRedirect(`/articles/${resolved.date}/${DAILY_CATEGORY}`);
+  }
+
   const article = await loadArticle(resolved);
 
   if (!article) {

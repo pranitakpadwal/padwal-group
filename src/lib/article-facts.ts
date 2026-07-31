@@ -25,6 +25,19 @@ export interface RankJumpFact {
   rankDelta: number;
 }
 
+/**
+ * A named slice of the roster (women / India / under-45) summarised inside the
+ * single daily article, instead of getting its own dated URL. The separate
+ * per-category recaps earned 3 clicks across 23 URLs over three months, so
+ * they're folded in here rather than published separately.
+ */
+export interface SegmentHighlight {
+  label: string;
+  leader: RankedFact | null;
+  topMover: MoverFact | null;
+  personCount: number;
+}
+
 export interface ArticleFacts {
   personCount: number;
   totalNetWorthUsd: number;
@@ -35,6 +48,8 @@ export interface ArticleFacts {
   losers: MoverFact[];
   risers: RankJumpFact[];
   fallers: RankJumpFact[];
+  /** Optional so articles stored before this existed still parse. */
+  segments?: SegmentHighlight[];
 }
 
 const TOP_N = 10;

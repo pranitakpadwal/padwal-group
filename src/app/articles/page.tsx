@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { listArticles } from "@/lib/articles";
 import { buildArticleText } from "@/lib/article-template";
-import { CATEGORIES, categoryLabel, isCategory, type Category } from "@/lib/categories";
+import { DAILY_CATEGORY } from "@/lib/generate-article";
 import { formatDateLong, todayDateString } from "@/lib/dates";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -15,16 +15,8 @@ export const metadata: Metadata = {
     "Daily recap articles covering who gained, who lost, and how the rankings shifted across World, India, Women, and Under-45 billionaire lists.",
 };
 
-export default async function ArticlesIndexPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const resolved = await searchParams;
-  const category: Category | undefined =
-    resolved.category && isCategory(resolved.category) ? resolved.category : undefined;
-
-  const articles = listArticles({ category, limit: 60 });
+export default async function ArticlesIndexPage() {
+  const articles = listArticles({ category: DAILY_CATEGORY, limit: 60 });
 
   return (
     <div className="flex flex-1 flex-col">
@@ -35,36 +27,12 @@ export default async function ArticlesIndexPage({
             Daily Recaps
           </h1>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            A new recap for each list, every day: who&apos;s on top, who
-            gained, who lost, and how the rankings shifted.
+            One recap a day covering the whole list: who&apos;s on top, who
+            gained, who lost, how the rankings shifted, and the standouts
+            among India, women, and the under-45s.
           </p>
         </div>
 
-        <nav className="flex flex-wrap gap-2 text-sm" aria-label="Filter by category">
-          <Link
-            href="/articles"
-            className={`rounded-full border px-3 py-1 ${
-              !category
-                ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
-            }`}
-          >
-            All
-          </Link>
-          {CATEGORIES.map((c) => (
-            <Link
-              key={c}
-              href={`/articles?category=${c}`}
-              className={`rounded-full border px-3 py-1 ${
-                category === c
-                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                  : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
-              }`}
-            >
-              {categoryLabel(c)}
-            </Link>
-          ))}
-        </nav>
 
         {articles.length === 0 ? (
           <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
@@ -75,15 +43,12 @@ export default async function ArticlesIndexPage({
               for everyone after that.
             </p>
             <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((c) => (
-                <Link
-                  key={c}
-                  href={`/articles/${todayDateString()}/${c}`}
-                  className="rounded-full border border-black bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90 dark:border-white dark:bg-white dark:text-black"
-                >
-                  Write today&apos;s {categoryLabel(c)} recap
-                </Link>
-              ))}
+              <Link
+                href={`/articles/${todayDateString()}/${DAILY_CATEGORY}`}
+                className="rounded-full border border-black bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90 dark:border-white dark:bg-white dark:text-black"
+              >
+                Write today&apos;s recap
+              </Link>
             </div>
           </div>
         ) : (
@@ -99,8 +64,7 @@ export default async function ArticlesIndexPage({
                     {title}
                   </Link>
                   <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                    <time dateTime={article.date}>{formatDateLong(article.date)}</time> &middot;{" "}
-                    {categoryLabel(article.category)}
+                    <time dateTime={article.date}>{formatDateLong(article.date)}</time>
                   </p>
                   <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{summary}</p>
                 </li>

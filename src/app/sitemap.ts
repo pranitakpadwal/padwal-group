@@ -8,9 +8,15 @@ import { listFamilies } from "@/lib/families";
 import { listEstimatedBillionaires } from "@/data/estimated-billionaires";
 import { netWorthUrl, hasOwnNetWorthContent } from "@/lib/net-worth-explainer";
 import { listArticles } from "@/lib/articles";
+import { DAILY_CATEGORY } from "@/lib/generate-article";
 import { listNews } from "@/lib/news";
 import { listAuthors } from "@/data/authors";
 import { siteUrl } from "@/lib/site";
+
+// Must be dynamic: article and news URLs live in SQLite, which is empty at
+// build time. Statically prerendering this shipped a sitemap that permanently
+// omitted every daily article, so Google never saw them from here.
+export const dynamic = "force-dynamic";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
@@ -146,7 +152,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
 
-  const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 }).map((article) => ({
+  // Only the single daily article per day. The old india/women/young recap URLs
+  // now 301 into it, so listing them here would submit redirecting URLs.
+  const articleRoutes: MetadataRoute.Sitemap = listArticles({ limit: 1000 })
+    .filter((article) => article.category === DAILY_CATEGORY)
+    .map((article) => ({
     url: `${base}/articles/${article.date}/${article.category}`,
     lastModified: article.generatedAt,
     changeFrequency: "never",

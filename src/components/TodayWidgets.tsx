@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ensureTodayNews } from "@/lib/generate-article";
+import { listRecentNews } from "@/lib/generate-article";
 import { todayDateString, formatDateLong } from "@/lib/dates";
 
 /**
@@ -12,7 +12,7 @@ import { todayDateString, formatDateLong } from "@/lib/dates";
  * single best crawl path into a page we want dropped from the index.
  */
 export default async function TodayWidgets() {
-  const news = await ensureTodayNews();
+  const news = listRecentNews();
   const topStory = news[0];
   const today = todayDateString();
 

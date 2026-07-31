@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ensureTodayNews } from "@/lib/generate-article";
+import { listRecentNews } from "@/lib/generate-article";
 import { formatDateLong } from "@/lib/dates";
 import { siteUrl } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsIndex() {
-  const news = await ensureTodayNews();
+  const news = listRecentNews();
 
   return (
     <div className="flex flex-1 flex-col">

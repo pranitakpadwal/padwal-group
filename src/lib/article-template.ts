@@ -125,6 +125,28 @@ export function buildArticleText(date: string, category: Category, facts: Articl
     );
   }
 
+  // Segment standouts (India / women / under-45) are reported here rather than
+  // as separate dated URLs — those earned 3 clicks across 23 pages in 3 months.
+  if (facts.segments && facts.segments.length > 0) {
+    for (const segment of facts.segments) {
+      const parts: string[] = [];
+      if (segment.leader) {
+        parts.push(
+          `Among the ${segment.personCount} ${segment.label} we track, ${segment.leader.name} stays on top at ${formatUsdCompact(segment.leader.netWorthUsd)}.`,
+        );
+      }
+      if (segment.topMover) {
+        const up = segment.topMover.deltaUsd >= 0;
+        parts.push(
+          `${segment.topMover.name} was the day's biggest move in that group, ${up ? "up" : "down"} ${magnitude(segment.topMover.deltaUsd, segment.topMover.deltaPercent)} to ${formatUsdCompact(segment.topMover.netWorthUsd)}.`,
+        );
+      }
+      if (parts.length > 0) {
+        narrative.push(parts.join(" "));
+      }
+    }
+  }
+
   if (facts.risers.length > 0 || facts.fallers.length > 0) {
     const moveSentences: string[] = [];
     if (facts.risers.length > 0) {
