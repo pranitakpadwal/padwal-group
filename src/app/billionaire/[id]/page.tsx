@@ -46,18 +46,25 @@ export async function generateMetadata({
     return { title: "Billionaire not found" };
   }
 
-  const title = `${person.name} — Net Worth, Bio & Real-Time Rank`;
-  const description = `${person.name}'s real-time net worth, world ranking, biography, and holdings. ${person.bio}`;
+  const title = `${person.name} Net Worth Today — Live Tracker & World Rank`;
+  const description = `${person.name}'s net worth right now, updated live from ${person.primarySource} share prices — plus today's gain or loss, world ranking, and how the figure is calculated.`;
   return {
     title,
     description,
+    // This page owns the high-volume "{name} net worth" query: Search Console
+    // shows it taking ~2.5x the impressions of the /net-worth explainer, which
+    // has been re-aimed at "how did {name} make their money" so the two stop
+    // splitting the same ranking signal. The live/today angle is the part
+    // Google can't answer with a knowledge panel, so it leads here.
     keywords: [
       `${person.name} net worth`,
+      `${person.name} net worth today`,
+      `${person.name} live net worth`,
+      `${person.name} net worth right now`,
       `${person.name} real time net worth`,
       `how rich is ${person.name}`,
       `${person.name} rank`,
       person.primarySource,
-      person.industry,
     ],
     alternates: { canonical: `${siteUrl()}/billionaire/${person.id}` },
     openGraph: { title, description, type: "profile" },

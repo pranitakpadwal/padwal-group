@@ -6,7 +6,13 @@ import { getPersonProfile } from "@/data/profiles";
 import { getAuthor } from "@/data/authors";
 import { getHolding } from "@/lib/holdings";
 import { countryPagePath } from "@/lib/countries";
-import { netWorthHeadline, netWorthUrl, personIdFromNetWorthSlug } from "@/lib/net-worth-explainer";
+import {
+  netWorthHeadline,
+  netWorthPageTitle,
+  netWorthCanonical,
+  netWorthUrl,
+  personIdFromNetWorthSlug,
+} from "@/lib/net-worth-explainer";
 import { formatUsdCompact, formatUsdChange, formatPercentChange } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 import { publisherJsonLd, personImageUrl, SITE_NAME } from "@/lib/schema";
@@ -34,18 +40,21 @@ export async function generateMetadata({
   if (!person) {
     return { title: "Not found" };
   }
-  const title = netWorthHeadline(person.id, person.name, year);
-  const description = `${person.name}'s real-time net worth in ${year}, how it breaks down between public stock and other assets, and how it's calculated — updated live from public holdings.`;
+  const title = netWorthPageTitle(person.id, person.name, year);
+  const description = `Where ${person.name}'s fortune actually comes from: how it splits between ${person.primarySource} stock and other assets, what's driven it in ${year}, and how the figure is calculated.`;
   return {
     title,
     description,
+    // Explainer intent only. "{name} net worth" / "how rich is {name}" belong to
+    // /billionaire/[id] now — keeping them here made our own pages compete.
     keywords: [
-      `${person.name} net worth`,
-      `${person.name} net worth ${year}`,
-      `how much is ${person.name} worth`,
-      `how rich is ${person.name}`,
+      `how did ${person.name} make their money`,
+      `how ${person.name} got rich`,
+      `${person.name} net worth breakdown`,
+      `${person.name} wealth explained`,
+      `${person.name} fortune source`,
     ],
-    alternates: { canonical: `${siteUrl()}${netWorthUrl(person.id, person.name, year)}` },
+    alternates: { canonical: netWorthCanonical(person.id, person.name, year) },
     openGraph: { title, description, type: "article" },
   };
 }
@@ -138,9 +147,10 @@ export default async function NetWorthPage({ params }: { params: Promise<RoutePa
         <div className="flex flex-col gap-6 rounded-2xl border border-line bg-gradient-to-br from-brand-soft to-surface p-6 sm:flex-row sm:items-center sm:p-8">
           <PersonAvatar name={ranked.name} photoUrl={ranked.photoUrl} size={96} />
           <div className="flex-1">
+            {/* Matches the <title> exactly so the page reads as the explainer it is,
+                rather than re-competing with the live profile's "net worth" framing. */}
             <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-              {person.name} Net Worth in {year}
-              {hook && <>: {hook.title}</>}
+              {netWorthPageTitle(person.id, person.name, year)}
             </h1>
             <p className="mt-1 text-sm text-[--muted]">
               #{ranked.rank} in the World &middot; {ranked.primarySource}

@@ -6,7 +6,7 @@ import { listCities } from "@/lib/cities";
 import { listIndustries } from "@/lib/industries";
 import { listFamilies } from "@/lib/families";
 import { listEstimatedBillionaires } from "@/data/estimated-billionaires";
-import { netWorthUrl } from "@/lib/net-worth-explainer";
+import { netWorthUrl, hasOwnNetWorthContent } from "@/lib/net-worth-explainer";
 import { listArticles } from "@/lib/articles";
 import { listNews } from "@/lib/news";
 import { listAuthors } from "@/data/authors";
@@ -129,15 +129,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 
 
+  // Only the net-worth pages carrying their own researched content are listed.
+  // The template-only ones canonicalize to /billionaire/[id], and submitting a
+  // URL that points its canonical elsewhere is a contradictory signal.
   const netWorthYear = new Date().getFullYear();
   const netWorthRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/net-worth`, lastModified: now, changeFrequency: "daily" as const, priority: 0.6 },
-    ...billionaires.map((person) => ({
-      url: `${base}${netWorthUrl(person.id, person.name, netWorthYear)}`,
-      lastModified: now,
-      changeFrequency: "daily" as const,
-      priority: 0.5,
-    })),
+    ...billionaires
+      .filter((person) => hasOwnNetWorthContent(person.id))
+      .map((person) => ({
+        url: `${base}${netWorthUrl(person.id, person.name, netWorthYear)}`,
+        lastModified: now,
+        changeFrequency: "daily" as const,
+        priority: 0.5,
+      })),
   ];
 
 
