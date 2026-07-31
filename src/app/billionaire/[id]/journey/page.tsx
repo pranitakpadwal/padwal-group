@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { NOINDEX } from "@/lib/site";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import { formatUsdCompact } from "@/lib/format";
@@ -30,6 +31,7 @@ export async function generateMetadata({
       `how ${person.name} became a billionaire`,
       `${person.name} timeline`,
     ],
+    robots: NOINDEX,
   };
 }
 

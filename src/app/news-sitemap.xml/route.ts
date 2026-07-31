@@ -1,6 +1,5 @@
 import { listNews } from "@/lib/news";
 import { listArticles } from "@/lib/articles";
-import { listQuoteOfDay } from "@/lib/quote-of-day";
 import { siteUrl } from "@/lib/site";
 import { SITE_NAME } from "@/lib/schema";
 
@@ -39,15 +38,9 @@ export async function GET() {
       publishedAt: article.generatedAt,
     }));
 
-  const quoteItems = listQuoteOfDay(10)
-    .filter((entry) => new Date(entry.generatedAt).getTime() >= cutoff)
-    .map((entry) => ({
-      url: `${base}/quote-of-the-day/${entry.slug}`,
-      title: entry.title,
-      publishedAt: entry.generatedAt,
-    }));
-
-  const entries = [...newsItems, ...recapItems, ...quoteItems]
+  // /quote-of-the-day is marked NOINDEX (see src/lib/site.ts), so it's left
+  // out here too — submitting a noindexed URL to Google News contradicts it.
+  const entries = [...newsItems, ...recapItems]
     .map(
       (item) => `  <url>
     <loc>${escapeXml(item.url)}</loc>

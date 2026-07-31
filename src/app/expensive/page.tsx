@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { listAssetCategories } from "@/lib/assets";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "billionaire cars",
   ],
   alternates: { canonical: `${siteUrl()}/expensive` },
+  robots: NOINDEX,
 };
 
 export default function ExpensiveIndex() {

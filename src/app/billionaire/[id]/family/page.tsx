@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { NOINDEX } from "@/lib/site";
 import { findBillionaireById } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import ProfileSubpageLayout from "@/components/ProfileSubpageLayout";
@@ -23,6 +24,7 @@ export async function generateMetadata({
   return {
     title: `${person.name}'s Family — Real-Time Billionaires`,
     description: `Marital status and family size reported for ${person.name}.`,
+    robots: NOINDEX,
   };
 }
 

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getLeaderboard } from "@/lib/net-worth";
 import { categoryFromSlug, getAssetsByCategory, ASSET_CATEGORY_LABEL } from "@/lib/assets";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PersonAvatar from "@/components/PersonAvatar";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
@@ -38,6 +38,7 @@ export async function generateMetadata({
       `who owns the most expensive ${label.toLowerCase().replace(/s$/, "")}`,
     ],
     alternates: { canonical: `${siteUrl()}/expensive/${slug}` },
+    robots: NOINDEX,
     openGraph: { title, description, type: "website" },
   };
 }

@@ -4,7 +4,7 @@ import { listQuotePeopleIds, getPersonQuotes } from "@/data/quotes";
 import { findBillionaireById, getLeaderboard } from "@/lib/net-worth";
 import { ensureAndListQuoteOfDay } from "@/lib/quote-of-day";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FaqBlock from "@/components/FaqBlock";
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     "billionaire quotes verified",
   ],
   alternates: { canonical: `${siteUrl()}/quotes` },
+  robots: NOINDEX,
 };
 
 export default async function QuotesHub() {

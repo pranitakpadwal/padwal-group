@@ -5,7 +5,7 @@ import { getLeaderboard } from "@/lib/net-worth";
 import { getTickerHolders } from "@/lib/holdings";
 import { getStockSummary } from "@/lib/stock";
 import { companyName } from "@/lib/companies";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import {
   formatCompactNumber,
   formatPercentChange,
@@ -46,6 +46,7 @@ export async function generateMetadata({
       ticker,
     ],
     alternates: { canonical: `${siteUrl()}/stock/${ticker}` },
+    robots: NOINDEX,
     openGraph: { title, description, type: "website" },
   };
 }

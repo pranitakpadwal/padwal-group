@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { NOINDEX } from "@/lib/site";
 import { findBillionaireById } from "@/lib/net-worth";
 import { getPersonProfile, type NotableAsset } from "@/data/profiles";
 import ProfileSubpageLayout from "@/components/ProfileSubpageLayout";
@@ -31,6 +32,7 @@ export async function generateMetadata({
   return {
     title: `${person.name}'s Homes, Jets & Notable Assets — Real-Time Billionaires`,
     description: `Publicly reported homes, yachts, jets, and other notable assets for ${person.name}, each with a source.`,
+    robots: NOINDEX,
   };
 }
 

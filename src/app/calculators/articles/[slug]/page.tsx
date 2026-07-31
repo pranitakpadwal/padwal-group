@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCalculatorArticle } from "@/lib/calculator-articles";
 import { getRelatedCoverage } from "@/lib/related-coverage";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
@@ -32,6 +32,7 @@ export async function generateMetadata({
     description: article.description,
     keywords: [article.eyebrow.toLowerCase(), "billionaire calculator", "wealth calculator article"],
     alternates: { canonical: url },
+    robots: NOINDEX,
     openGraph: {
       title: article.title,
       description: article.description,

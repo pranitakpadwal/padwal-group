@@ -6,7 +6,7 @@ import { getPersonQuotes } from "@/data/quotes";
 import { getPersonProfile } from "@/data/profiles";
 import { netWorthUrl } from "@/lib/net-worth-explainer";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import { listQuotePeopleIds } from "@/data/quotes";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -48,6 +48,7 @@ export async function generateMetadata({
       "quote of the day",
     ],
     alternates: { canonical: url },
+    robots: NOINDEX,
     openGraph: { title, description, type: "article", url, siteName: SITE_NAME },
     twitter: { card: "summary_large_image", title, description },
   };

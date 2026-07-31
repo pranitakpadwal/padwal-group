@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CALCULATOR_ARTICLE_INDEX } from "@/lib/calculator-articles";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     "wealth calculator stories",
   ],
   alternates: { canonical: `${siteUrl()}/calculators/articles` },
+  robots: NOINDEX,
 };
 
 export default function CalculatorArticlesIndex() {

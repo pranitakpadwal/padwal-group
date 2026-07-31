@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ensureAndListQuoteOfDay } from "@/lib/quote-of-day";
 import { formatDateLong } from "@/lib/dates";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     "inspirational quote today",
   ],
   alternates: { canonical: `${siteUrl()}/quote-of-the-day` },
+  robots: NOINDEX,
 };
 
 export default async function QuoteOfDayIndex() {

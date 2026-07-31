@@ -7,7 +7,7 @@ import { getPersonQuotes } from "@/data/quotes";
 import { formatUsdCompact } from "@/lib/format";
 import { formatDateLong } from "@/lib/dates";
 import { listNews } from "@/lib/news";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
@@ -41,6 +41,7 @@ export async function generateMetadata({
       `${person.name} career timeline`,
     ],
     alternates: { canonical: `${siteUrl()}/story/${person.id}` },
+    robots: NOINDEX,
     openGraph: { title, description, type: "article" },
   };
 }

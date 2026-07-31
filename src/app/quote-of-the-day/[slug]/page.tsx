@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getQuoteOfDayBySlug, listQuoteOfDay } from "@/lib/quote-of-day";
 import { getPersonQuotes } from "@/data/quotes";
 import { formatDateLong } from "@/lib/dates";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
@@ -39,6 +39,7 @@ export async function generateMetadata({
       "inspirational quote of the day",
     ],
     alternates: { canonical: url },
+    robots: NOINDEX,
     openGraph: {
       title: entry.title,
       description,

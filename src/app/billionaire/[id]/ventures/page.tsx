@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { NOINDEX } from "@/lib/site";
 import { findBillionaireById } from "@/lib/net-worth";
 import { getPersonProfile } from "@/data/profiles";
 import ProfileSubpageLayout from "@/components/ProfileSubpageLayout";
@@ -22,6 +23,7 @@ export async function generateMetadata({
   return {
     title: `${person.name}'s Ventures & Investments — Real-Time Billionaires`,
     description: `Business ventures and investments beyond ${person.primarySource} reported for ${person.name}, each with a source.`,
+    robots: NOINDEX,
   };
 }
 

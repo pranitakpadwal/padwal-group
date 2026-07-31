@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getCelebrity, listCelebrities } from "@/data/celebrities";
 import { getPhotoUrl } from "@/lib/photos";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { ASSET_CATEGORY_LABEL } from "@/lib/assets";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PersonAvatar from "@/components/PersonAvatar";
@@ -37,6 +37,7 @@ export async function generateMetadata({
       `${celebrity.name} assets`,
     ],
     alternates: { canonical: `${siteUrl()}/celebrity/${celebrity.id}` },
+    robots: NOINDEX,
     openGraph: { title, description, type: "profile" },
   };
 }

@@ -5,7 +5,7 @@ import { getPersonProfile } from "@/data/profiles";
 import { getLeaderboard } from "@/lib/net-worth";
 import { isSpotlightEligible } from "@/lib/spotlight";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import PersonAvatar from "@/components/PersonAvatar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteHeader from "@/components/SiteHeader";
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     "billionaire success stories",
   ],
   alternates: { canonical: `${siteUrl()}/good-news` },
+  robots: NOINDEX,
 };
 
 export default async function GoodNewsHub() {

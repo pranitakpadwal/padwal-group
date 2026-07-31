@@ -8,7 +8,7 @@ import { isSpotlightEligible, buildSpotlight } from "@/lib/spotlight";
 import { listNews } from "@/lib/news";
 import { formatUsdCompact } from "@/lib/format";
 import { formatDateLong } from "@/lib/dates";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import { publisherJsonLd, SITE_NAME } from "@/lib/schema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ShareBar from "@/components/ShareBar";
@@ -43,6 +43,7 @@ export async function generateMetadata({
       `${person.name} net worth`,
     ],
     alternates: { canonical: url },
+    robots: NOINDEX,
     openGraph: { title: spotlight.headline, description: spotlight.dek, type: "article", url, siteName: SITE_NAME },
     twitter: { card: "summary_large_image", title: spotlight.headline, description: spotlight.dek },
   };

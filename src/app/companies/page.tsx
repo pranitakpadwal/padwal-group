@@ -3,7 +3,7 @@ import Link from "next/link";
 import { listCompanies } from "@/lib/companies";
 import { getLeaderboard } from "@/lib/net-worth";
 import { formatUsdCompact } from "@/lib/format";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, NOINDEX } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import LiveWebPageJsonLd from "@/components/LiveWebPageJsonLd";
@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     "who owns Tesla stock",
   ],
   alternates: { canonical: `${siteUrl()}/companies` },
+  robots: NOINDEX,
 };
 
 export default async function CompaniesIndex() {
