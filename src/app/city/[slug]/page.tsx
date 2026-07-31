@@ -30,15 +30,25 @@ export async function generateMetadata({
   if (!info) {
     return { title: "Not found" };
   }
-  const title = `Billionaires in ${info.city} — Ranked Live by Net Worth`;
-  const description = `The billionaires who call ${info.city} home, ranked live by real-time net worth.`;
+  // Search Console shows the winning query is "billionaires in mumbai" — the
+  // bare city name. Every keyword here carried the ", India" suffix from the
+  // stored value, so none of them matched how people actually search.
+  const cityName = info.city.split(",")[0].trim();
+  const count = info.personIds.length;
+  const title = `Billionaires in ${cityName} — Ranked Live by Net Worth`;
+  const description =
+    count === 1
+      ? `The billionaire who calls ${info.city} home, with a live net worth recalculated continuously from public stock holdings.`
+      : `All ${count} billionaires who call ${info.city} home, ranked by live net worth — recalculated continuously from public stock holdings.`;
   return {
     title,
     description,
     keywords: [
+      `billionaires in ${cityName}`,
+      `richest people in ${cityName}`,
+      `${cityName} billionaires`,
+      `richest person in ${cityName}`,
       `billionaires in ${info.city}`,
-      `richest people in ${info.city}`,
-      `${info.city} billionaires`,
     ],
     alternates: { canonical: `${siteUrl()}/city/${info.slug}` },
     openGraph: { title, description, type: "website" },
