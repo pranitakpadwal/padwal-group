@@ -50,6 +50,9 @@ export default function SiteFooter() {
             <Link href="/articles" className="text-foreground/70 hover:text-brand">
               Daily Recaps
             </Link>
+            <Link href="/why" className="text-foreground/70 hover:text-brand">
+              Why Today&apos;s Moves
+            </Link>
             <Link href="/about" className="text-foreground/70 hover:text-brand">
               Methodology
             </Link>
