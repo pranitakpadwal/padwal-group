@@ -78,6 +78,82 @@ export function requiredMonthlyContribution(
   return hi;
 }
 
+/** A future amount growing at a fixed annual rate — used to project today's expenses forward to retirement. */
+export function inflateAmount(amount: number, annualRatePercent: number, years: number): number {
+  return amount * Math.pow(1 + annualRatePercent / 100, Math.max(0, years));
+}
+
+export interface DrawdownInputs {
+  corpus: number;
+  /** Monthly expense in year one of retirement — already inflation- and lifestyle-adjusted. */
+  monthlyExpenseAtRetirement: number;
+  /** Return the corpus earns during retirement (typically more conservative than the pre-retirement rate). */
+  postRetirementReturnPercent: number;
+  /** The withdrawal rises with inflation once a year, same annual-step convention as simulateGrowth. */
+  inflationPercent: number;
+  /** Years the corpus needs to last — usually (life expectancy − retirement age). */
+  retirementYears: number;
+}
+
+/**
+ * Draws down `corpus` month by month: withdraw at the start of the month,
+ * then the remainder earns postRetirementReturnPercent for that month. The
+ * withdrawal itself rises with inflation once a year. Returns the ending
+ * balance — negative means the money ran out before retirementYears was up.
+ */
+export function simulateDrawdown({
+  corpus,
+  monthlyExpenseAtRetirement,
+  postRetirementReturnPercent,
+  inflationPercent,
+  retirementYears,
+}: DrawdownInputs): number {
+  const months = Math.max(0, Math.round(retirementYears * 12));
+  const monthlyRate = postRetirementReturnPercent / 100 / 12;
+  let balance = corpus;
+  let withdrawal = monthlyExpenseAtRetirement;
+
+  for (let month = 1; month <= months; month++) {
+    balance -= withdrawal;
+    balance *= 1 + monthlyRate;
+    if (month % 12 === 0 && inflationPercent > 0) {
+      withdrawal *= 1 + inflationPercent / 100;
+    }
+  }
+
+  return balance;
+}
+
+/**
+ * The corpus needed so a monthly withdrawal — starting at
+ * monthlyExpenseAtRetirement, rising with inflation once a year — lasts
+ * exactly retirementYears, given the corpus keeps earning
+ * postRetirementReturnPercent while it's drawn down. Solved by binary search
+ * over simulateDrawdown, the same technique requiredMonthlyContribution uses
+ * for the accumulation phase — one shared, already-verified approach instead
+ * of a second closed-form formula with its own edge cases to get right.
+ * Answers "will the money actually last?", not just "did I hit my number."
+ */
+export function corpusNeededForRetirement(inputs: Omit<DrawdownInputs, "corpus">): number {
+  const { monthlyExpenseAtRetirement, retirementYears } = inputs;
+  if (retirementYears <= 0 || monthlyExpenseAtRetirement <= 0) return 0;
+
+  let lo = 0;
+  let hi = Math.max(monthlyExpenseAtRetirement * 12 * retirementYears, 1);
+  while (simulateDrawdown({ ...inputs, corpus: hi }) < 0 && hi < Number.MAX_SAFE_INTEGER / 4) {
+    hi *= 2;
+  }
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (simulateDrawdown({ ...inputs, corpus: mid }) < 0) {
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+  return hi;
+}
+
 export interface WithdrawalTax {
   gains: number;
   taxableGains: number;

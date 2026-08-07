@@ -27,14 +27,14 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    question: "How is my retirement corpus calculated?",
+    question: "How is the retirement amount calculated?",
     answer:
-      "We simulate your investments growing month by month at the return rate you choose, adding your monthly contribution (and any annual step-up) each month. It's a projection based on an assumption you control, not a guarantee — real markets don't return a fixed rate every year.",
+      "From what you spend today, adjusted for the lifestyle you pick and inflated to your retirement age, we work out the corpus that lets you withdraw that (inflation-rising) amount every month without running out before the age you choose to plan until. It's not the crude \"25x your expenses\" rule — it's a real month-by-month simulation of the drawdown, not just the buildup.",
   },
   {
     question: "How much do I need to retire with ₹10 crore?",
     answer:
-      "Enter your current investments, monthly SIP, and years to retirement, and the calculator works backward to show the monthly contribution that gets you there on your timeline — or the surplus/shortfall if you keep contributing at your current rate.",
+      "Open \"Customize assumptions\" and type ₹10 crore into \"Set your own goal instead\" — the calculator then shows the monthly investment needed to hit that exact number by your retirement age, using your current savings and chosen return rate.",
   },
   {
     question: "How is the tax estimate calculated?",
@@ -44,7 +44,7 @@ const FAQS = [
   {
     question: "Does it account for my home loan or car loan?",
     answer:
-      "Yes — add any loans with their outstanding balance, interest rate, and EMI, and it shows exactly how many months until each is paid off, and whether that happens before or after your target retirement age.",
+      "Yes — open the advanced options and add any loans with their outstanding balance, interest rate, and EMI. It shows exactly how many months until each is paid off, and whether that happens before or after your retirement age.",
   },
 ];
 
