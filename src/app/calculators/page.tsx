@@ -21,6 +21,12 @@ export const metadata: Metadata = {
 
 const CALCULATORS = [
   {
+    href: "/calculators/retirement",
+    title: "Retirement Calculator",
+    description:
+      "Your investments, your SIP, your loans, your goal — see your projected corpus, what it's worth after tax, and whether you're on track to retire when you want.",
+  },
+  {
     href: "/calculators/wealth-race",
     title: "Wealth Race",
     description:

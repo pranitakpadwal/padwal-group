@@ -48,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators/billionaire-by-age",
     "/calculators/inflation",
     "/calculators/wealth-race",
+    "/calculators/retirement",
     "/about",
     "/privacy",
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: "weekly", priority: 0.6 }));
