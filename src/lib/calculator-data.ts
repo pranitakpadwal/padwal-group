@@ -1,6 +1,9 @@
-import { getStockSummary } from "@/lib/stock";
+import YahooFinance from "yahoo-finance2";
 import { getLeaderboard } from "@/lib/net-worth";
 import { getUsdRates } from "@/lib/fx";
+import { withTimeout } from "@/lib/with-timeout";
+
+const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
 /**
  * Well-known companies for the "own a piece" calculator — global, not just
@@ -42,34 +45,58 @@ export interface CompanyCap {
   priceUsd: number;
 }
 
+const CACHE_TTL_MS = 60_000;
+const FETCH_TIMEOUT_MS = 10_000;
+let capsCache: { caps: CompanyCap[]; expiresAt: number } | null = null;
+
+/**
+ * Used to fetch every company's quote in ONE outbound request instead of 20
+ * separate ones. The previous version called getStockSummary() per company
+ * via Promise.all — 20 concurrent, uncached, untimed-out Yahoo Finance
+ * calls on every single load of this page. That's the kind of load pattern
+ * that shows up in Search Console as "server connectivity: high fail rate":
+ * a slow or overloaded upstream held the whole response open, and enough of
+ * those piling up (crawler + regular traffic) can make the server look down
+ * to anyone else hitting it at the same time, not just this page.
+ */
 export async function getCompanyCaps(): Promise<CompanyCap[]> {
-  const summaries = await Promise.all(
-    CALCULATOR_COMPANIES.map(async (company) => ({
-      company,
-      summary: await getStockSummary(company.ticker),
-    })),
+  if (capsCache && capsCache.expiresAt > Date.now()) {
+    return capsCache.caps;
+  }
+
+  const tickers = CALCULATOR_COMPANIES.map((c) => c.ticker);
+  const quotes = await withTimeout(yahooFinance.quote(tickers, { return: "map" }), FETCH_TIMEOUT_MS, null).catch(
+    () => null,
   );
 
-  const currencies = summaries
-    .map((s) => s.summary?.currency)
+  if (!quotes) {
+    // Fetch failed/timed out — serve stale data rather than an empty page.
+    return capsCache?.caps ?? [];
+  }
+
+  const currencies = Array.from(quotes.values())
+    .map((q) => q.currency)
     .filter((c): c is string => Boolean(c));
   const usdRates = await getUsdRates(currencies);
 
   const caps: CompanyCap[] = [];
-  for (const { company, summary } of summaries) {
-    if (!summary || summary.marketCap === null || summary.price === null) continue;
-    const rate = summary.currency ? usdRates.get(summary.currency) : 1;
+  for (const company of CALCULATOR_COMPANIES) {
+    const quote = quotes.get(company.ticker);
+    if (!quote || typeof quote.marketCap !== "number" || typeof quote.regularMarketPrice !== "number") continue;
+    const rate = quote.currency ? usdRates.get(quote.currency) : 1;
     if (rate === undefined) continue; // no FX rate -> skip rather than mislabel
     caps.push({
       ticker: company.ticker,
       name: company.name,
       country: company.country,
-      marketCapUsd: summary.marketCap * rate,
-      priceUsd: summary.price * rate,
+      marketCapUsd: quote.marketCap * rate,
+      priceUsd: quote.regularMarketPrice * rate,
     });
   }
 
-  return caps.sort((a, b) => b.marketCapUsd - a.marketCapUsd);
+  caps.sort((a, b) => b.marketCapUsd - a.marketCapUsd);
+  capsCache = { caps, expiresAt: Date.now() + CACHE_TTL_MS };
+  return caps;
 }
 
 export interface RosterEntry {

@@ -2,8 +2,10 @@ import YahooFinance from "yahoo-finance2";
 import { billionaires, type Billionaire } from "@/data/billionaires";
 import { calculateAge } from "@/lib/age";
 import { getPhotoUrls } from "@/lib/photos";
+import { withTimeout } from "@/lib/with-timeout";
 
 const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
+const FETCH_TIMEOUT_MS = 10_000;
 
 export interface RankedBillionaire {
   rank: number;
@@ -129,11 +131,16 @@ async function getUsdFxRates(currencies: string[]): Promise<Map<string, number>>
 
   try {
     const fxSymbols = uniqueNonUsd.map((currency) => `${currency}USD=X`);
-    const fxQuotes = await yahooFinance.quote(fxSymbols, { return: "map" });
-    for (const currency of uniqueNonUsd) {
-      const rate = fxQuotes.get(`${currency}USD=X`)?.regularMarketPrice;
-      if (typeof rate === "number") {
-        rates.set(currency, rate);
+    // Timed out, not just try/caught: an unbounded call here can hang this
+    // function, which hangs fetchLeaderboard, which hangs every page on the
+    // site since they all await getLeaderboard().
+    const fxQuotes = await withTimeout(yahooFinance.quote(fxSymbols, { return: "map" }), FETCH_TIMEOUT_MS, null);
+    if (fxQuotes) {
+      for (const currency of uniqueNonUsd) {
+        const rate = fxQuotes.get(`${currency}USD=X`)?.regularMarketPrice;
+        if (typeof rate === "number") {
+          rates.set(currency, rate);
+        }
       }
     }
   } catch {
@@ -149,18 +156,24 @@ async function fetchLeaderboard(): Promise<Leaderboard> {
   );
   const wikipediaTitles = billionaires.map((b) => b.wikipediaTitle);
 
+  // Same reasoning as getUsdFxRates: this single call gates every page on
+  // the site through getLeaderboard(), so it can't be allowed to hang
+  // indefinitely on a slow upstream. Degrades to an empty quote map on
+  // timeout, matching how the outer getLeaderboard() catch handler already
+  // degrades to otherAssetsUsd-only figures on an outright failure.
   const [quotes, photosByTitle] = await Promise.all([
-    yahooFinance.quote(symbols, { return: "map" }),
+    withTimeout(yahooFinance.quote(symbols, { return: "map" }), FETCH_TIMEOUT_MS, null),
     getPhotoUrls(wikipediaTitles),
   ]);
+  const quoteMap = quotes ?? new Map();
 
-  const currencies = Array.from(quotes.values())
+  const currencies = Array.from(quoteMap.values())
     .map((quote) => quote.currency)
     .filter((currency): currency is string => Boolean(currency));
   const fxRates = await getUsdFxRates(currencies);
 
   const quotesBySymbol = new Map<string, QuoteInfo>();
-  for (const [symbol, quote] of quotes.entries()) {
+  for (const [symbol, quote] of quoteMap.entries()) {
     const price = quote.regularMarketPrice;
     if (typeof price !== "number") {
       continue;

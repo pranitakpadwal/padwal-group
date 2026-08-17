@@ -11,10 +11,20 @@
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // photos rarely change; cache a day
 const cache = new Map<string, { url: string | null; expiresAt: number }>();
 
+// This cache is in-memory and resets on every deploy, and getPhotoUrls fans
+// out one request per billionaire with no batching — so right after a
+// redeploy, the leaderboard (which every page on the site depends on) was
+// waiting on up to ~50 concurrent, unbounded Wikipedia fetches before it
+// could resolve. A hung or slow one blocked the whole leaderboard, which
+// blocks the whole site — indistinguishable from a dead server to a crawler
+// timing out its connection. AbortSignal.timeout bounds each individual
+// fetch so that can't happen.
+const FETCH_TIMEOUT_MS = 6_000;
+
 async function fetchThumbnail(wikipediaTitle: string): Promise<string | null> {
   const response = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikipediaTitle)}`,
-    { headers: { accept: "application/json" } },
+    { headers: { accept: "application/json" }, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) },
   );
 
   if (!response.ok) {
