@@ -135,6 +135,19 @@ export default async function BillionaireProfile({
         ]
       : null;
 
+  // Kuvera-style "About" meta-grid: age/country/source are always known;
+  // residence/education/wealth-origin only exist for the ~38 of 51 people
+  // with a researched profiles.ts entry, so those are added conditionally
+  // rather than rendering empty cells for the rest.
+  const quickFacts: { label: string; value: string }[] = [
+    { label: "Age", value: String(ranked.age) },
+    { label: "Country", value: ranked.country },
+    { label: "Primary Source", value: ranked.primarySource },
+    ...(profile?.wealthOrigin ? [{ label: "Wealth Origin", value: profile.wealthOrigin }] : []),
+    ...(profile?.residenceCity ? [{ label: "Residence", value: profile.residenceCity }] : []),
+    ...(profile?.education ? [{ label: "Education", value: profile.education }] : []),
+  ];
+
   // Only the net-worth explainer remains: /story, /quotes, /good-news and the
   // journey/ventures/lifestyle/family sub-pages are all noindexed, and this is
   // the site's biggest impression pool (8,596), so it was the main crawl path
@@ -232,6 +245,14 @@ export default async function BillionaireProfile({
                   {person.bio}
                 </p>
               )}
+              <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-line pt-4 text-sm sm:grid-cols-3">
+                {quickFacts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="text-xs uppercase tracking-wide text-[--muted]">{fact.label}</dt>
+                    <dd className="mt-0.5 font-medium text-foreground">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
             </section>
 
             {profile?.keyFacts && profile.keyFacts.length > 0 && (
