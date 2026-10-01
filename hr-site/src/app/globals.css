@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f7f5f0;
+  --ink: #16202e;
+  --navy: #14233c;
+  --navy-deep: #0e1a2e;
+  --brass: #8a6a2f;
+  --muted: #5d6675;
+  --rule: #dcd8cd;
+  --panel: #ffffff;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-brass: var(--brass);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-panel: var(--panel);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif-face);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--font-serif-face), Georgia, serif; letter-spacing: -0.01em; }
