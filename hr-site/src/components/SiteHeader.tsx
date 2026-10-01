@@ -53,8 +53,13 @@ export default function SiteHeader() {
       <div className="border-b border-rule bg-paper">
         <Container className="flex items-center justify-between gap-6 py-4">
           <Link href="/" className="leading-tight">
-            <span className="block font-serif text-2xl font-semibold text-navy">{firm.name}</span>
-            <span className="block text-[10px] uppercase tracking-[0.22em] text-muted">{firm.descriptor}</span>
+            <span className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center bg-navy text-lg font-extrabold text-white" aria-hidden>PG</span>
+              <span>
+                <span className="block text-2xl font-extrabold leading-none text-navy">{firm.name}</span>
+                <span className="mt-1 block text-[11px] font-medium uppercase tracking-wider text-muted">{firm.descriptor}</span>
+              </span>
+            </span>
           </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">

@@ -9,6 +9,7 @@ export const firm = {
   tagline: "Senior hiring for technology, business and marketing leaders.",
   email: "contact@padwalgroup.example",
   phone: "+91 00000 00000",
+  whatsapp: "910000000000", // digits only, with country code. Empty string hides the button.
   address: "Registered office address, City, State, India",
   hours: "Monday to Friday, 9:30 am to 6:30 pm IST",
   contactPlaceholder: true,
@@ -44,4 +45,18 @@ export const process = [
   { n: "03", title: "Approach and assessment", body: "Direct, confidential outreach, followed by structured interviews, competency assessment and reference checks. Nothing reaches you unvetted." },
   { n: "04", title: "Shortlist and interviews", body: "A concise shortlist with our written assessment of each candidate, and coordination of your interview rounds." },
   { n: "05", title: "Offer and onboarding", body: "Offer structuring, negotiation, notice-period management and follow-up after joining." },
+];
+
+// Real client quotes only. Ask for written permission to publish each one.
+export const testimonials = [
+  { quote: "Add a short, real quote from a client here, describing the role you filled and how the search went.", name: "Client name", title: "Designation, Company", placeholder: true },
+  { quote: "A second quote. Even two honest, specific quotes do more for trust than ten generic ones.", name: "Client name", title: "Designation, Company", placeholder: true },
+];
+
+// What we commit to on every engagement. Keep only the ones you will honour.
+export const commitments = [
+  { h: "A partner stays on your search", p: "The person who briefs you is the person who runs the search. It is not handed to a junior after the pitch." },
+  { h: "Fees in writing, up front", p: "Fee basis, milestones and replacement terms are agreed in the engagement letter before any work begins." },
+  { h: "A written update every week", p: "Who we approached, what the market said, and any change we recommend to the brief, with the data behind it." },
+  { h: "Confidential by default", p: "Candidate and client details are shared only with permission, and your name stays out of outreach until there is real interest." },
 ];

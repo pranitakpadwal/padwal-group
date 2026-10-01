@@ -33,11 +33,21 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
 
 export function PageHeader({ crumbs, title, intro }: { crumbs: Crumb[]; title: string; intro?: string }) {
   return (
-    <section className="border-b border-rule bg-panel">
+    <section className="bg-navy text-white">
       <Container className="py-10 sm:py-14">
-        <Breadcrumbs items={crumbs} />
-        <h1 className="mt-6 max-w-3xl text-3xl font-semibold leading-tight text-navy sm:text-[2.6rem]">{title}</h1>
-        {intro && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{intro}</p>}
+        <nav aria-label="Breadcrumb" className="text-xs text-white/70">
+          <ol className="flex flex-wrap items-center gap-x-2">
+            <li><Link href="/" className="hover:text-white">Home</Link></li>
+            {crumbs.map((c, i) => (
+              <li key={c.label} className="flex items-center gap-x-2">
+                <span aria-hidden>/</span>
+                {c.href && i < crumbs.length - 1 ? <Link href={c.href} className="hover:text-white">{c.label}</Link> : <span className="text-white">{c.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <h1 className="mt-5 max-w-3xl text-3xl font-bold leading-tight sm:text-5xl">{title}</h1>
+        {intro && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/80">{intro}</p>}
       </Container>
     </section>
   );
