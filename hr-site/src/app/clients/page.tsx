@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CtaBand, PageHeader, Placeholder, Section } from "@/components/ui";
 import { notFound } from "next/navigation";
+import { Container, CtaBand, PageHeader, Placeholder } from "@/components/ui";
 import { clients, showClients } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Clients" };
@@ -9,9 +9,9 @@ export default function Clients() {
   if (!showClients) notFound();
   return (
     <>
-      <PageHeader eyebrow="Clients" title="Organisations that trust us with senior hiring." intro="A selection of clients across technology, financial services, manufacturing, healthcare, energy and the public sector." />
-      <Section>
-        <p className="mb-6 text-sm text-muted">Logos are placeholders. Replace them with client logos you have permission to display.<Placeholder /></p>
+      <PageHeader crumbs={[{ label: "About", href: "/about" }, { label: "Clients" }]} title="Clients" intro="Organisations across technology, financial services, manufacturing, healthcare, energy and the public sector." />
+      <Container className="py-12 sm:py-16">
+        <p className="mb-6 text-sm text-muted">Hold list: replace with real clients you have permission to display.<Placeholder /></p>
         <div className="grid grid-cols-2 gap-px border border-rule bg-rule sm:grid-cols-3 lg:grid-cols-4">
           {clients.map((c) => (
             <div key={c.name} className="flex h-36 flex-col items-center justify-center gap-1 bg-panel px-3 text-center">
@@ -20,7 +20,7 @@ export default function Clients() {
             </div>
           ))}
         </div>
-      </Section>
+      </Container>
       <CtaBand />
     </>
   );
